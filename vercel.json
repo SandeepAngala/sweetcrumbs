@@ -2,7 +2,7 @@
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "version": 2,
     "framework": null,
-    "installCommand": "npm ci",
+    "installCommand": "composer install --no-dev --optimize-autoloader && npm ci",
     "buildCommand": "node scripts/vercel-vite.mjs",
     "functions": {
         "api/index.php": {
@@ -10,30 +10,30 @@
             "maxDuration": 30
         }
     },
-    "rewrites": [
+    "routes": [
         {
-            "source": "/build/(.*)",
-            "destination": "/public/build/$1"
+            "src": "/build/(.*)",
+            "dest": "/public/build/$1"
         },
         {
-            "source": "/storage/(.*)",
-            "destination": "/public/storage/$1"
+            "src": "/storage/(.*)",
+            "dest": "/public/storage/$1"
         },
         {
-            "source": "/images/(.*)",
-            "destination": "/public/images/$1"
+            "src": "/images/(.*)",
+            "dest": "/public/images/$1"
         },
         {
-            "source": "/(.*)",
-            "destination": "/api/index.php"
-        }
-    ],
-    "headers": [
+            "src": "/(favicon\\.ico|robots\\.txt)",
+            "dest": "/public/$1"
+        },
         {
-            "source": "/build/(.*)",
-            "headers": [
-                { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-            ]
+            "src": "/(.*\\.(?:css|js|mjs|map|png|jpg|jpeg|gif|svg|webp|ico|woff2?|ttf|eot|json|txt))$",
+            "dest": "/public/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
         }
     ],
     "env": {
@@ -48,6 +48,5 @@
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_DRIVER": "array",
         "SESSION_DRIVER": "cookie"
-    },
-    "outputDirectory": "public"
+    }
 }

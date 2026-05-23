@@ -1,5 +1,9 @@
 # Vercel Deployment — Sweet Crumbs
 
+## Critical: do not use `outputDirectory: "public"`
+
+That setting deploys `public/` as a **static site**, so browsers **download** `index.php` instead of running PHP. Laravel must run through `api/index.php` + `vercel-php@0.7.4`.
+
 ## Build separation (required)
 
 | Phase | Environment | Command |
