@@ -1,35 +1,50 @@
 # Vercel Deployment — Sweet Crumbs
 
-## Critical: do not use `outputDirectory: "public"`
+## Critical dashboard settings
 
-That setting deploys `public/` as a **static site**, so browsers **download** `index.php` instead of running PHP. Laravel must run through `api/index.php` + `vercel-php@0.7.4`.
+In **Vercel → Project → Settings → Build & Deployment**:
 
-## Build separation (required)
+| Setting | Value |
+|---------|--------|
+| Framework Preset | **Other** |
+| Root Directory | `.` (repo root) |
+| **Output Directory** | **EMPTY** (never `public`) |
+| Build Command | empty, or `node scripts/vercel-vite.mjs` |
+| Install Command | empty, or `composer install --no-dev --optimize-autoloader && npm ci` |
+| Node.js Version | **22.x** |
 
-| Phase | Environment | Command |
-|-------|-------------|---------|
-| Frontend assets | Node | `npx vite build` (via `vercel.json` `buildCommand`) |
-| PHP / Composer | `vercel-php@0.7.4` (Node 22) | `composer run vercel` (npm + vite only, no artisan) |
+If **Output Directory** is `public`, Vercel serves `index.php` as a **static download** instead of running PHP.
 
-**Do not** add `php artisan` to `package.json` `build` or `vercel-build` scripts.
+## How routing works
 
-## If deploy still fails with `php: command not found`
+```
+Static files (CSS, JS, images)  →  @vercel/static from public/**
+All other URLs (/, /products)   →  api/index.php → public/index.php (Laravel)
+```
 
-Vercel is running a **dashboard override** or cached `package.json` that chains `php artisan` after Vite.
+## Build separation
 
-1. **Vercel Dashboard** → Settings → Build & Development  
-   - **Framework Preset:** Other  
-   - **Build Command:** `node scripts/vercel-vite.mjs` (or leave **empty** to use `vercel.json`)  
-   - **Install Command:** `npm ci` (or empty)  
-   - **Delete** any command containing `php artisan`
+| Phase | Command |
+|-------|---------|
+| Node (Vite) | `node scripts/vercel-vite.mjs` |
+| PHP (Composer) | `composer run vercel` during vercel-php build |
 
-2. **Redeploy without cache** (required)  
-   Deployments → ⋮ → Redeploy → **uncheck** “Use existing Build Cache”
+`package.json` must **not** include `php artisan` in npm scripts.
 
-3. Repo build scripts (must match):
-   ```json
-   "build": "node scripts/vercel-vite.mjs",
-   "vercel-build": "node scripts/vercel-vite.mjs"
-   ```
+## Redeploy checklist
 
-4. `public/build` is committed so assets exist even if the Node build step is skipped.
+1. Push latest `main` from GitHub
+2. **Redeploy without build cache**
+3. Confirm Output Directory is blank in dashboard
+4. Set env vars: `APP_KEY`, `APP_URL`, `DB_*`, etc.
+
+## Local smoke test
+
+```bash
+composer install
+npm ci
+npm run build
+php artisan serve
+```
+
+Visit http://127.0.0.1:8000 — site should render with assets from `public/build/`.
