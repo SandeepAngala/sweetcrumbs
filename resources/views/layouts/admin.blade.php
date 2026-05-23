@@ -65,11 +65,32 @@
             <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.banners.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
                 <i class="fa-solid fa-images w-5"></i> Banners
             </a>
+            <a href="{{ route('admin.offers.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.offers.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-gift w-5"></i> Homepage Offers
+            </a>
+            <a href="{{ route('admin.gallery.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.gallery.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-camera w-5"></i> Gallery
+            </a>
+            <a href="{{ route('admin.faqs.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.faqs.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-circle-question w-5"></i> FAQs
+            </a>
+            <a href="{{ route('admin.team.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.team.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-user-group w-5"></i> Team
+            </a>
             <a href="{{ route('admin.reviews.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.reviews.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
                 <i class="fa-solid fa-star w-5"></i> Reviews
             </a>
             <a href="{{ route('admin.contacts.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
                 <i class="fa-solid fa-envelope w-5"></i> Support
+            </a>
+            <a href="{{ route('admin.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.analytics*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-chart-pie w-5"></i> Analytics
+            </a>
+            <a href="{{ route('admin.inventory.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.inventory.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-boxes-stacked w-5"></i> Inventory
+            </a>
+            <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
+                <i class="fa-solid fa-sliders w-5"></i> Settings
             </a>
         </nav>
 

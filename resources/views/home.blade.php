@@ -205,56 +205,27 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Combo 1 -->
+            @forelse($homepageOffers as $offer)
             <div class="glass rounded-3xl p-8 border border-white/15 flex flex-col group hover:border-gold/30 hover:scale-[1.02] transition-all duration-300">
-                <span class="text-xs text-gold font-bold uppercase tracking-wider">MORNING ENERGIZE</span>
-                <h3 class="font-display font-bold text-2xl text-white mt-2">The Parisian Awakening</h3>
-                <p class="text-xs text-cream/70 mt-3 leading-relaxed">Pair our world-class Classic Butter Croissant with a freshly-pulled, double espresso Cappuccino to start your day with authentic European luxury.</p>
-                
+                @if($offer->badge)<span class="text-xs text-gold font-bold uppercase tracking-wider">{{ $offer->badge }}</span>@endif
+                <h3 class="font-display font-bold text-2xl text-white mt-2">{{ $offer->title }}</h3>
+                <p class="text-xs text-cream/70 mt-3 leading-relaxed">{{ $offer->description }}</p>
                 <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] text-gray-400 line-through">Regular Price: ₹279</span>
-                        <div class="text-2xl font-black text-gold">₹219 <span class="text-xs font-bold text-white">SAVE ₹60</span></div>
+                        @if($offer->compare_price)
+                        <span class="text-[10px] text-gray-400 line-through">Regular Price: {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->compare_price, 0) }}</span>
+                        @endif
+                        <div class="text-2xl font-black text-gold">{{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->price, 0) }}
+                            @if($offer->savings)<span class="text-xs font-bold text-white">SAVE {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->savings, 0) }}</span>@endif
+                        </div>
                     </div>
-                    <span class="text-3xl text-gold flex gap-2"><i class="fa-solid fa-mug-hot"></i><i class="fa-solid fa-bread-slice"></i></span>
+                    @if($offer->icon_classes)<span class="text-3xl text-gold flex gap-2">@foreach(explode(' ', $offer->icon_classes) as $icon)<i class="fa-solid {{ $icon }}"></i>@endforeach</span>@endif
                 </div>
-
-                <a href="{{ route('products.index', ['category' => 'premium-coffees']) }}" class="mt-auto w-full py-3 bg-gold hover:bg-[#a67a35] text-coffee-950 font-bold rounded-xl text-center text-xs tracking-wider transition-all">ORDER COMBO PAIR</a>
+                <a href="{{ $offer->button_link ?: route('products.index') }}" class="mt-auto w-full py-3 bg-gold hover:bg-[#a67a35] text-coffee-950 font-bold rounded-xl text-center text-xs tracking-wider transition-all">{{ $offer->button_text }}</a>
             </div>
-
-            <!-- Combo 2 -->
-            <div class="glass rounded-3xl p-8 border border-white/15 flex flex-col group hover:border-gold/30 hover:scale-[1.02] transition-all duration-300">
-                <span class="text-xs text-gold font-bold uppercase tracking-wider">AFTERNOON DELIGHT</span>
-                <h3 class="font-display font-bold text-2xl text-white mt-2">Gourmet Dolce & Mint</h3>
-                <p class="text-xs text-cream/70 mt-3 leading-relaxed">Relax with our authentic, velvety Mascarpone Tiramisu cup, coupled beautifully with a cold, sparkling Spearmint Mint Cooler mocktail.</p>
-                
-                <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
-                    <div>
-                        <span class="text-[10px] text-gray-400 line-through">Regular Price: ₹399</span>
-                        <div class="text-2xl font-black text-gold">₹329 <span class="text-xs font-bold text-white">SAVE ₹70</span></div>
-                    </div>
-                    <span class="text-3xl text-gold flex gap-2"><i class="fa-solid fa-cake-candles"></i><i class="fa-solid fa-leaf"></i></span>
-                </div>
-
-                <a href="{{ route('products.index', ['category' => 'sweets-desserts']) }}" class="mt-auto w-full py-3 bg-gold hover:bg-[#a67a35] text-coffee-950 font-bold rounded-xl text-center text-xs tracking-wider transition-all">ORDER COMBO PAIR</a>
-            </div>
-
-            <!-- Combo 3 -->
-            <div class="glass rounded-3xl p-8 border border-white/15 flex flex-col group hover:border-gold/30 hover:scale-[1.02] transition-all duration-300">
-                <span class="text-xs text-gold font-bold uppercase tracking-wider">ROYAL FESTIVAL</span>
-                <h3 class="font-display font-bold text-2xl text-white mt-2">Sizzling Lava & Fudge</h3>
-                <p class="text-xs text-cream/70 mt-3 leading-relaxed">The ultimate sweet feast: Hot Chocolate Lava Cake with a velvety hot flow center, served with a scoop of Belgian Chocolate Ice Cream.</p>
-                
-                <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
-                    <div>
-                        <span class="text-[10px] text-gray-400 line-through">Regular Price: ₹389</span>
-                        <div class="text-2xl font-black text-gold">₹319 <span class="text-xs font-bold text-white">SAVE ₹70</span></div>
-                    </div>
-                    <span class="text-3xl text-gold flex gap-2"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-cookie-bite"></i></span>
-                </div>
-
-                <a href="{{ route('products.index', ['category' => 'sweets-desserts']) }}" class="mt-auto w-full py-3 bg-gold hover:bg-[#a67a35] text-coffee-950 font-bold rounded-xl text-center text-xs tracking-wider transition-all">ORDER COMBO PAIR</a>
-            </div>
+            @empty
+            <p class="col-span-3 text-center text-cream/60 text-sm">Combo offers coming soon — manage them in Admin → Homepage Offers.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -390,12 +361,12 @@
                 <div class="p-6 flex flex-col flex-grow">
                     <span class="text-[10px] text-coffee-400 dark:text-gray-400 font-bold uppercase tracking-wider mb-2">{{ $blog->published_at->format('M d, Y') }}</span>
                     <h4 class="font-display font-bold text-base text-coffee-900 dark:text-white leading-snug mb-3 hover:text-gold transition-colors">
-                        <a href="#">{{ $blog->title }}</a>
+                        <a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a>
                     </h4>
                     <p class="text-xs text-coffee-500 dark:text-gray-400 mb-6 font-medium line-clamp-2 leading-relaxed">
                         {{ $blog->excerpt }}
                     </p>
-                    <a href="#" class="text-xs font-bold text-gold hover:underline mt-auto flex items-center gap-1.5 transition-colors">
+                    <a href="{{ route('blog.show', $blog->slug) }}" class="text-xs font-bold text-gold hover:underline mt-auto flex items-center gap-1.5 transition-colors">
                         READ ARTICLE <i class="fa-solid fa-arrow-right text-[8px]"></i>
                     </a>
                 </div>
@@ -432,29 +403,7 @@
                     </div>
                 </div>
             @empty
-                @php
-                    $mockTests = [
-                        ['name' => 'Aishwarya Rao', 'comment' => 'The double chocolate fudge brownies from Sweet Crumbs are completely outstanding! Crusty, soft inside, super chocolatey.', 'rating' => 5],
-                        ['name' => 'Rohan Mehta', 'comment' => 'Their cappuccino and butter croissant morning combo is the best part of my daily routine.', 'rating' => 5],
-                        ['name' => 'Neha Sharma', 'comment' => 'Rasmalai Cake is out of this world. Soft cardamomy cake soaked with thick milk. Pure heaven!', 'rating' => 5],
-                    ];
-                @endphp
-                @foreach($mockTests as $test)
-                    <div class="glass bg-white dark:bg-gray-800 p-8 rounded-3xl border border-coffee-100/5 shadow-warm flex flex-col relative" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <span class="text-gold/20 text-6xl absolute top-4 right-6 font-display leading-none">“</span>
-                        <div class="flex text-amber-400 text-xs gap-0.5 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs sm:text-sm text-coffee-700 dark:text-gray-300 italic leading-relaxed mb-6 font-medium flex-grow">"{{ $test['comment'] }}"</p>
-                        <div class="flex items-center gap-3 mt-auto pt-4 border-t border-coffee-100/5">
-                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm shadow-inner border border-gold/10">
-                                {{ strtoupper(substr($test['name'], 0, 1)) }}
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-xs sm:text-sm text-coffee-900 dark:text-white">{{ $test['name'] }}</h4>
-                                <span class="text-[9px] text-gold font-bold uppercase tracking-wide">VERIFIED FOODIE</span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+                <p class="col-span-3 text-center text-coffee-500 dark:text-gray-400 text-sm py-8">Be the first to share your experience — order and leave a review!</p>
             @endforelse
         </div>
     </div>

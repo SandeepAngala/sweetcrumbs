@@ -40,7 +40,7 @@
                                 </div>
                             </dt>
                             <dd class="flex items-center">
-                                <span>123 Bakers Street, Gourmet District, New Delhi, 110001</span>
+                                <span>{{ $bakery['store_address'] ?? '' }}</span>
                             </dd>
                         </div>
                         
@@ -53,7 +53,7 @@
                                 </div>
                             </dt>
                             <dd class="flex items-center">
-                                <a class="hover:text-gold transition-colors duration-300 font-semibold" href="tel:+919876543210">+91 98765 43210</a>
+                                <a class="hover:text-gold transition-colors duration-300 font-semibold" href="tel:{{ preg_replace('/\s+/', '', $bakery['store_phone'] ?? '') }}">{{ $bakery['store_phone'] ?? '' }}</a>
                             </dd>
                         </div>
 
@@ -66,7 +66,7 @@
                                 </div>
                             </dt>
                             <dd class="flex items-center">
-                                <a class="hover:text-gold transition-colors duration-300 font-semibold" href="mailto:hello@sweetcrumbs.com">hello@sweetcrumbs.com</a>
+                                <a class="hover:text-gold transition-colors duration-300 font-semibold" href="mailto:{{ $bakery['store_email'] ?? '' }}">{{ $bakery['store_email'] ?? '' }}</a>
                             </dd>
                         </div>
 
@@ -78,24 +78,23 @@
                                     <i class="fa-solid fa-clock"></i>
                                 </div>
                             </dt>
-                            <dd>
-                                <span class="font-bold text-coffee">Mon - Sat:</span> 7:00 AM - 9:00 PM <br>
-                                <span class="font-bold text-coffee">Sunday:</span> 8:00 AM - 6:00 PM
-                            </dd>
+                            <dd>{{ $bakery['opening_hours'] ?? '' }}</dd>
                         </div>
                     </dl>
                 </div>
 
                 <!-- Styled Map Container -->
+                @if(!empty($bakery['map_embed_url']))
                 <div class="mt-12 overflow-hidden rounded-3xl border border-amber-100 shadow-md h-72 relative group">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.996160538965!2d77.21832131508272!3d28.629864282419163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd3655555555%3A0xe54ef8f0b78cf6b4!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi%20110001!5e0!3m2!1sen!2sin!4v1653139871234!5m2!1sen!2sin" 
-                        class="w-full h-full border-0 grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" 
-                        allowfullscreen="" 
-                        loading="lazy" 
+                    <iframe
+                        src="{{ $bakery['map_embed_url'] }}"
+                        class="w-full h-full border-0 grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        allowfullscreen=""
+                        loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
+                @endif
             </div>
 
             <!-- Contact Form Card -->

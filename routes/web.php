@@ -17,12 +17,13 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
-Route::post('/contact', [PageController::class, 'contactStore'])->name('contact.store');
+Route::post('/contact', [PageController::class, 'contactStore'])->middleware('throttle:forms')->name('contact.store');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 Route::get('/testimonials', [PageController::class, 'testimonials'])->name('testimonials');
+Route::post('/testimonials', [PageController::class, 'storeTestimonial'])->middleware('auth')->name('testimonials.store');
 Route::get('/custom-cake', [PageController::class, 'customCake'])->name('custom-cake');
-Route::post('/custom-cake', [PageController::class, 'customCakeStore'])->name('custom-cake.store');
+Route::post('/custom-cake', [PageController::class, 'customCakeStore'])->middleware('throttle:forms')->name('custom-cake.store');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
@@ -34,13 +35,14 @@ Route::get('/categories/{slug}', [CategoryController::class, 'show'])->name('cat
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
-Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->middleware('throttle:forms')->name('newsletter.subscribe');
+
+// Guest-friendly cart add (session cart)
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
-    // Cart Routes
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->name('cart.coupon');
@@ -83,30 +85,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Routes (Admins Only)
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
-    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
-    
-    Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
-    Route::put('/orders/{id}/status', [App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.status');
-    
-    Route::get('/customers', [App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'show'])->name('customers.show');
-    
-    Route::resource('coupons', App\Http\Controllers\Admin\CouponController::class);
-    Route::resource('blogs', App\Http\Controllers\Admin\BlogController::class);
-    Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
-    
-    Route::get('/reviews', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
-    Route::post('/reviews/{id}/approve', [App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('reviews.approve');
-    Route::delete('/reviews/{id}', [App\Http\Controllers\Admin\ReviewController::class, 'reject'])->name('reviews.reject');
-    
-    Route::get('/contacts', [App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');
-    Route::get('/contacts/{id}', [App\Http\Controllers\Admin\ContactController::class, 'show'])->name('contacts.show');
-    Route::delete('/contacts/{id}', [App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('contacts.destroy');
-});
-
+require __DIR__.'/admin.php';
 require __DIR__.'/auth.php';

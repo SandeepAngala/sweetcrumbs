@@ -10,15 +10,22 @@ export default defineConfig({
     ],
     build: {
         target: 'es2020',
-        chunkSizeWarningLimit: 1600,
+        chunkSizeWarningLimit: 600,
         sourcemap: false,
         minify: 'esbuild',
+        cssMinify: true,
+        reportCompressedSize: true,
         rollupOptions: {
             output: {
                 manualChunks: {
                     vendor: ['alpinejs', 'axios'],
                 },
             },
+        },
+    },
+    server: {
+        hmr: {
+            host: 'localhost',
         },
     },
 });

@@ -22,6 +22,11 @@
     <!-- Vite Styles & Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <script>
+        window.isAuthenticated = @json(auth()->check());
+        window.loginUrl = @json(route('login'));
+    </script>
+
     <style>
         /* Custom brand progress bar for SPA navigation */
         .turbo-progress-bar {

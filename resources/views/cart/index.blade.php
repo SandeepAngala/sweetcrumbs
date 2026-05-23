@@ -104,7 +104,7 @@
                             <span class="text-coffee font-extrabold" id="summary-subtotal">₹{{ number_format($totals['subtotal'], 2) }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span>GST (5%):</span>
+                            <span>GST ({{ $bakery['tax_percent'] ?? 5 }}%):</span>
                             <span class="text-coffee font-extrabold" id="summary-tax">₹{{ number_format($totals['tax'], 2) }}</span>
                         </div>
                         <div class="flex justify-between">

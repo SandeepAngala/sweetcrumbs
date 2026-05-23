@@ -98,7 +98,7 @@
                         <!-- Date picker -->
                         <div>
                             <label for="delivery_date" class="block text-xs font-bold text-coffee uppercase tracking-wider">Select Delivery Date</label>
-                            <input type="date" name="delivery_date" id="delivery_date" required min="{{ \Carbon\Carbon::now()->addDay()->format('Y-m-d') }}"
+                            <input type="date" name="delivery_date" id="delivery_date" required min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"
                                    class="mt-2 block w-full rounded-xl border border-coffee-200 bg-cream/20 px-3 py-2.5 text-xs text-coffee font-bold focus:border-gold focus:ring-gold" />
                         </div>
 
@@ -107,9 +107,9 @@
                             <label for="delivery_time_slot" class="block text-xs font-bold text-coffee uppercase tracking-wider">Preferable Time Slot</label>
                             <select name="delivery_time_slot" id="delivery_time_slot" required
                                     class="mt-2 block w-full rounded-xl border border-coffee-200 bg-cream/20 px-3 py-2.5 text-xs text-coffee font-bold focus:border-gold focus:ring-gold">
-                                <option value="Morning (8:00 AM - 11:00 AM)">Morning (8:00 AM - 11:00 AM)</option>
-                                <option value="Noon (12:00 PM - 3:00 PM)">Noon (12:00 PM - 3:00 PM)</option>
-                                <option value="Evening (4:00 PM - 7:00 PM)">Evening (4:00 PM - 7:00 PM)</option>
+                                @foreach(($bakery['delivery_slots'] ?? []) as $slot)
+                                <option value="{{ $slot }}">{{ $slot }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -136,31 +136,43 @@
                             <span class="text-lg text-coffee"><i class="fa-solid fa-hand-holding-dollar"></i></span>
                         </label>
 
-                        <!-- Stripe -->
+                        <label class="relative flex p-4 rounded-2xl border border-coffee-100/10 bg-white/40 backdrop-blur-sm shadow-sm cursor-pointer hover:border-gold transition items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment_method" value="upi"
+                                       class="h-4 w-4 border-coffee-200 text-gold focus:ring-gold" />
+                                <div class="ml-3 text-xs font-semibold">
+                                    <span class="block font-bold text-coffee text-sm">UPI Payment</span>
+                                    <span class="block text-coffee-500 mt-0.5">Pay via UPI at checkout (reference sent after order).</span>
+                                </div>
+                            </div>
+                            <span class="text-lg text-emerald-600"><i class="fa-solid fa-mobile-screen"></i></span>
+                        </label>
+
+                        @if(!empty($paymentOnlineEnabled))
                         <label class="relative flex p-4 rounded-2xl border border-coffee-100/10 bg-white/40 backdrop-blur-sm shadow-sm cursor-pointer hover:border-gold transition items-center justify-between">
                             <div class="flex items-center">
                                 <input type="radio" name="payment_method" value="stripe"
                                        class="h-4 w-4 border-coffee-200 text-gold focus:ring-gold" />
                                 <div class="ml-3 text-xs font-semibold">
                                     <span class="block font-bold text-coffee text-sm">Stripe Secure Card</span>
-                                    <span class="block text-coffee-500 mt-0.5">Instant secure credit / debit card processing.</span>
+                                    <span class="block text-coffee-500 mt-0.5">Card payments (configured gateway).</span>
                                 </div>
                             </div>
                             <span class="text-lg text-indigo-600"><i class="fa-brands fa-cc-stripe"></i></span>
                         </label>
 
-                        <!-- Razorpay -->
                         <label class="relative flex p-4 rounded-2xl border border-coffee-100/10 bg-white/40 backdrop-blur-sm shadow-sm cursor-pointer hover:border-gold transition items-center justify-between">
                             <div class="flex items-center">
                                 <input type="radio" name="payment_method" value="razorpay"
                                        class="h-4 w-4 border-coffee-200 text-gold focus:ring-gold" />
                                 <div class="ml-3 text-xs font-semibold">
                                     <span class="block font-bold text-coffee text-sm">Razorpay Gateway</span>
-                                    <span class="block text-coffee-500 mt-0.5">UPI, NetBanking, and mobile wallets.</span>
+                                    <span class="block text-coffee-500 mt-0.5">UPI, NetBanking, and wallets.</span>
                                 </div>
                             </div>
                             <span class="text-lg text-sky-600"><i class="fa-solid fa-credit-card"></i></span>
                         </label>
+                        @endif
                     </div>
                 </div>
             </div>

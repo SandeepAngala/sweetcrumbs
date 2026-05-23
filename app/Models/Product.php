@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MediaUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -61,6 +62,21 @@ class Product extends Model
         return $this->hasMany(Wishlist::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    public function inventoryLogs()
+    {
+        return $this->hasMany(InventoryLog::class);
+    }
+
     // Accessors
     public function getDiscountPercentageAttribute()
     {
@@ -73,12 +89,13 @@ class Product extends Model
     public function getAverageRatingAttribute()
     {
         if (isset($this->attributes['reviews_avg_rating'])) {
-            return round((float) $this->attributes['reviews_avg_rating'] ?: 5, 1);
+            return round((float) ($this->attributes['reviews_avg_rating'] ?? 0), 1);
         }
         if ($this->relationLoaded('reviews')) {
-            return round($this->reviews->avg('rating') ?: 5, 1);
+            return round((float) ($this->reviews->avg('rating') ?? 0), 1);
         }
-        return round($this->reviews()->avg('rating') ?: 5, 1);
+
+        return round((float) ($this->reviews()->avg('rating') ?? 0), 1);
     }
 
     public function getPrimaryImageAttribute()
@@ -87,15 +104,10 @@ class Product extends Model
         if (is_array($this->images) && count($this->images) > 0) {
             $img = $this->images[0];
         } else {
-            $img = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600';
+            $img = Setting::get('default_product_image');
         }
 
-        if (str_contains($img, 'unsplash.com')) {
-            $parts = explode('?', $img);
-            return $parts[0] . '?auto=format,webp&fit=crop&w=600&q=75';
-        }
-
-        return $img;
+        return MediaUrl::resolve($img);
     }
 
     // Scopes

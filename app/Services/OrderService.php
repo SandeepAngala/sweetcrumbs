@@ -2,63 +2,60 @@
 
 namespace App\Services;
 
+use App\Models\CouponUsage;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
-use App\Models\Cart;
-use App\Models\Coupon;
 use App\Models\Payment;
+use App\Notifications\OrderPlaced;
 use Illuminate\Support\Facades\DB;
-use App\Services\CartService;
+use Illuminate\Support\Str;
 
 class OrderService
 {
-    protected $cartService;
+    public function __construct(
+        protected CartService $cartService,
+        protected InventoryService $inventoryService,
+        protected DeliveryTrackingService $deliveryTrackingService
+    ) {}
 
-    public function __construct(CartService $cartService)
-    {
-        $this->cartService = $cartService;
-    }
-
-    public function createOrder($userId, array $data)
+    public function createOrder(int $userId, array $data): Order
     {
         return DB::transaction(function () use ($userId, $data) {
             $cartItems = $this->cartService->getCart($userId);
             if ($cartItems->isEmpty()) {
-                throw new \Exception("Cannot place order. Your shopping cart is empty.");
+                throw new \Exception('Cannot place order. Your shopping cart is empty.');
             }
 
             $subtotal = $this->cartService->getCartTotal($userId);
-            
-            // Check stock of all products
+
             foreach ($cartItems as $item) {
                 if ($item->product->stock < $item->quantity) {
-                    throw new \Exception("Product '{$item->product->name}' is out of stock or does not have enough stock available.");
+                    throw new \Exception("Product '{$item->product->name}' does not have enough stock.");
                 }
             }
 
             $discount = 0.00;
             $couponId = null;
 
-            if (!empty($data['coupon_code'])) {
-                try {
-                    $couponData = $this->cartService->applyCoupon($data['coupon_code'], $subtotal);
-                    $discount = $couponData['discount'];
-                    $couponId = $couponData['coupon']->id;
-                    
-                    // Increment coupon usage
-                    $couponData['coupon']->increment('used_count');
-                } catch (\Exception $e) {
-                    // Suppress or handle coupon errors gracefully
-                }
+            if (! empty($data['coupon_code'])) {
+                $couponData = $this->cartService->applyCoupon($data['coupon_code'], $subtotal);
+                $discount = $couponData['discount'];
+                $couponId = $couponData['coupon']->id;
+                $couponData['coupon']->increment('used_count');
             }
 
-            $tax = round($subtotal * 0.05, 2); // 5% GST
-            $deliveryCharge = $subtotal >= 500 ? 0.00 : 50.00; // free delivery above 500
+            $taxRate = config('bakery.tax_rate', 0.05);
+            $tax = round($subtotal * $taxRate, 2);
+            $freeThreshold = config('bakery.free_delivery_threshold', 500);
+            $deliveryCharge = $subtotal >= $freeThreshold ? 0.00 : config('bakery.default_delivery_charge', 50);
             $total = ($subtotal + $tax + $deliveryCharge) - $discount;
+
+            $paymentMethod = $data['payment_method'] ?? 'cod';
+            $isCod = $paymentMethod === 'cod';
 
             $order = Order::create([
                 'user_id' => $userId,
+                'uuid' => (string) Str::uuid(),
                 'status' => 'pending',
                 'subtotal' => $subtotal,
                 'tax' => $tax,
@@ -66,15 +63,16 @@ class OrderService
                 'discount' => $discount,
                 'total' => $total,
                 'coupon_id' => $couponId,
-                'payment_method' => $data['payment_method'] ?? 'cod',
-                'payment_status' => ($data['payment_method'] ?? 'cod') === 'cod' ? 'pending' : 'paid',
+                'payment_method' => $paymentMethod,
+                'payment_status' => $isCod ? 'pending' : 'pending',
                 'delivery_date' => $data['delivery_date'] ?? now()->addDay()->toDateString(),
                 'delivery_time_slot' => $data['delivery_time_slot'] ?? 'Morning 9-12',
                 'address_id' => $data['address_id'] ?? null,
-                'notes' => $data['notes'] ?? null
+                'notes' => $data['notes'] ?? null,
             ]);
 
-            // Save order items & decrement product stock
+            $this->deliveryTrackingService->assignTrackingNumber($order);
+
             foreach ($cartItems as $item) {
                 $price = $item->product->discount_price ?: $item->product->price;
                 OrderItem::create([
@@ -82,49 +80,82 @@ class OrderService
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
                     'price' => $price,
-                    'total' => $item->total
+                    'total' => $item->total,
                 ]);
 
-                // Decrement stock
-                $item->product->decrement('stock', $item->quantity);
+                $this->inventoryService->deductForOrder($item->product, $item->quantity, $order->id, $userId);
             }
 
-            // Create primary payment record
+            if ($couponId) {
+                CouponUsage::create([
+                    'coupon_id' => $couponId,
+                    'user_id' => $userId,
+                    'order_id' => $order->id,
+                    'discount_amount' => $discount,
+                ]);
+            }
+
             Payment::create([
                 'order_id' => $order->id,
-                'transaction_id' => $data['transaction_id'] ?? 'COD-' . strtoupper(Str::random(10)),
-                'payment_method' => $order->payment_method,
+                'transaction_id' => $data['transaction_id'] ?? 'PAY-'.strtoupper(Str::random(10)),
+                'payment_method' => $paymentMethod,
                 'amount' => $order->total,
-                'status' => $order->payment_status === 'paid' ? 'success' : 'pending',
+                'status' => $isCod ? 'pending' : 'pending',
             ]);
 
-            // Clear the user's cart
+            $this->deliveryTrackingService->addTrackingEvent($order, 'pending', 'Order placed successfully');
+
             $this->cartService->clearCart($userId);
 
-            // Add loyalty points (1 point per 10 rupees spent)
-            $pointsEarned = floor($order->total / 10);
-            $order->user->increment('loyalty_points', $pointsEarned);
+            $pointsRate = config('bakery.loyalty_points_per_rupee', 0.1);
+            $order->user->increment('loyalty_points', (int) floor($order->total * $pointsRate));
 
-            return $order;
+            $order->user->notify(new OrderPlaced($order));
+
+            return $order->load(['items.product', 'address']);
         });
     }
 
-    public function updateStatus($orderId, $status)
+    public function updateStatus(int $orderId, string $status, ?int $staffId = null): Order
     {
         $order = Order::findOrFail($orderId);
         $order->status = $status;
-        
-        if ($status === 'delivered') {
-            $order->payment_status = 'paid';
+
+        if ($staffId) {
+            $order->assigned_staff_id = $staffId;
         }
-        
+
+        if ($status === 'delivered') {
+            $order->payment_status = $order->payment_method === 'cod' ? 'paid' : $order->payment_status;
+        }
+
         $order->save();
-        return $order;
+
+        app(DeliveryTrackingService::class)->addTrackingEvent($order, $status);
+
+        return $order->fresh();
     }
-}
-// Helper snippet
-class Str {
-    public static function random($length = 16) {
-        return bin2hex(random_bytes($length / 2));
+
+    public function cancelOrder(Order $order, ?int $userId = null): Order
+    {
+        if (in_array($order->status, ['delivered', 'cancelled'], true)) {
+            throw new \Exception('This order cannot be cancelled.');
+        }
+
+        return DB::transaction(function () use ($order, $userId) {
+            foreach ($order->items as $item) {
+                $this->inventoryService->restoreFromCancellation(
+                    $item->product,
+                    $item->quantity,
+                    $order->id,
+                    $userId
+                );
+            }
+
+            $order->update(['status' => 'cancelled']);
+            app(DeliveryTrackingService::class)->addTrackingEvent($order, 'cancelled', 'Order cancelled');
+
+            return $order->fresh();
+        });
     }
 }

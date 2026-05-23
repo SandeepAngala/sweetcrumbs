@@ -18,17 +18,11 @@
 
     {{-- Wishlist Quick Button (top-right) --}}
     <div class="absolute top-4 right-4 z-10">
-        <button onclick="toggleWishlistAjax({{ $product->id }}, this)"
+        <button onclick="@auth toggleWishlistAjax({{ $product->id }}, this) @else window.location.href='{{ route('login') }}' @endauth"
                 class="w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 active:scale-95"
                 title="Add to Wishlist">
             @php
-                $inWishlist = false;
-                if (auth()->check()) {
-                    $wishlistIds = \Illuminate\Support\Facades\Cache::driver('array')->remember('user_wishlist_' . auth()->id(), 60, function() {
-                        return \App\Models\Wishlist::where('user_id', auth()->id())->pluck('product_id')->toArray();
-                    });
-                    $inWishlist = in_array($product->id, $wishlistIds);
-                }
+                $inWishlist = isset($wishlistProductIds) && $wishlistProductIds->has($product->id);
             @endphp
             <i class="{{ $inWishlist ? 'fa-solid text-rose-500' : 'fa-regular text-coffee-400' }} fa-heart text-sm"></i>
         </button>
@@ -70,9 +64,9 @@
         {{-- Star Ratings --}}
         <div class="flex items-center gap-2 mb-3">
             <div class="flex text-amber-400 text-[11px] gap-0.5">
-                @php 
-                    $rating = $product->reviews_avg_rating ?? $product->average_rating; 
-                    $reviewsCount = $product->reviews_count ?? $product->reviews->count();
+                @php
+                    $rating = round((float) ($product->reviews_avg_rating ?? $product->average_rating ?? 0));
+                    $reviewsCount = $product->reviews_count ?? 0;
                 @endphp
                 @for($i = 1; $i <= 5; $i++)
                     <i class="fa-{{ $i <= $rating ? 'solid' : 'regular' }} fa-star"></i>
@@ -100,19 +94,11 @@
                 @endif
             </div>
 
-            @auth
-                <button onclick="addToCartAjax({{ $product->id }})"
+            <button onclick="addToCartAjax({{ $product->id }})"
                         class="btn-cart btn-premium bg-coffee-800 hover:bg-gold text-cream hover:text-white px-4 py-2.5 flex items-center gap-2 shadow-warm">
                     <i class="fa-solid fa-cart-shopping text-[10px]"></i>
                     <span class="text-[11px] font-bold">ADD</span>
                 </button>
-            @else
-                <a href="{{ route('login') }}"
-                   class="btn-cart btn-premium border border-coffee-200 dark:border-gray-600 text-coffee-600 dark:text-gray-300 hover:bg-coffee-50 dark:hover:bg-gray-700 px-4 py-2.5 flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping text-[10px]"></i>
-                    <span class="text-[11px] font-bold">ADD</span>
-                </a>
-            @endauth
         </div>
     </div>
 </div>

@@ -80,6 +80,7 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::active()
+            ->with('category')
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->where('slug', $slug)

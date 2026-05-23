@@ -8,8 +8,9 @@ use Illuminate\Support\Str;
 class Order extends Model
 {
     protected $fillable = [
-        'user_id', 'order_number', 'status', 'subtotal', 'tax', 'delivery_charge', 'discount', 'total',
-        'coupon_id', 'payment_method', 'payment_status', 'delivery_date', 'delivery_time_slot', 'address_id', 'notes'
+        'user_id', 'uuid', 'order_number', 'tracking_number', 'status', 'subtotal', 'tax',
+        'delivery_charge', 'discount', 'total', 'coupon_id', 'payment_method', 'payment_status',
+        'delivery_date', 'delivery_time_slot', 'address_id', 'notes', 'assigned_staff_id',
     ];
 
     protected $casts = [
@@ -55,5 +56,15 @@ class Order extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function deliveryTrackings()
+    {
+        return $this->hasMany(DeliveryTracking::class);
+    }
+
+    public function assignedStaff()
+    {
+        return $this->belongsTo(User::class, 'assigned_staff_id');
     }
 }

@@ -2,98 +2,131 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Order;
-use App\Models\Review;
-use App\Models\Wishlist;
-use App\Models\Cart;
-use App\Models\Address;
-use App\Models\Blog;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'phone',
-        'avatar',
-        'role',
-        'loyalty_points',
-        'google_id',
-        'address',
+        'name', 'email', 'password', 'phone', 'avatar', 'role',
+        'loyalty_points', 'google_id', 'address', 'is_blocked', 'blocked_at',
+        'notification_preferences', 'uuid',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'loyalty_points' => 'integer',
+            'is_blocked' => 'boolean',
+            'blocked_at' => 'datetime',
+            'notification_preferences' => 'array',
         ];
     }
 
-    /**
-     * Check if user is an admin.
-     */
-    public function isAdmin(): bool
+    protected static function boot(): void
     {
-        return $this->role === 'admin';
+        parent::boot();
+        static::creating(function (User $user) {
+            if (empty($user->uuid)) {
+                $user->uuid = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
     }
 
-    // Relationships
-    public function orders()
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin'], true)
+            || $this->hasRole('admin')
+            || $this->hasRole('super_admin');
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->isAdmin() || $this->role === 'staff' || $this->hasRole('staff');
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer' || $this->role === 'user' || $this->hasRole('customer');
+    }
+
+    public function isBlocked(): bool
+    {
+        return (bool) $this->is_blocked;
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole(string $slug): bool
+    {
+        return $this->roles()->where('slug', $slug)->exists();
+    }
+
+    public function hasPermission(string $slug): bool
+    {
+        return $this->roles()
+            ->whereHas('permissions', fn ($q) => $q->where('slug', $slug))
+            ->exists();
+    }
+
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    public function wishlists()
+    public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class);
     }
 
-    public function carts()
+    public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }
 
-    public function addresses()
+    public function cartSession(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CartSession::class);
+    }
+
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
 
-    public function blogs()
+    public function blogs(): HasMany
     {
         return $this->hasMany(Blog::class, 'author_id');
+    }
+
+    public function savedPaymentMethods(): HasMany
+    {
+        return $this->hasMany(SavedPaymentMethod::class);
+    }
+
+    public function bakeryNotifications(): HasMany
+    {
+        return $this->hasMany(BakeryNotification::class);
     }
 }

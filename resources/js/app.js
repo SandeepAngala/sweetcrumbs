@@ -4,13 +4,10 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 
-// Custom Bakery Scripts
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Dark Mode Setup
     const htmlElement = document.documentElement;
     const darkToggleBtn = document.getElementById('dark-mode-toggle');
 
-    // Load initial dark mode state
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         htmlElement.classList.add('dark');
     } else {
@@ -29,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Sticky Navbar Scroll Effect
     const navbar = document.getElementById('main-navbar');
     if (navbar) {
         window.addEventListener('scroll', () => {
@@ -41,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Back to Top Button
     const backToTopBtn = document.getElementById('back-to-top');
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
@@ -59,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Live Search with Debounce
     const searchInput = document.getElementById('global-search-input');
     const searchSuggestions = document.getElementById('search-suggestions');
     let debounceTimer;
@@ -75,11 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             debounceTimer = setTimeout(() => {
-                fetch(`/search?query=${encodeURIComponent(query)}`)
+                fetch(`/search?query=${encodeURIComponent(query)}`, {
+                    headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                })
                     .then(response => response.json())
                     .then(data => {
                         searchSuggestions.innerHTML = '';
-                        if (data.length === 0) {
+                        if (!data.length) {
                             searchSuggestions.innerHTML = '<div class="p-4 text-center text-sm text-coffee-400">No products found...</div>';
                         } else {
                             data.forEach(item => {
@@ -98,13 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         searchSuggestions.classList.remove('hidden');
                     })
-                    .catch(() => {
-                        searchSuggestions.classList.add('hidden');
-                    });
+                    .catch(() => searchSuggestions.classList.add('hidden'));
             }, 300);
         });
 
-        // Hide suggestions when clicking outside
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
                 searchSuggestions.classList.add('hidden');
@@ -113,15 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Toast notification helper
 window.showToast = function(message, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast-alert flex items-center justify-between gap-4 p-4 rounded-xl shadow-warm-lg transition-all duration-300 transform translate-y-4 opacity-0 max-w-sm w-full font-body ${
-        type === 'success' 
-            ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-500' 
+        type === 'success'
+            ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border-l-4 border-emerald-500'
             : type === 'error'
             ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-300 border-l-4 border-rose-500'
             : 'bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border-l-4 border-amber-500'
@@ -129,31 +121,40 @@ window.showToast = function(message, type = 'success') {
 
     toast.innerHTML = `
         <div class="flex items-center gap-3">
-            <span class="text-lg">${
-                type === 'success' ? '🧁' : type === 'error' ? '⚠️' : '🔔'
-            }</span>
+            <span class="text-lg">${type === 'success' ? '🧁' : type === 'error' ? '⚠️' : '🔔'}</span>
             <span class="text-sm font-semibold">${message}</span>
         </div>
         <button onclick="this.parentElement.remove()" class="text-coffee-300 hover:text-coffee-600 dark:text-gray-400 dark:hover:text-white">&times;</button>
     `;
 
     container.appendChild(toast);
-
-    // Trigger animation
-    setTimeout(() => {
-        toast.classList.remove('translate-y-4', 'opacity-0');
-    }, 10);
-
-    // Auto dismiss
+    setTimeout(() => toast.classList.remove('translate-y-4', 'opacity-0'), 10);
     setTimeout(() => {
         toast.classList.add('translate-y-4', 'opacity-0');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
+        setTimeout(() => toast.remove(), 300);
     }, 4000);
 };
 
-// AJAX Cart & Wishlist helper actions
+window.updateNavbarCartCount = function(count) {
+    document.querySelectorAll('.cart-count-badge').forEach(badge => {
+        badge.innerText = count;
+        if (count > 0) {
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    });
+};
+
+window.requireAuth = function(action = 'continue') {
+    if (window.isAuthenticated) return true;
+    window.showToast(`Please log in to ${action}.`, 'error');
+    setTimeout(() => {
+        window.location.href = window.loginUrl || '/login';
+    }, 800);
+    return false;
+};
+
 window.ajaxAction = function(url, data, successCallback) {
     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -162,42 +163,46 @@ window.ajaxAction = function(url, data, successCallback) {
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': token,
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        credentials: 'same-origin',
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw new Error(err.message || 'Something went wrong'); });
+    .then(async response => {
+        if (response.status === 401 || response.status === 419) {
+            window.requireAuth('use this feature');
+            throw new Error('Authentication required');
         }
-        return response.json();
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(payload.message || 'Something went wrong');
+        }
+        return payload;
     })
     .then(data => {
         if (successCallback) successCallback(data);
         return data;
     })
     .catch(err => {
-        window.showToast(err.message, 'error');
-    });
-};
-
-// Global Cart Trigger Action
-window.addToCartAjax = function(productId, quantity = 1) {
-    window.ajaxAction('/cart/add', { product_id: productId, quantity: quantity }, (res) => {
-        if (res.success) {
-            window.showToast(res.message, 'success');
-            // Update cart badges
-            const badges = document.querySelectorAll('.cart-count-badge');
-            badges.forEach(badge => {
-                badge.innerText = res.cart_count;
-                badge.classList.remove('hidden');
-            });
+        if (err.message !== 'Authentication required') {
+            window.showToast(err.message, 'error');
         }
     });
 };
 
-// Global Wishlist Trigger Action
+window.addToCartAjax = function(productId, quantity = 1) {
+    window.ajaxAction('/cart/add', { product_id: productId, quantity }, (res) => {
+        if (res.success) {
+            window.showToast(res.message, 'success');
+            window.updateNavbarCartCount(res.cart_count);
+        }
+    });
+};
+
 window.toggleWishlistAjax = function(productId, btnElement = null) {
+    if (!window.requireAuth('manage your wishlist')) return;
+
     window.ajaxAction('/wishlist/toggle', { product_id: productId }, (res) => {
         if (res.success) {
             window.showToast(res.message, 'success');
@@ -215,33 +220,18 @@ window.toggleWishlistAjax = function(productId, btnElement = null) {
     });
 };
 
-// ============================================
-// PREMIUM MICRO-INTERACTIONS
-// ============================================
-
-// Ripple effect on premium buttons
 document.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-premium');
     if (!btn) return;
 
     const ripple = document.createElement('span');
-    ripple.classList.add('ripple');
     const rect = btn.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
-    ripple.style.width = ripple.style.height = `${size}px`;
-    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
-    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
-    ripple.style.position = 'absolute';
-    ripple.style.borderRadius = '50%';
-    ripple.style.background = 'rgba(255, 255, 255, 0.35)';
-    ripple.style.transform = 'scale(0)';
-    ripple.style.animation = 'ripple 0.6s linear';
-    ripple.style.pointerEvents = 'none';
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;position:absolute;border-radius:50%;background:rgba(255,255,255,0.35);transform:scale(0);animation:ripple 0.6s linear;pointer-events:none`;
     btn.appendChild(ripple);
     setTimeout(() => ripple.remove(), 600);
 });
 
-// Smooth section reveal on scroll (IntersectionObserver)
 document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -252,18 +242,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    // Only observe main content sections, not nested ones
     document.querySelectorAll('main > section, main > div > section').forEach(section => {
         section.classList.add('reveal-section');
         observer.observe(section);
     });
 });
 
-// Enhanced addToCartAjax with animation
 const _origAddToCart = window.addToCartAjax;
 window.addToCartAjax = function(productId, quantity = 1) {
-    // Find the closest button from the event
-    const btn = document.activeElement?.closest('.btn-cart') || document.querySelector(`button[onclick*="addToCartAjax(${productId})"]`);
+    const btn = document.activeElement?.closest('.btn-cart');
     if (btn) {
         btn.classList.add('cart-added');
         const icon = btn.querySelector('i');
@@ -285,7 +272,6 @@ window.addToCartAjax = function(productId, quantity = 1) {
     _origAddToCart(productId, quantity);
 };
 
-// Enhanced toggleWishlistAjax with heart animation
 const _origToggleWishlist = window.toggleWishlistAjax;
 window.toggleWishlistAjax = function(productId, btnElement = null) {
     if (btnElement) {

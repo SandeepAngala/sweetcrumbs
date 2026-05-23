@@ -13,7 +13,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->isAdmin()) {
+        $user = auth()->user();
+
+        if ($user && $user->isStaff()) {
+            if ($user->is_blocked) {
+                abort(403, 'Your account has been blocked.');
+            }
+
             return $next($request);
         }
 

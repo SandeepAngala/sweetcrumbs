@@ -7,38 +7,24 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    protected $cartService;
+    public function __construct(protected CartService $cartService) {}
 
-    public function __construct(CartService $cartService)
+    protected function userId(): ?int
     {
-        $this->cartService = $cartService;
+        return auth()->id();
     }
 
     public function index()
     {
-        $cartItems = $this->cartService->getCart(auth()->id());
-        $savedItems = $this->cartService->getSavedForLater(auth()->id());
-        $subtotal = $this->cartService->getCartTotal(auth()->id());
-        
-        $tax = round($subtotal * 0.05, 2); // 5% tax
-        $delivery = ($subtotal >= 500 || $subtotal == 0) ? 0.00 : 50.00;
-        
-        // Retrieve applied coupon from session
-        $discount = session('coupon_discount', 0.00);
-        $couponCode = session('coupon_code', '');
-
-        $total = ($subtotal + $tax + $delivery) - $discount;
-        if ($total < 0) {
-            $total = 0.00;
+        if (! auth()->check()) {
+            return redirect()->route('login')->with('warning', 'Please log in to view your cart.');
         }
 
-        $totals = [
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'delivery_charge' => $delivery,
-            'discount' => $discount,
-            'total' => $total
-        ];
+        $userId = $this->userId();
+        $cartItems = $this->cartService->getCart($userId);
+        $savedItems = $this->cartService->getSavedForLater($userId);
+        $totals = $this->cartService->calculateTotals($userId);
+        $couponCode = session('coupon_code', '');
 
         return view('cart.index', compact('cartItems', 'savedItems', 'totals', 'couponCode'));
     }
@@ -47,22 +33,23 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'nullable|integer|min:1|max:99',
         ]);
 
         try {
-            $this->cartService->addToCart(auth()->id(), $request->product_id, $request->quantity);
-            $count = $this->cartService->getCartCount(auth()->id());
-            
+            $quantity = (int) ($request->quantity ?? 1);
+            $this->cartService->addToCart($this->userId(), $request->product_id, $quantity);
+            $count = $this->cartService->getCartCount($this->userId());
+
             return response()->json([
                 'success' => true,
                 'message' => 'Product successfully added to cart!',
-                'cart_count' => $count
+                'cart_count' => $count,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
@@ -71,37 +58,28 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:0'
+            'quantity' => 'required|integer|min:0',
         ]);
 
-        try {
-            $userId = auth()->id();
-            $this->cartService->updateQuantity($userId, $request->product_id, $request->quantity);
-            
-            // Clear coupons on update to ensure subtotal remains valid
-            session()->forget(['coupon_code', 'coupon_discount']);
+        if (! auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Please log in to update your cart.'], 401);
+        }
 
-            $subtotal = $this->cartService->getCartTotal($userId);
-            $tax = round($subtotal * 0.05, 2);
-            $delivery = $subtotal >= 500 ? 0.00 : 50.00;
-            $total = $subtotal + $tax + $delivery;
+        try {
+            $userId = $this->userId();
+            $this->cartService->updateQuantity($userId, $request->product_id, $request->quantity);
+            session()->forget(['coupon_code', 'coupon_discount']);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Cart successfully updated!',
                 'item_qty' => $request->quantity,
-                'totals' => [
-                    'subtotal' => $subtotal,
-                    'tax' => $tax,
-                    'delivery_charge' => $delivery,
-                    'discount' => 0.00,
-                    'total' => $total
-                ]
+                'totals' => $this->cartService->calculateTotals($userId, 0),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
@@ -109,70 +87,70 @@ class CartController extends Controller
     public function remove(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id'
+            'product_id' => 'required|exists:products,id',
         ]);
 
-        $this->cartService->removeFromCart(auth()->id(), $request->product_id);
-        
-        // Reset coupon
+        if (! auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Please log in.'], 401);
+        }
+
+        $this->cartService->removeFromCart($this->userId(), $request->product_id);
         session()->forget(['coupon_code', 'coupon_discount']);
 
         return response()->json([
             'success' => true,
-            'message' => 'Item successfully removed from cart!'
+            'message' => 'Item successfully removed from cart!',
+            'totals' => $this->cartService->calculateTotals($this->userId(), 0),
         ]);
     }
 
     public function applyCoupon(Request $request)
     {
-        $request->validate([
-            'code' => 'required|string'
-        ]);
+        $request->validate(['code' => 'required|string']);
+
+        if (! auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Please log in to apply a coupon.'], 401);
+        }
 
         try {
-            $userId = auth()->id();
+            $userId = $this->userId();
             $subtotal = $this->cartService->getCartTotal($userId);
             $couponData = $this->cartService->applyCoupon($request->code, $subtotal);
-            
+
             session([
                 'coupon_code' => $couponData['coupon']->code,
-                'coupon_discount' => $couponData['discount']
+                'coupon_discount' => $couponData['discount'],
             ]);
-
-            $tax = round($subtotal * 0.05, 2);
-            $delivery = $subtotal >= 500 ? 0.00 : 50.00;
-            $discount = $couponData['discount'];
-            $total = ($subtotal + $tax + $delivery) - $discount;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Coupon code applied successfully!',
-                'discount' => $discount,
-                'totals' => [
-                    'subtotal' => $subtotal,
-                    'tax' => $tax,
-                    'delivery_charge' => $delivery,
-                    'discount' => $discount,
-                    'total' => $total
-                ]
+                'discount' => $couponData['discount'],
+                'totals' => $this->cartService->calculateTotals($userId, $couponData['discount']),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
 
     public function saveForLater($productId)
     {
-        $this->cartService->saveForLater(auth()->id(), $productId);
+        try {
+            $this->cartService->saveForLater($this->userId(), (int) $productId);
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
         return back()->with('success', 'Item list preference successfully changed.');
     }
 
     public function moveToCart($productId)
     {
-        $this->cartService->saveForLater(auth()->id(), $productId); // switches state back to active cart
+        $this->cartService->saveForLater($this->userId(), (int) $productId);
+
         return back()->with('success', 'Item successfully returned to active cart.');
     }
 }

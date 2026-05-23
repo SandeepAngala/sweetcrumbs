@@ -4,184 +4,126 @@
 
 @section('content')
 <div class="relative bg-cream py-16 sm:py-24 overflow-hidden">
-    <!-- Decorative backgrounds -->
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/40 via-cream to-cream"></div>
 
     <div class="relative mx-auto max-w-7xl px-6 lg:px-8">
-        <!-- Breadcrumb -->
         <div class="mb-8">
             <x-breadcrumb :items="[['label' => 'Home', 'url' => route('home')], ['label' => 'Testimonials', 'url' => '#']]" />
         </div>
 
-        <!-- Heading -->
-        <x-section-heading 
-            title="Loved by Sweet Lovers" 
-            subtitle="Read glowing stories from our lovely customers and professional food critics"
+        <x-section-heading
+            title="Loved by Sweet Lovers"
+            subtitle="Read glowing stories from our lovely customers"
             align="center"
         />
 
-        <!-- Reviews Grid -->
+        @if(session('success'))
+            <div class="mx-auto max-w-2xl mt-8 rounded-2xl bg-emerald-50 p-4 border border-emerald-100 text-emerald-800 text-sm text-center">
+                <i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>{{ session('success') }}
+            </div>
+        @endif
+
         <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <!-- Review 1 -->
+            @forelse($reviews as $review)
             <div class="flex flex-col justify-between bg-white/70 backdrop-blur-sm border border-amber-100 p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300">
                 <div>
-                    <!-- Stars -->
                     <div class="flex gap-1 text-gold">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fa-{{ $i <= $review->rating ? 'solid' : 'regular' }} fa-star"></i>
+                        @endfor
                     </div>
                     <blockquote class="mt-6 text-base text-gray-600 leading-relaxed font-playfair italic">
-                        "The Royal Velvet raspberry cake was the absolute star of my daughter's birthday. It was incredibly moist, and that hint of fresh raspberry coulis combined with luxury white chocolate frosting was sheer perfection. Chef Sandeep is a true artist!"
+                        "{{ $review->comment }}"
                     </blockquote>
                 </div>
                 <div class="mt-8 flex items-center gap-x-4 border-t border-amber-50 pt-6">
-                    <img class="h-12 w-12 rounded-full object-cover shadow-inner" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop" alt="Sophia Carter">
+                    <div class="h-12 w-12 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-lg shadow-inner">
+                        {{ strtoupper(substr($review->user->name ?? 'G', 0, 1)) }}
+                    </div>
                     <div>
-                        <h4 class="text-sm font-bold text-coffee">Sophia Carter</h4>
-                        <p class="text-xs text-gold font-semibold">Verified Customer</p>
+                        <h4 class="text-sm font-bold text-coffee">{{ $review->user->name ?? 'Guest' }}</h4>
+                        <p class="text-xs text-gold font-semibold">
+                            @if($review->is_verified_purchase) Verified Purchase @else Customer Review @endif
+                            @if($review->product) · {{ $review->product->name }} @endif
+                        </p>
                     </div>
                 </div>
             </div>
-
-            <!-- Review 2 -->
-            <div class="flex flex-col justify-between bg-white/70 backdrop-blur-sm border border-amber-100 p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300">
-                <div>
-                    <!-- Stars -->
-                    <div class="flex gap-1 text-gold">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <blockquote class="mt-6 text-base text-gray-600 leading-relaxed font-playfair italic">
-                        "As a culinary critic, I am extremely picky about French lamination. The butter croissants at Sweet Crumbs are, without a doubt, the most authentic in the city. The crumb honeycomb interior is light, airy, and extraordinarily buttery. Phenomenal."
-                    </blockquote>
-                </div>
-                <div class="mt-8 flex items-center gap-x-4 border-t border-amber-50 pt-6">
-                    <img class="h-12 w-12 rounded-full object-cover shadow-inner" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Vikram Malhotra">
-                    <div>
-                        <h4 class="text-sm font-bold text-coffee">Vikram Malhotra</h4>
-                        <p class="text-xs text-gold font-semibold">Food Columnist, Daily Gourmet</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Review 3 -->
-            <div class="flex flex-col justify-between bg-white/70 backdrop-blur-sm border border-amber-100 p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300">
-                <div>
-                    <!-- Stars -->
-                    <div class="flex gap-1 text-gold">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <blockquote class="mt-6 text-base text-gray-600 leading-relaxed font-playfair italic">
-                        "Finding delicious gluten-free bakery items is almost impossible, but Sweet Crumbs has totally solved this. The Gluten-Free Almond Orange Cake is moist, perfectly sweet, and absolutely healthy. A weekly staple for my family!"
-                    </blockquote>
-                </div>
-                <div class="mt-8 flex items-center gap-x-4 border-t border-amber-50 pt-6">
-                    <img class="h-12 w-12 rounded-full object-cover shadow-inner" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop" alt="Emma Watson">
-                    <div>
-                        <h4 class="text-sm font-bold text-coffee">Emma Watson</h4>
-                        <p class="text-xs text-gold font-semibold">Verified Customer</p>
-                    </div>
-                </div>
-            </div>
+            @empty
+            <p class="col-span-3 text-center text-gray-500 py-12">No reviews yet. Be the first to share your sweet experience!</p>
+            @endforelse
         </div>
 
-        <!-- Inline Review Submission Form -->
+        @if($reviews->hasPages())
+        <div class="mt-12">{{ $reviews->links() }}</div>
+        @endif
+
+        @auth
         <div class="mx-auto mt-24 max-w-2xl bg-white/80 backdrop-blur-md border border-amber-100 p-8 sm:p-10 rounded-3xl shadow-xl">
             <h3 class="text-xl font-bold tracking-tight text-coffee font-playfair text-center mb-2">Share Your Sweet Experience</h3>
             <p class="text-sm text-gray-600 text-center mb-8">Your feedback inspires our pastry chefs and helps other dessert lovers choose.</p>
-            
-            <form onsubmit="submitReview(event)" class="space-y-6">
-                <!-- Star Rating Picker -->
+
+            <form action="{{ route('testimonials.store') }}" method="POST" class="space-y-6">
+                @csrf
+
+                <div>
+                    <label for="product_id" class="block text-sm font-semibold leading-6 text-coffee">Product Reviewed</label>
+                    <select name="product_id" id="product_id" required class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 bg-cream/30 focus:ring-2 focus:ring-gold text-sm">
+                        <option value="">Select a product...</option>
+                        @foreach($products as $product)
+                            <option value="{{ $product->id }}" @selected(old('product_id') == $product->id)>{{ $product->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('product_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                </div>
+
                 <div>
                     <label class="block text-sm font-semibold leading-6 text-coffee text-center">Your Rating</label>
-                    <div class="mt-3 flex justify-center gap-2 text-2xl text-amber-200">
-                        <button type="button" onclick="setRating(1)" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
-                        <button type="button" onclick="setRating(2)" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
-                        <button type="button" onclick="setRating(3)" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
-                        <button type="button" onclick="setRating(4)" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
-                        <button type="button" onclick="setRating(5)" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                    <div class="mt-3 flex justify-center gap-2 text-2xl text-amber-200" id="star-picker">
+                        @for($i = 1; $i <= 5; $i++)
+                        <button type="button" data-rating="{{ $i }}" class="star-btn transition duration-200 hover:scale-110"><i class="fa-solid fa-star"></i></button>
+                        @endfor
                     </div>
-                    <input type="hidden" id="selectedRating" name="rating" value="5" />
+                    <input type="hidden" name="rating" id="selectedRating" value="{{ old('rating', 5) }}" />
+                    @error('rating')<p class="mt-1 text-xs text-red-600 text-center">{{ $message }}</p>@enderror
                 </div>
 
-                <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6">
-                    <!-- Name -->
-                    <div>
-                        <label for="name" class="block text-sm font-semibold leading-6 text-coffee">Your Name</label>
-                        <div class="mt-2">
-                            <input type="text" id="name" required class="block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 bg-cream/30 focus:ring-2 focus:ring-gold text-sm" />
-                        </div>
-                    </div>
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-sm font-semibold leading-6 text-coffee">Email Address</label>
-                        <div class="mt-2">
-                            <input type="email" id="email" required class="block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 bg-cream/30 focus:ring-2 focus:ring-gold text-sm" />
-                        </div>
-                    </div>
-                    <!-- Review Content -->
-                    <div class="sm:col-span-2">
-                        <label for="review" class="block text-sm font-semibold leading-6 text-coffee">Your Review</label>
-                        <div class="mt-2">
-                            <textarea id="review" rows="4" required placeholder="Tell us about the texture, flavors, and our boutique service..." class="block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 bg-cream/30 focus:ring-2 focus:ring-gold text-sm"></textarea>
-                        </div>
-                    </div>
+                <div>
+                    <label for="comment" class="block text-sm font-semibold leading-6 text-coffee">Your Review</label>
+                    <textarea name="comment" id="comment" rows="4" required placeholder="Tell us about the texture, flavors, and our boutique service..."
+                              class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 bg-cream/30 focus:ring-2 focus:ring-gold text-sm">{{ old('comment') }}</textarea>
+                    @error('comment')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
 
-                <div class="mt-8">
-                    <button type="submit" class="w-full rounded-2xl bg-coffee px-6 py-4 text-center text-sm font-semibold text-cream shadow-md hover:bg-gold transition-colors duration-300">
-                        Submit Review &nbsp;<i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
+                <button type="submit" class="w-full rounded-2xl bg-coffee px-6 py-4 text-center text-sm font-semibold text-cream shadow-md hover:bg-gold transition-colors duration-300">
+                    Submit Review &nbsp;<i class="fa-solid fa-heart"></i>
+                </button>
             </form>
-            
-            <!-- Success message placeholder -->
-            <div id="reviewSuccess" class="hidden mt-6 rounded-2xl bg-emerald-50 p-4 border border-emerald-100 text-emerald-800 text-sm text-center">
-                <i class="fa-solid fa-circle-check text-emerald-500 text-lg mr-2"></i>
-                <span>Thank you! Your review has been submitted for chef moderation and will appear soon.</span>
-            </div>
         </div>
+        @else
+        <div class="mx-auto mt-24 max-w-2xl text-center bg-white/80 backdrop-blur-md border border-amber-100 p-8 rounded-3xl shadow-xl">
+            <p class="text-gray-600 mb-4">Sign in to share your experience with our community.</p>
+            <a href="{{ route('login') }}" class="inline-block rounded-2xl bg-coffee px-6 py-3 text-sm font-semibold text-cream hover:bg-gold transition-colors">Sign In to Review</a>
+        </div>
+        @endauth
     </div>
 </div>
 
+@auth
 <script>
-    let currentRating = 5;
-
     function setRating(rating) {
-        currentRating = rating;
         document.getElementById('selectedRating').value = rating;
-        const stars = document.querySelectorAll('.star-btn');
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.remove('text-amber-200');
-                star.classList.add('text-gold');
-            } else {
-                star.classList.remove('text-gold');
-                star.classList.add('text-amber-200');
-            }
+        document.querySelectorAll('.star-btn').forEach((star, index) => {
+            star.classList.toggle('text-gold', index < rating);
+            star.classList.toggle('text-amber-200', index >= rating);
         });
     }
-
-    // Initialize rating stars as gold
     document.addEventListener('DOMContentLoaded', () => {
-        setRating(5);
+        setRating(parseInt(document.getElementById('selectedRating').value) || 5);
+        document.querySelectorAll('.star-btn').forEach(btn => {
+            btn.addEventListener('click', () => setRating(parseInt(btn.dataset.rating)));
+        });
     });
-
-    function submitReview(event) {
-        event.preventDefault();
-        // Hide form, show success
-        event.currentTarget.classList.add('hidden');
-        document.getElementById('reviewSuccess').classList.remove('hidden');
-    }
 </script>
+@endauth
 @endsection

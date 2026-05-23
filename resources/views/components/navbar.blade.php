@@ -9,8 +9,15 @@
             </span>
         </a>
 
+        <!-- Live Search -->
+        <div class="hidden lg:block relative flex-1 max-w-xs mx-4">
+            <input type="search" id="global-search-input" placeholder="Search menu..."
+                   class="w-full rounded-xl border border-coffee-200/60 bg-white/60 dark:bg-gray-800/60 px-4 py-2 text-sm focus:border-gold focus:ring-gold" autocomplete="off" />
+            <div id="search-suggestions" class="hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 rounded-2xl shadow-warm-lg border border-coffee-100/10 overflow-hidden z-50 max-h-80 overflow-y-auto"></div>
+        </div>
+
         <!-- Main Desktop Navigation -->
-        <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-coffee-800 dark:text-gray-200">
+        <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-coffee-800 dark:text-gray-200">
             <a href="{{ route('home') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('home') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Home</a>
             <a href="{{ route('about') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('about') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Our Story</a>
             <a href="{{ route('products.index') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('products.*') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Menu</a>
@@ -29,6 +36,7 @@
             </button>
 
             @auth
+                @php $cartCount = $navbarCartCount ?? 0; @endphp
                 <!-- Wishlist link -->
                 <a href="{{ route('wishlist.index') }}" class="p-2.5 rounded-xl hover:bg-coffee-100/50 dark:hover:bg-gray-800 text-coffee-600 dark:text-coffee-300 transition-all relative active:scale-95" title="Wishlist">
                     <i class="fa-regular fa-heart text-lg"></i>
@@ -37,13 +45,21 @@
                 <!-- Cart Dropdown trigger -->
                 <a href="{{ route('cart.index') }}" class="p-2.5 rounded-xl hover:bg-coffee-100/50 dark:hover:bg-gray-800 text-coffee-600 dark:text-coffee-300 transition-all relative active:scale-95" title="Cart">
                     <i class="fa-solid fa-bag-shopping text-lg"></i>
-                    @php 
-                        $cartCount = \App\Models\Cart::where('user_id', auth()->id())->where('saved_for_later', false)->sum('quantity');
-                    @endphp
-                    <span class="cart-count-badge absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-rose-500 text-white rounded-full text-[10px] font-bold shadow {{ $cartCount > 0 ? '' : 'hidden' }}">
-                        {{ $cartCount }}
+                    <span class="cart-count-badge absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-rose-500 text-white rounded-full text-[10px] font-bold shadow {{ ($cartCount ?? 0) > 0 ? '' : 'hidden' }}">
+                        {{ $cartCount ?? 0 }}
                     </span>
                 </a>
+            @else
+                @php $cartCount = $navbarCartCount ?? 0; @endphp
+                <a href="{{ route('cart.index') }}" class="p-2.5 rounded-xl hover:bg-coffee-100/50 dark:hover:bg-gray-800 text-coffee-600 dark:text-coffee-300 transition-all relative active:scale-95" title="Cart">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span class="cart-count-badge absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-rose-500 text-white rounded-full text-[10px] font-bold shadow {{ ($cartCount ?? 0) > 0 ? '' : 'hidden' }}">
+                        {{ $cartCount ?? 0 }}
+                    </span>
+                </a>
+            @endauth
+
+            @auth
 
                 <!-- User Dropdown profile -->
                 <div x-data="{ open: false }" class="relative">
@@ -55,8 +71,8 @@
                     <div x-show="open" @click.outside="open = false" x-transition class="absolute right-0 mt-3 w-52 bg-white dark:bg-gray-900 border border-coffee-100/10 rounded-2xl shadow-warm-lg overflow-hidden py-1 z-50">
                         <div class="px-4 py-2 border-b border-coffee-100/5 text-xs text-coffee-400">Welcome, {{ auth()->user()->name }}</div>
                         <a href="{{ route('dashboard.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-coffee-700 dark:text-gray-200 hover:bg-coffee-50 dark:hover:bg-gray-800"><i class="fa-solid fa-user-circle w-5"></i> Dashboard</a>
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-coffee-700 dark:text-gray-200 hover:bg-coffee-50 dark:hover:bg-gray-800 font-semibold text-bakery-gold-500"><i class="fa-solid fa-chef-hat w-5"></i> Chef Admin</a>
+                        @if(auth()->user()->isStaff())
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-coffee-700 dark:text-gray-200 hover:bg-coffee-50 dark:hover:bg-gray-800 font-semibold text-bakery-gold-500"><i class="fa-solid fa-chef-hat w-5"></i> Admin Panel</a>
                         @endif
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf

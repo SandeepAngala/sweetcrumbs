@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Blog;
+use App\Models\HomepageOffer;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -23,69 +24,36 @@ class HomeController extends Controller
         });
 
         // Cache product collections for 10 minutes with eager loading
-        $hotSelling = Cache::remember('home_hot_selling', 600, function () {
-            return Product::active()
-                ->with('category')
-                ->withCount('reviews')
-                ->whereHas('category', fn ($q) => $q->where('slug', 'hot-items'))
-                ->take(8)
-                ->get();
-        });
+        $productQuery = fn () => Product::active()
+            ->with('category')
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating');
 
-        $trendingDesserts = Cache::remember('home_trending_desserts', 600, function () {
-            return Product::active()
-                ->with('category')
-                ->withCount('reviews')
-                ->whereHas('category', fn ($q) => $q->where('slug', 'sweets-desserts'))
-                ->trending()
-                ->take(8)
-                ->get();
-        });
+        $hotSelling = Cache::remember('home_hot_selling', 600, fn () => $productQuery()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'hot-items'))
+            ->take(8)->get());
 
-        $mocktailSpecials = Cache::remember('home_mocktails', 600, function () {
-            return Product::active()
-                ->with('category')
-                ->withCount('reviews')
-                ->whereHas('category', fn ($q) => $q->where('slug', 'mocktails'))
-                ->take(8)
-                ->get();
-        });
+        $trendingDesserts = Cache::remember('home_trending_desserts', 600, fn () => $productQuery()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'sweets-desserts'))
+            ->trending()->take(8)->get());
 
-        $coffeeCollection = Cache::remember('home_coffee', 600, function () {
-            return Product::active()
-                ->with('category')
-                ->withCount('reviews')
-                ->whereHas('category', fn ($q) => $q->where('slug', 'premium-coffees'))
-                ->take(8)
-                ->get();
-        });
+        $mocktailSpecials = Cache::remember('home_mocktails', 600, fn () => $productQuery()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'mocktails'))
+            ->take(8)->get());
 
-        $iceCreams = Cache::remember('home_ice_creams', 600, function () {
-            return Product::active()
-                ->with('category')
-                ->withCount('reviews')
-                ->whereHas('category', fn ($q) => $q->where('slug', 'ice-creams'))
-                ->take(8)
-                ->get();
-        });
+        $coffeeCollection = Cache::remember('home_coffee', 600, fn () => $productQuery()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'premium-coffees'))
+            ->take(8)->get());
 
-        $chefRecommendations = Cache::remember('home_chef_picks', 600, function () {
-            return Product::active()
-                ->featured()
-                ->with('category')
-                ->withCount('reviews')
-                ->take(6)
-                ->get();
-        });
+        $iceCreams = Cache::remember('home_ice_creams', 600, fn () => $productQuery()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'ice-creams'))
+            ->take(8)->get());
 
-        $bestsellerProducts = Cache::remember('home_bestsellers', 600, function () {
-            return Product::active()
-                ->bestseller()
-                ->with('category')
-                ->withCount('reviews')
-                ->take(8)
-                ->get();
-        });
+        $chefRecommendations = Cache::remember('home_chef_picks', 600, fn () => $productQuery()
+            ->featured()->take(6)->get());
+
+        $bestsellerProducts = Cache::remember('home_bestsellers', 600, fn () => $productQuery()
+            ->bestseller()->take(8)->get());
 
         $testimonials = Cache::remember('home_testimonials', 600, function () {
             return Review::approved()
@@ -103,6 +71,10 @@ class HomeController extends Controller
                 ->get();
         });
 
+        $homepageOffers = Cache::remember('home_offers', 1800, function () {
+            return HomepageOffer::active()->get();
+        });
+
         return view('home', compact(
             'banners',
             'categories',
@@ -114,7 +86,8 @@ class HomeController extends Controller
             'chefRecommendations',
             'bestsellerProducts',
             'testimonials',
-            'latestBlogs'
+            'latestBlogs',
+            'homepageOffers'
         ));
     }
 }

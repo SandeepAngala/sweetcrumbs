@@ -367,7 +367,7 @@
                 showToast(data.message, 'success');
                 // Toggle heart icon color
                 const icon = heartBtn.querySelector('i');
-                if(data.action === 'added') {
+                if(data.status === 'added') {
                     icon.className = "fa-solid fa-heart text-lg text-rose-600 animate-pulse";
                     heartBtn.classList.remove('text-gray-400');
                     heartBtn.classList.add('bg-rose-50', 'text-rose-600');
