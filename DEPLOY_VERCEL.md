@@ -1,30 +1,47 @@
-# Vercel Deployment — Sweet Crumbs
+# Sweet Crumbs — Vercel Deployment (Final)
 
-## Dashboard (Framework Preset)
+## Warning (safe to ignore)
+
+> WARNING! Due to `builds` existing in your configuration file, the Build and Development Settings defined in your Project Settings will not apply.
+
+**Normal for Laravel + vercel-php.** `vercel.json` intentionally controls the build.
+
+## Vercel dashboard
 
 | Setting | Value |
 |---------|--------|
-| Framework Preset | **Other** (not Vite / React / Next.js) |
-| Output Directory override | **OFF** / empty |
-| Build Command override | **OFF** / empty |
+| Framework Preset | **Other** |
+| Output Directory override | **OFF** (empty) |
+| Build Command override | **OFF** (empty) |
 | Node.js Version | **22.x** |
 
-## How it works (`vercel.json`)
+## `vercel.json` behavior
 
-1. **`@vercel/static-build`** — runs `npm run build` → Vite outputs to `public/build`
-2. **`vercel-php@0.7.4`** — executes `public/index.php` (Laravel)
-3. **Routes** — `/build/*` → static assets; everything else → `public/index.php`
+1. `@vercel/static-build` → runs `npm run build` → Vite → `public/build`
+2. `vercel-php@0.7.4` → executes `public/index.php` (Laravel)
+3. Routes: `/build/*` = assets; all else → Laravel
 
-> Uses `vercel-php@0.7.4` (not 0.6.0) because Node 18 is discontinued on Vercel.
+> Uses **0.7.4** (not 0.6.0) — Node 18 runtime is discontinued on Vercel.
+
+## Local build before deploy
+
+```bash
+composer install
+npm ci
+npm run build
+```
 
 ## Redeploy
 
-1. Push `main` from GitHub
-2. **Deployments → Redeploy → uncheck “Use existing Build Cache”**
-3. Set env: `APP_KEY`, `APP_URL`, database credentials
+1. Push `main` to GitHub
+2. Vercel → **Deployments** → **Redeploy**
+3. **Clear Cache & Redeploy**
+4. Env vars: `APP_KEY`, `APP_URL`, `DB_*` (use MySQL/Postgres, not SQLite)
 
-## Environment variables (Production)
+## Verify after deploy
 
-- `APP_KEY` — required
-- `APP_URL` — your Vercel URL
-- `DB_*` — use MySQL/Postgres (SQLite does not persist on serverless)
+- [ ] Status **Ready** (warning is OK)
+- [ ] Homepage shows HTML (no `.php` download)
+- [ ] CSS/JS load from `/build/`
+- [ ] `/products`, `/login`, `/admin` work
+- [ ] `/api/v1/products` returns JSON
