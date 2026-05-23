@@ -5,7 +5,7 @@
 | Phase | Environment | Command |
 |-------|-------------|---------|
 | Frontend assets | Node | `npx vite build` (via `vercel.json` `buildCommand`) |
-| PHP / Composer | vercel-php runtime | `composer run vercel` (npm + vite only, no artisan) |
+| PHP / Composer | `vercel-php@0.7.4` (Node 22) | `composer run vercel` (npm + vite only, no artisan) |
 
 **Do not** add `php artisan` to `package.json` `build` or `vercel-build` scripts.
 
