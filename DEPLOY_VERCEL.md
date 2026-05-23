@@ -11,16 +11,21 @@
 
 ## If deploy still fails with `php: command not found`
 
-1. **Vercel Dashboard** → Project → Settings → Build & Development  
-   - **Framework Preset:** Other (`null`)  
-   - **Build Command:** leave empty (use `vercel.json`) or set exactly: `npx vite build`  
-   - **Install Command:** leave empty or `npm ci`  
-   - **Do not** use: `vite build && php artisan ...`
+Vercel is running a **dashboard override** or cached `package.json` that chains `php artisan` after Vite.
 
-2. **Redeploy without cache**  
-   Deployments → ⋮ → Redeploy → uncheck “Use existing Build Cache”
+1. **Vercel Dashboard** → Settings → Build & Development  
+   - **Framework Preset:** Other  
+   - **Build Command:** `node scripts/vercel-vite.mjs` (or leave **empty** to use `vercel.json`)  
+   - **Install Command:** `npm ci` (or empty)  
+   - **Delete** any command containing `php artisan`
 
-3. Confirm `package.json` on GitHub `main` has only:
+2. **Redeploy without cache** (required)  
+   Deployments → ⋮ → Redeploy → **uncheck** “Use existing Build Cache”
+
+3. Repo build scripts (must match):
    ```json
-   "build": "vite build"
+   "build": "node scripts/vercel-vite.mjs",
+   "vercel-build": "node scripts/vercel-vite.mjs"
    ```
+
+4. `public/build` is committed so assets exist even if the Node build step is skipped.

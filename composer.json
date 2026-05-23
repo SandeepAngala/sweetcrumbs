@@ -52,7 +52,7 @@
         ],
         "vercel": [
             "npm ci",
-            "npm run build"
+            "node scripts/vercel-vite.mjs"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

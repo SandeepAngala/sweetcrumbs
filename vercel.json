@@ -3,7 +3,7 @@
     "version": 2,
     "framework": null,
     "installCommand": "npm ci",
-    "buildCommand": "npx vite build",
+    "buildCommand": "node scripts/vercel-vite.mjs",
     "functions": {
         "api/index.php": {
             "runtime": "vercel-php@0.6.0",

@@ -1,0 +1,20 @@
+{
+  "_vendor-C7i05jfi.js": {
+    "file": "assets/vendor-C7i05jfi.js",
+    "name": "vendor"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BGSahzZg.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-D6-W4KS9.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-C7i05jfi.js"
+    ]
+  }
+}

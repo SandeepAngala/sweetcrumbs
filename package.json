@@ -3,8 +3,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "vercel-build": "vite build"
+        "build": "node scripts/vercel-vite.mjs",
+        "vercel-build": "node scripts/vercel-vite.mjs"
     },
     "engines": {
         "node": "20.x"
