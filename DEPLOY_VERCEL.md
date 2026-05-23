@@ -31,12 +31,60 @@ All other URLs (/, /products)   →  api/index.php → public/index.php (Laravel
 
 `package.json` must **not** include `php artisan` in npm scripts.
 
+## Fix the orange warning (from your screenshots)
+
+You see: **"Configuration Settings in the current Production deployment differ from your current Project Settings."**
+
+That means the **live site** was built with **old settings**, even though your dashboard now looks correct.
+
+### Step 1 — Build and Deployment (your screenshot)
+
+Your **Project Settings** are correct:
+
+| Setting | Your value | Status |
+|---------|------------|--------|
+| Framework Preset | Other | OK |
+| Build Command override | OFF, empty | OK |
+| **Output Directory override** | OFF, empty | OK |
+| Install Command override | OFF, empty | OK |
+| Root Directory | `./` | OK |
+
+1. Click **Production Overrides** (expand it).
+2. If you see **Output Directory = `public`** or a build command with `php artisan` — that is the bug. Clear those overrides or turn overrides OFF.
+3. Leave all four **Override** toggles **OFF** so `vercel.json` in Git controls the build.
+
+### Step 2 — Node.js Version (your screenshot)
+
+1. Open **Project Settings** (not Production Overrides).
+2. Set **Node.js Version** to **22.x**.
+3. Save.
+4. Expand **Production Overrides** — if Node version is pinned to 18.x there, remove it or redeploy so production matches 22.x.
+
+### Step 3 — Fresh production deploy
+
+1. **Deployments** tab → latest deployment from `main`.
+2. ⋮ menu → **Redeploy**.
+3. **Uncheck** “Use existing Build Cache”.
+4. Confirm redeploy.
+
+Or push any small commit to `main` to trigger a new Git deployment.
+
+### Step 4 — Environment variables
+
+**Settings → Environment Variables** (Production):
+
+- `APP_KEY` (required)
+- `APP_URL` = your Vercel URL (e.g. `https://sweetcrumbs.vercel.app`)
+- Database vars if you use a remote DB (SQLite does not work on Vercel serverless — use MySQL/Postgres)
+
 ## Redeploy checklist
 
-1. Push latest `main` from GitHub
-2. **Redeploy without build cache**
-3. Confirm Output Directory is blank in dashboard
-4. Set env vars: `APP_KEY`, `APP_URL`, `DB_*`, etc.
+1. Push latest `main` from GitHub (includes `vercel.json` with `builds` + `vercel-php@0.7.4`)
+2. Clear **Production Overrides** if they conflict
+3. Node.js **22.x** in Project Settings
+4. **Redeploy without build cache**
+5. Confirm Output Directory override stays **OFF**
+6. Set env vars: `APP_KEY`, `APP_URL`, `DB_*`, etc.
 
 ## Local smoke test
 
