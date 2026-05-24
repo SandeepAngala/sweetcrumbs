@@ -14,6 +14,29 @@ Set in Railway → **Variables**:
 | `APP_URL` | `https://sweetcrumbs-production-ec96.up.railway.app` |
 | `FORCE_HTTPS` | `true` |
 | `BAKERY_PREFER_LOCAL_MEDIA` | `false` |
+| `CACHE_STORE` | `file` |
+| `SESSION_DRIVER` | `file` |
+| `QUEUE_CONNECTION` | `sync` |
+| `LOG_CHANNEL` | `stderr` |
+
+**Database:** Add MySQL or PostgreSQL in Railway and **link it** to the web service so `DATABASE_URL` is injected. The app reads `DATABASE_URL` automatically (no manual `DB_HOST` needed).
+
+## Fix 500 Internal Server Error
+
+Common causes after deploy:
+
+1. **No database linked** — homepage queries products/settings; without `DATABASE_URL` Laravel falls back to SQLite (missing on Railway) → 500.
+2. **Build-time `config:cache`** — old config without `APP_KEY` / DB credentials. Fixed: startup runs `config:clear` before serve.
+3. **`CACHE_STORE=database` / `SESSION_DRIVER=database`** without tables — use `file` for cache/session on Railway (see table above).
+4. **Migrations not run** — `scripts/railway-start.sh` runs `migrate --force` on each deploy.
+
+After setting variables, **redeploy**. Check **Deploy Logs** for migration errors.
+
+Seed once (empty storefront):
+
+```bash
+railway run php artisan db:seed --force
+```
 
 `FORCE_HTTPS` + trusted proxies (configured in code) ensure `@vite` and `route()` use **https://**.
 
