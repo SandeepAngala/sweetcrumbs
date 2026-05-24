@@ -1,10 +1,8 @@
 # Sweet Crumbs — Railway deployment
 
-## Critical: HTTPS and `APP_URL`
+## Environment variables
 
-Railway serves your app over **HTTPS**. If `APP_URL` uses `http://`, Laravel generates `http://` asset URLs (`/build/assets/...`). Browsers **block** those as mixed content when the page is `https://`, so CSS/JS never load.
-
-Set in Railway → **Variables**:
+Set in Railway → **Variables** (web service):
 
 | Variable | Value |
 |----------|--------|
@@ -19,59 +17,52 @@ Set in Railway → **Variables**:
 | `QUEUE_CONNECTION` | `sync` |
 | `LOG_CHANNEL` | `stderr` |
 
-**Database:** Add MySQL or PostgreSQL in Railway and **link it** to the web service so `DATABASE_URL` is injected. The app reads `DATABASE_URL` automatically (no manual `DB_HOST` needed).
+**Database:** Add **MySQL** or **PostgreSQL** in Railway and **link** it to the web service. Railway injects `DATABASE_URL` — the app uses it automatically. Do **not** set `DB_HOST=127.0.0.1` or XAMPP credentials.
 
-## Fix 500 Internal Server Error
+## Empty products / categories (most common)
 
-Common causes after deploy:
+The UI works but sections say “No products found” because the **production database has no seeded data**.
 
-1. **No database linked** — homepage queries products/settings; without `DATABASE_URL` Laravel falls back to SQLite (missing on Railway) → 500.
-2. **Build-time `config:cache`** — old config without `APP_KEY` / DB credentials. Fixed: startup runs `config:clear` before serve.
-3. **`CACHE_STORE=database` / `SESSION_DRIVER=database`** without tables — use `file` for cache/session on Railway (see table above).
-4. **Migrations not run** — `scripts/railway-start.sh` runs `migrate --force` on each deploy.
+On each deploy, `scripts/railway-start.sh` runs:
 
-After setting variables, **redeploy**. Check **Deploy Logs** for migration errors.
+1. `migrate --force` — creates tables  
+2. `db:seed-if-empty` — seeds **64 products**, 6 categories, banners, CMS, reviews when `products` table is empty  
 
-Seed once (empty storefront):
+**Redeploy** after linking a database, or seed manually once:
 
 ```bash
+railway run php artisan db:seed-if-empty
+# or full seed:
 railway run php artisan db:seed --force
 ```
 
-`FORCE_HTTPS` + trusted proxies (configured in code) ensure `@vite` and `route()` use **https://**.
-
-## Database (empty homepage sections)
-
-Add MySQL/PostgreSQL on Railway and set `DATABASE_URL` (or `DB_*` vars). After first deploy:
+Verify counts:
 
 ```bash
-railway run php artisan migrate --force
-railway run php artisan db:seed --force
+railway run php scripts/db-check.php
 ```
 
-Without seeding, products/categories will be empty even when CSS works.
+Expected: **64 products**, **6 categories**.
 
-## Build
+## HTTPS / Vite assets
 
-`railway.toml` runs:
+If CSS/JS are missing, set `APP_URL` to **`https://`** (not `http://`) and `FORCE_HTTPS=true`. Browsers block mixed-content `http://` assets on HTTPS pages.
 
-```bash
-composer install --no-dev --optimize-autoloader
-npm ci && npm run build
-php artisan config:cache
-```
+## Fix 500 errors
 
-`public/build` is also committed to git as a fallback if `npm run build` fails on a deploy.
+1. Link a database service (`DATABASE_URL` must appear in Variables).  
+2. Set `CACHE_STORE=file` and `SESSION_DRIVER=file`.  
+3. Check deploy logs for migration/seed errors.
 
-## Verify after deploy
+## APIs
 
-1. Open DevTools → **Network** → reload.
-2. `app-*.css` and `app-*.js` must be **200** and URLs must start with **`https://`**.
-3. No mixed-content warnings in the console.
+After seeding:
 
-## Local production check
+- `GET /api/v1/products` — product list  
+- `GET /api/v1/categories` — categories  
 
-```bash
-APP_ENV=production APP_URL=https://your-app.up.railway.app php artisan serve
-npm run build
-```
+Empty `[]` response = database not seeded.
+
+## Admin login (after seed)
+
+- `admin@sweetcrumbs.com` / `password`

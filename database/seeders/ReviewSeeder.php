@@ -46,16 +46,19 @@ class ReviewSeeder extends Seeder
             ],
         ];
 
-        // Seed reviews for some products
         foreach ($products as $index => $product) {
             $reviewData = $reviews[$index % count($reviews)];
-            Review::create([
-                'user_id' => $customerId,
-                'product_id' => $product->id,
-                'rating' => $reviewData['rating'],
-                'comment' => $reviewData['comment'],
-                'is_approved' => $reviewData['is_approved'],
-            ]);
+            Review::firstOrCreate(
+                [
+                    'user_id' => $customerId,
+                    'product_id' => $product->id,
+                ],
+                [
+                    'rating' => $reviewData['rating'],
+                    'comment' => $reviewData['comment'],
+                    'is_approved' => $reviewData['is_approved'],
+                ]
+            );
         }
     }
 }
