@@ -126,14 +126,6 @@ For scores 90+, deploy with:
 
 ## 4. Deployment Report
 
-### Vercel (`vercel.json`)
-
-- PHP runtime via `api/index.php`
-- Asset rewrites for `/build`, `/storage`, `/images`
-- Immutable cache headers for built assets
-- Production build command with config/route/view cache
-- `APP_DEBUG=false`, `LOG_CHANNEL=stderr`
-
 ### Local / VPS deployment
 
 ```bash
@@ -171,7 +163,7 @@ php artisan optimize
 | Seed data uses Unsplash URLs | Low | Dev/demo only; upload via admin for production |
 | Custom cake / page content admin UI | Medium | Data seeded; full CRUD UI optional |
 | Queue worker not bundled | Medium | Required for email notifications in prod |
-| Redis cache in production | Medium | Recommended over `file`/`array` on Vercel |
+| Redis cache in production | Medium | Recommended over `file`/`array` on shared hosting |
 | Lighthouse 90+ audit | Low | Run manually post-deploy with real HTTPS |
 | WebP for seeded external images | Low | `MediaUrl` optimizes Unsplash when allowed |
 
@@ -247,7 +239,7 @@ php artisan optimize
 - [x] Form rate limiting on public POST endpoints
 - [x] Secure image upload validation
 - [x] Local SVG placeholder for missing images
-- [x] Vercel config hardened
+- [x] Production build assets in `public/build`
 
 ---
 
