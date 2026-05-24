@@ -2,6 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "predev": "node scripts/clean-hot.mjs",
         "dev": "vite",
         "build": "vite build"
     },
