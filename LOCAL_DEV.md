@@ -1,15 +1,36 @@
 # Local development (Sweet Crumbs)
 
-## Quick start
+## Quick start (XAMPP + MySQL)
+
+1. Start **Apache** and **MySQL** in XAMPP.
+2. Create database `sweetcrumbs` in phpMyAdmin (utf8mb4).
+3. Configure `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sweetcrumbs
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+4. Run:
 
 ```bash
 composer install
 cp .env.example .env   # if needed
 php artisan key:generate
-php artisan migrate --seed
+php artisan migrate:fresh --seed
+php artisan storage:link
+php artisan optimize:clear
 npm ci
 composer dev
 ```
+
+Verify data: `php scripts/db-check.php` (expect 64 products, 6 categories).
+
+If the homepage is empty after migrating to MySQL, seeders likely did not run — `migrate:fresh --seed` repopulates all storefront data.
 
 Open **http://127.0.0.1:8000** — not `http://localhost:5173` (that URL is only the Vite dev server).
 
