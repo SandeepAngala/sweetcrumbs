@@ -65,7 +65,7 @@
                 @endphp
                 <div class="w-full bg-coffee-50 dark:bg-gray-955 p-4 rounded-2xl border border-coffee-100/50 dark:border-gray-800 mb-6 text-left">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xxs font-bold text-coffee-400 dark:text-gray-500 uppercase tracking-widest">Bakery Tier</span>
+                        <span class="text-xxs font-bold text-coffee-400 dark:text-gray-500 uppercase tracking-widest">Loyalty Tier</span>
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 {{ $tierClass }}">
                             <i class="{{ $tierIcon }}"></i> {{ $tier }}
                         </span>
@@ -125,7 +125,7 @@
                 
                 <!-- Tab: Orders History -->
                 <div id="tabContent-orders" class="tab-panel space-y-4">
-                    <h3 class="font-display text-lg font-bold text-coffee-950 dark:text-white border-b border-coffee-50 dark:border-gray-800 pb-3 mb-4">Past Bakery Orders</h3>
+                    <h3 class="font-display text-lg font-bold text-coffee-950 dark:text-white border-b border-coffee-50 dark:border-gray-800 pb-3 mb-4">Past Orders</h3>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-sm">

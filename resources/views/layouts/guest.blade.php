@@ -113,21 +113,21 @@
                     <h1 class="font-display text-4xl lg:text-5xl font-black tracking-tight leading-none text-white">
                         MANA OORU MANA TEA
                     </h1>
-                    <span class="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-bakery-gold-300">Café & Artisanal Bakery</span>
+                    <span class="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-bakery-gold-300">Premium Tea Lounge & Café</span>
                     
                     <!-- Decorative glowing divider -->
                     <div class="w-16 h-0.5 bg-gradient-to-r from-bakery-gold-400 to-transparent my-6"></div>
 
                     <!-- Narrative quote -->
                     <p class="text-base text-coffee-100 font-medium leading-relaxed italic font-display">
-                        "Freshly baked happiness, crafted with premium AOP butter, local ingredients, and artisanal love."
+                        "Fresh chai and filter coffee, brewed with care for every journey on NH 216."
                     </p>
                 </div>
 
                 <!-- Bottom Row: Decorative info -->
                 <div class="z-20 flex justify-between items-center text-xxs text-coffee-200 border-t border-white/10 pt-4" data-aos="fade-up" data-aos-duration="1000">
                     <span>Est. 2026 &bull; Mana Ooru Mana Tea</span>
-                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-green-400 animate-pulse text-[6px]"></i> Oven Hot & Baking</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-green-400 animate-pulse text-[6px]"></i> Kettle On & Brewing</span>
                 </div>
 
             </div>

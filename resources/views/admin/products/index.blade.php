@@ -45,7 +45,7 @@
                             </td>
                             
                             <td class="py-4 text-coffee-600 dark:text-gray-300 font-medium">
-                                {{ $prod->category->name ?? 'Bakery Signature' }}
+                                {{ $prod->category->name ?? 'House Special' }}
                             </td>
                             
                             <td class="py-4 font-bold text-coffee-950 dark:text-white">

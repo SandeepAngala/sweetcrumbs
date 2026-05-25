@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                 'avatar' => 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=400&auto=format&fit=crop',
                 'role' => 'admin',
                 'loyalty_points' => 500,
-                'address' => '123 Bakers Street, Gourmet City',
+                'address' => 'Arumbaka, NH 216, Guntur - 522309',
             ]
         );
 
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
                 'avatar' => 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=400&auto=format&fit=crop',
                 'role' => 'user',
                 'loyalty_points' => 120,
-                'address' => '456 Pastry Lane, Sweet Town',
+                'address' => 'Bapatla, Guntur District',
             ]
         );
     }

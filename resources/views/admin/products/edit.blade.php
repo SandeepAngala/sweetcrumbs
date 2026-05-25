@@ -31,7 +31,7 @@
 
                 <!-- Category -->
                 <div>
-                    <label for="category_id" class="block text-xs font-bold uppercase tracking-wider text-coffee-600 dark:text-gray-400 mb-2">Bakery Category</label>
+                    <label for="category_id" class="block text-xs font-bold uppercase tracking-wider text-coffee-600 dark:text-gray-400 mb-2">Menu Category</label>
                     <select name="category_id" id="category_id" required class="w-full px-4 py-3 rounded-xl bg-coffee-50/50 dark:bg-gray-950/50 border border-coffee-100 dark:border-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-bakery-gold-400 transition-all font-semibold">
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -133,7 +133,7 @@
 
                 <!-- Full Description -->
                 <div class="md:col-span-2">
-                    <label for="description" class="block text-xs font-bold uppercase tracking-wider text-coffee-600 dark:text-gray-400 mb-2">Full Description & Bakery Ingredients</label>
+                    <label for="description" class="block text-xs font-bold uppercase tracking-wider text-coffee-600 dark:text-gray-400 mb-2">Full Description & Ingredients</label>
                     <textarea name="description" id="description" rows="5" required class="w-full px-4 py-3 rounded-xl bg-coffee-50/50 dark:bg-gray-950/50 border border-coffee-100 dark:border-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-bakery-gold-400 transition-all font-medium resize-none">{{ old('description', $product->description) }}</textarea>
                     @error('description')
                         <p class="text-xs text-rose-500 mt-1.5 font-bold">{{ $message }}</p>

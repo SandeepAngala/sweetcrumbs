@@ -96,9 +96,9 @@ class CmsSeeder extends Seeder
     protected function seedOffers(): void
     {
         $offers = [
-            ['badge' => 'MORNING ENERGIZE', 'title' => 'The Parisian Awakening', 'description' => 'Classic Butter Croissant with double espresso Cappuccino.', 'price' => 219, 'compare_price' => 279, 'icon_classes' => 'fa-mug-hot fa-bread-slice', 'button_link' => '/products?category=premium-coffees', 'sort_order' => 1],
-            ['badge' => 'AFTERNOON DELIGHT', 'title' => 'Gourmet Dolce & Mint', 'description' => 'Tiramisu cup with Spearmint Mint Cooler mocktail.', 'price' => 329, 'compare_price' => 399, 'icon_classes' => 'fa-cake-candles fa-leaf', 'button_link' => '/products?category=sweets-desserts', 'sort_order' => 2],
-            ['badge' => 'ROYAL FESTIVAL', 'title' => 'Sizzling Lava & Fudge', 'description' => 'Chocolate Lava Cake with Belgian Chocolate Ice Cream.', 'price' => 319, 'compare_price' => 389, 'icon_classes' => 'fa-fire fa-cookie-bite', 'button_link' => '/products?category=sweets-desserts', 'sort_order' => 3],
+            ['badge' => 'MORNING CHAI', 'title' => 'Sunrise Masala Combo', 'description' => 'Karivepaku chai with bun maska and filter coffee shot.', 'price' => 149, 'compare_price' => 199, 'icon_classes' => 'fa-mug-hot fa-bread-slice', 'button_link' => '/products?category=premium-coffees', 'sort_order' => 1],
+            ['badge' => 'EVENING SPECIAL', 'title' => 'Ginger Chai & Snacks', 'description' => 'Strong ginger tea with hot puffs and garlic toast.', 'price' => 179, 'compare_price' => 229, 'icon_classes' => 'fa-mug-hot fa-fire', 'button_link' => '/products?category=hot-items', 'sort_order' => 2],
+            ['badge' => 'COOLER PAIR', 'title' => 'Iced Tea & Bites', 'description' => 'Mint cooler with light sweets from our tea-time menu.', 'price' => 199, 'compare_price' => 259, 'icon_classes' => 'fa-glass-water fa-leaf', 'button_link' => '/products?category=mocktails', 'sort_order' => 3],
         ];
 
         foreach ($offers as $offer) {
@@ -108,30 +108,30 @@ class CmsSeeder extends Seeder
 
     protected function seedPageContent(): void
     {
-        PageContent::firstOrCreate(
+        PageContent::updateOrCreate(
             ['slug' => 'about'],
             [
-                'title' => 'Our Sweet Journey',
-                'body' => 'Founded by Chef Sandeep in 2018, MANA OORU MANA TEA Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour.',
+                'title' => 'Our Tea Journey',
+                'body' => 'Mana Ooru Mana Tea began at a highway tea point on NH 216 in Arumbaka — brewing honest chai for travelers, locals, and families since day one.',
                 'meta' => [
                     'established' => '2018',
-                    'headline' => 'Where Every Crumb Tells a Story',
-                    'subtitle' => 'The Story of Passion, Flour, and Edible Artistry',
-                    'hero_image' => 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=800&auto=format&fit=crop',
+                    'headline' => 'Where Every Cup Tells a Story',
+                    'subtitle' => 'South Indian chai, filter coffee & café warmth',
+                    'hero_image' => 'https://images.unsplash.com/photo-1571934811356-798df2168c42?q=80&w=800&auto=format&fit=crop',
                     'story_paragraphs' => [
-                        'Founded by Chef Sandeep in 2018, MANA OORU MANA TEA Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour. Our goal has always been simple: to elevate daily moments with extraordinary, hand-rolled confections that look like fine art and taste like heaven.',
-                        'We believe in slow baking—the quiet rhythm of natural fermentation, the precise lamination of cold butter, and the warm aroma of caramelized crusts wafting through the early morning air. Every ingredient we choose is ethically sourced, from local grass-fed butter to organic, single-origin dark chocolate.',
+                        'Mana Ooru Mana Tea serves fresh masala chai, karivepaku tea, ginger brews, and strong filter coffee beside NH 216 at Arumbaka, Guntur. Our lounge is a pause worth taking — warm snacks, cold drinks, and smiles with every pour.',
+                        'We source quality tea leaves and coffee beans, brew in small batches, and pair every cup with bun maska, puffs, and light bites. Whether you are fueling up or winding down, our team pours with care.',
                     ],
                     'values' => [
-                        ['icon' => 'fa-wheat-awn', 'title' => 'Uncompromising Ingredients', 'description' => 'We source only the finest raw ingredients—organic flours, real AOP French butter, fresh farm-direct fruits, and raw honeycomb. No preservatives, ever.'],
-                        ['icon' => 'fa-palette', 'title' => 'Edible Artistry', 'description' => 'Every pastry is detailed by hand. From complex chocolate mirror glazes to delicate sugar flowers and gold leaves, our desserts are designed to stun.'],
-                        ['icon' => 'fa-heart', 'title' => 'Warm Hospitality', 'description' => 'Baking is an act of sharing love. Whether you purchase a single warm butter croissant or a grand wedding cake, we serve you with joy and gratitude.'],
+                        ['icon' => 'fa-mug-hot', 'title' => 'Fresh Brews Daily', 'description' => 'Chai and coffee made to order — never sitting too long on the burner.'],
+                        ['icon' => 'fa-leaf', 'title' => 'Authentic Flavors', 'description' => 'Classic South Indian recipes with the right spice, strength, and warmth.'],
+                        ['icon' => 'fa-heart', 'title' => 'Highway Hospitality', 'description' => 'Open hearts, quick service, and a clean stop for every journey.'],
                     ],
                     'timeline' => [
-                        ['year' => '2018', 'title' => 'The Humble Beginning', 'description' => 'Chef Sandeep rents a tiny garage in Sweet Town, baking simple macarons and selling them at local farmers markets.', 'icon' => 'fa-seedling', 'side' => 'left'],
-                        ['year' => '2020', 'title' => 'First Boutique Café', 'description' => 'We open our flagship bakery and café doors. Gourmet food lovers queue around the block for hot butter croissants.', 'icon' => 'fa-store', 'side' => 'right'],
-                        ['year' => '2023', 'title' => 'Award Winning Pastries', 'description' => 'Awarded "Best Artisanal Bakery in the State" for our outstanding French lamination and wild sourdough loaves.', 'icon' => 'fa-trophy', 'side' => 'left'],
-                        ['year' => '2026', 'title' => 'The Digital Bakery', 'description' => 'Launching a fully premium digital ordering experience, complete with live tracking, custom cake builder, and loyalty perks.', 'icon' => 'fa-laptop', 'side' => 'right'],
+                        ['year' => '2018', 'title' => 'First Kettle', 'description' => 'Started serving chai and snacks to NH 216 travelers.', 'icon' => 'fa-seedling', 'side' => 'left'],
+                        ['year' => '2020', 'title' => 'Tea Lounge Opens', 'description' => 'Expanded menu with filter coffee, mocktails, and evening bites.', 'icon' => 'fa-store', 'side' => 'right'],
+                        ['year' => '2023', 'title' => 'Local Favorite', 'description' => 'Became a trusted stop for families and fleet drivers in Guntur district.', 'icon' => 'fa-trophy', 'side' => 'left'],
+                        ['year' => '2026', 'title' => 'Digital Menu', 'description' => 'Online ordering, loyalty perks, and full menu at your fingertips.', 'icon' => 'fa-laptop', 'side' => 'right'],
                     ],
                 ],
             ]

@@ -6,7 +6,7 @@
     <!-- Top Action bar -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-coffee-100 dark:border-gray-800 pb-5">
         <div>
-            <h1 class="font-display text-3xl font-bold text-coffee-950 dark:text-white">Bakery Categories</h1>
+            <h1 class="font-display text-3xl font-bold text-coffee-950 dark:text-white">Menu Categories</h1>
             <p class="text-xs text-coffee-500 dark:text-gray-400 mt-1">Classify and organize your delicious delicacies and cakes</p>
         </div>
         <a href="{{ route('admin.categories.create') }}" class="px-5 py-3 bg-coffee-800 hover:bg-coffee-900 text-white font-bold rounded-2xl text-xs shadow-warm flex items-center justify-center gap-2 transition-all">

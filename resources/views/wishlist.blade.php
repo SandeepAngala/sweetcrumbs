@@ -66,7 +66,7 @@
                                 <!-- Category & Rating -->
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-xs font-semibold text-bakery-gold-600 dark:text-bakery-gold-400 uppercase tracking-wider">
-                                        {{ $product->category->name ?? 'Bakery Signature' }}
+                                        {{ $product->category->name ?? 'House Special' }}
                                     </span>
                                     <div class="flex items-center text-amber-400 text-sm">
                                         <i class="fa-solid fa-star"></i>

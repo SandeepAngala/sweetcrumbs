@@ -30,6 +30,17 @@ composer dev
 
 Verify data: `php scripts/db-check.php` (expect 64 products, 6 categories).
 
+## After rebrand (Mana Ooru Mana Tea)
+
+Refresh CMS, banners, categories, and settings:
+
+```bash
+php artisan db:seed --class=BrandRefreshSeeder --force
+php artisan view:clear
+```
+
+Login: `admin@manaoorumanatea.com` / `password`
+
 If the homepage is empty after migrating to MySQL, seeders likely did not run — `migrate:fresh --seed` repopulates all storefront data.
 
 Open **http://127.0.0.1:8000** — not `http://localhost:5173` (that URL is only the Vite dev server).

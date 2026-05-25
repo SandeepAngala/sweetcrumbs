@@ -34,7 +34,7 @@
         <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 border border-coffee-100 dark:border-gray-800 shadow-sm flex items-center justify-between">
             <div>
                 <span class="text-xs font-bold text-coffee-400 dark:text-gray-500 uppercase tracking-wider block">Active Tiers</span>
-                <span class="text-2xl font-black text-coffee-900 dark:text-white mt-1 block">4 Bakery Levels</span>
+                <span class="text-2xl font-black text-coffee-900 dark:text-white mt-1 block">4 Loyalty Levels</span>
             </div>
             <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center text-xl">
                 <i class="fa-solid fa-award"></i>
