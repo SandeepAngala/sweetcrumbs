@@ -6,9 +6,9 @@
 @php
     $meta = $page?->meta ?? [];
     $established = $meta['established'] ?? '2018';
-    $headline = $meta['headline'] ?? 'Where Every Crumb Tells a Story';
-    $subtitle = $meta['subtitle'] ?? 'The Story of Passion, Flour, and Edible Artistry';
-    $heroImage = $meta['hero_image'] ?? 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=800&auto=format&fit=crop';
+    $headline = $meta['headline'] ?? 'Where Every Cup Tells a Story';
+    $subtitle = $meta['subtitle'] ?? 'South Indian chai, filter coffee & café warmth';
+    $heroImage = \App\Helpers\MediaUrl::resolve($meta['hero_image'] ?? null, \App\Helpers\MediaUrl::heroFallback());
     $paragraphs = $meta['story_paragraphs'] ?? [$page?->body ?? ''];
     $values = $meta['values'] ?? [];
     $timeline = $meta['timeline'] ?? [];
@@ -24,7 +24,7 @@
         </div>
 
         <x-section-heading
-            :title="$page?->title ?? 'Our Sweet Journey'"
+            :title="$page?->title ?? 'Our Tea Journey'"
             :subtitle="$subtitle"
             align="center"
         />
@@ -32,7 +32,7 @@
         <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center">
             <div class="relative group">
                 <div class="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-gold/20 to-coffee/10 opacity-30 blur-lg transition duration-500 group-hover:opacity-50"></div>
-                <img src="{{ $heroImage }}" alt="{{ $headline }}" class="relative w-full aspect-[4/3] rounded-3xl object-cover shadow-2xl transition duration-500 group-hover:scale-[1.01]" />
+                <img src="{{ $heroImage }}" alt="{{ $headline }}" class="relative w-full aspect-[4/3] rounded-3xl object-cover shadow-2xl transition duration-500 group-hover:scale-[1.01]" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-hero-tea.svg') }}';" />
             </div>
 
             <div class="flex flex-col justify-center">
@@ -43,7 +43,7 @@
                 @endforeach
                 <div class="mt-10 flex items-center gap-x-6">
                     <a href="{{ route('products.index') }}" class="rounded-full bg-coffee px-6 py-3 text-sm font-semibold text-cream shadow-md hover:bg-gold transition-colors duration-300">Explore Our Menu</a>
-                    <a href="{{ route('contact') }}" class="text-sm font-semibold leading-6 text-coffee hover:text-gold transition-colors duration-300">Contact Chef <span aria-hidden="true">→</span></a>
+                    <a href="{{ route('contact') }}" class="text-sm font-semibold leading-6 text-coffee hover:text-gold transition-colors duration-300">Contact Our Team <span aria-hidden="true">→</span></a>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 <li class="group">
                     <div class="relative overflow-hidden rounded-3xl aspect-[3/4] shadow-md group-hover:shadow-xl transition-shadow duration-300">
                         <img class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                             src="{{ $member->image ?: ($bakery['default_product_image'] ?? '/images/placeholder-product.jpg') }}"
+                             src="{{ $member->image_url }}"
                              alt="{{ $member->name }}">
                         <div class="absolute inset-0 bg-gradient-to-t from-coffee/90 via-coffee/40 to-transparent flex flex-col justify-end p-6">
                             <h3 class="text-xl font-bold tracking-tight text-cream font-playfair">{{ $member->name }}</h3>

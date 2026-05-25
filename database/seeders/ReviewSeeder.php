@@ -2,63 +2,78 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\Product;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class ReviewSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $customer = User::where('role', 'user')->first();
-        $customerId = $customer ? $customer->id : 2;
+        Review::query()->delete();
 
-        $products = Product::all();
+        $reviewers = [
+            ['name' => 'Ravi Kumar', 'email' => 'ravi.kumar@example.com'],
+            ['name' => 'Priya Sharma', 'email' => 'priya.sharma@example.com'],
+            ['name' => 'Arjun Reddy', 'email' => 'arjun.reddy@example.com'],
+            ['name' => 'Lakshmi Devi', 'email' => 'lakshmi.devi@example.com'],
+            ['name' => 'Vikram Naidu', 'email' => 'vikram.naidu@example.com'],
+            ['name' => 'Anitha Rao', 'email' => 'anitha.rao@example.com'],
+        ];
+
+        $userIds = [];
+        foreach ($reviewers as $i => $reviewer) {
+            $user = User::updateOrCreate(
+                ['email' => $reviewer['email']],
+                [
+                    'name' => $reviewer['name'],
+                    'password' => Hash::make('password'),
+                    'phone' => '900000000' . $i,
+                    'role' => 'user',
+                    'loyalty_points' => 50 + ($i * 10),
+                    'address' => 'Guntur District, Andhra Pradesh',
+                ]
+            );
+            $userIds[] = $user->id;
+        }
+
+        $products = Product::active()
+            ->where(function ($q) {
+                $q->featured()->orWhere('is_bestseller', true);
+            })
+            ->orderBy('id')
+            ->take(6)
+            ->get();
+
+        if ($products->isEmpty()) {
+            $products = Product::active()->orderBy('id')->take(6)->get();
+        }
 
         if ($products->isEmpty()) {
             return;
         }
 
         $reviews = [
-            [
-                'rating' => 5,
-                'comment' => 'This is hands down the best red velvet cake I have ever had! The raspberry coulis cuts through the sweetness perfectly. Incredible quality.',
-                'is_approved' => true,
-            ],
-            [
-                'rating' => 5,
-                'comment' => 'Absolutely buttery and flaky. Tastes exactly like the ones I had in Paris. Will order again!',
-                'is_approved' => true,
-            ],
-            [
-                'rating' => 4,
-                'comment' => 'Very rich and chocolatey. A bit heavy, but highly delicious. Recommended for true chocolate lovers.',
-                'is_approved' => true,
-            ],
-            [
-                'rating' => 5,
-                'comment' => 'Amazing sourdough bread! The crumb is so airy and the crust is perfectly crispy. Wonderful tang!',
-                'is_approved' => true,
-            ],
+            ['rating' => 5, 'comment' => 'The masala chai here is perfectly spiced — strong, creamy, and fresh every time. Best stop on NH 216.'],
+            ['rating' => 5, 'comment' => 'Karivepaku tea with bun maska is my evening ritual. Crisp leaves, soft bun, and quick service.'],
+            ['rating' => 5, 'comment' => 'Filter coffee foam and aroma remind me of home. Paired with hot puffs — unbeatable combo.'],
+            ['rating' => 4, 'comment' => 'Ginger chai hits the right heat level. Great for long drives; snacks stay warm and fresh.'],
+            ['rating' => 5, 'comment' => 'Mint cooler was refreshing after a sunny drive. Clean lounge, friendly team, fair prices.'],
+            ['rating' => 5, 'comment' => 'Ordered the sunrise combo — chai, bun maska, and coffee shot. Everything tasted made-to-order.'],
         ];
 
         foreach ($products as $index => $product) {
-            $reviewData = $reviews[$index % count($reviews)];
-            Review::firstOrCreate(
-                [
-                    'user_id' => $customerId,
-                    'product_id' => $product->id,
-                ],
-                [
-                    'rating' => $reviewData['rating'],
-                    'comment' => $reviewData['comment'],
-                    'is_approved' => $reviewData['is_approved'],
-                ]
-            );
+            $data = $reviews[$index % count($reviews)];
+            Review::create([
+                'user_id' => $userIds[$index % count($userIds)],
+                'product_id' => $product->id,
+                'rating' => $data['rating'],
+                'comment' => $data['comment'],
+                'is_approved' => true,
+                'is_verified_purchase' => true,
+            ]);
         }
     }
 }

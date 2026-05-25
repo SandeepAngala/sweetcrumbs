@@ -56,10 +56,10 @@ class CmsSeeder extends Seeder
     protected function seedFaqs(): void
     {
         $faqs = [
-            ['category' => 'orders', 'question' => 'How far do you deliver?', 'answer' => 'We deliver within 15 km of our boutique. Orders above the free delivery threshold qualify for complimentary delivery.', 'sort_order' => 1],
+            ['category' => 'orders', 'question' => 'How far do you deliver from Arumbaka?', 'answer' => 'We deliver within 15 km of our NH 216 tea lounge. Orders above the free delivery threshold qualify for complimentary delivery.', 'sort_order' => 1],
             ['category' => 'orders', 'question' => 'What are your delivery charges?', 'answer' => 'Standard delivery applies below the free threshold. Exact amounts are shown at checkout based on your cart total.', 'sort_order' => 2],
-            ['category' => 'products', 'question' => 'Do you offer eggless options?', 'answer' => 'Yes! Many of our cakes and pastries can be prepared eggless. Mention it in order notes or contact us before ordering.', 'sort_order' => 3],
-            ['category' => 'custom', 'question' => 'How early should I book a custom cake?', 'answer' => 'We recommend at least 48–72 hours for custom designs. Wedding and large tier cakes may require 1–2 weeks.', 'sort_order' => 4],
+            ['category' => 'products', 'question' => 'Can I customize a tea combo?', 'answer' => 'Yes — visit Tea Bar to choose chai style, snack, serving size, and optional cooler. Our team confirms your order shortly after.', 'sort_order' => 3],
+            ['category' => 'custom', 'question' => 'How early should I book a large combo tray?', 'answer' => 'For family trays or event combos, please request at least 24 hours ahead so we can brew fresh chai and prepare snacks.', 'sort_order' => 4],
         ];
 
         foreach ($faqs as $faq) {
@@ -70,9 +70,9 @@ class CmsSeeder extends Seeder
     protected function seedGallery(): void
     {
         $items = [
-            ['title' => 'Royal Velvet Celebration Cake', 'description' => 'Four layers of velvety red sponge with raspberry coulis.', 'image' => 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600', 'category' => 'cakes', 'sort_order' => 1],
-            ['title' => 'Classic Parisian Butter Croissant', 'description' => 'Flaky, buttery laminated pastry.', 'image' => 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=600', 'category' => 'pastries', 'sort_order' => 2],
-            ['title' => 'Artisanal Wild Sourdough', 'description' => 'Natural fermentation, caramelized crust.', 'image' => 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?q=80&w=600', 'category' => 'breads', 'sort_order' => 3],
+            ['title' => 'Masala Chai at Sunrise', 'description' => 'Fresh kadai brew with cardamom and ginger.', 'image' => 'https://images.unsplash.com/photo-1571934811356-798df2168c42?q=80&w=600', 'category' => 'chai', 'sort_order' => 1],
+            ['title' => 'Bun Maska & Filter Coffee', 'description' => 'Classic highway tea-time pairing.', 'image' => 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600', 'category' => 'café', 'sort_order' => 2],
+            ['title' => 'Evening Ginger Chai', 'description' => 'Bold ginger boil served with hot puffs.', 'image' => 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=600', 'category' => 'evening', 'sort_order' => 3],
         ];
 
         foreach ($items as $item) {
@@ -83,9 +83,9 @@ class CmsSeeder extends Seeder
     protected function seedTeam(): void
     {
         $members = [
-            ['name' => 'Chef Sandeep', 'role' => 'Founder & Executive Pastry Chef', 'bio' => 'Trained in Paris under world-renowned master bakers. Loves playing with complex textures and organic sugars.', 'image' => 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=400&auto=format&fit=crop', 'sort_order' => 1],
-            ['name' => 'Sarah Jenkins', 'role' => 'Head Bread Artisan', 'bio' => 'Our sourdough queen. Sarah nurtures a 65-year-old starter inherited from her grandmother with absolute devotion.', 'image' => 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?q=80&w=400&auto=format&fit=crop', 'sort_order' => 2],
-            ['name' => 'Marcus Vance', 'role' => 'Master Chocolatier', 'bio' => 'Obsessed with cacao origins and silky mirror glazes. Ensures our dark chocolate truffles are pure perfection.', 'image' => 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=400&auto=format&fit=crop', 'sort_order' => 3],
+            ['name' => 'Sandeep Angala', 'role' => 'Founder & Tea Master', 'bio' => 'Built Mana Ooru Mana Tea on NH 216 with honest chai, filter coffee, and warm highway hospitality.', 'image' => 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=400&auto=format&fit=crop', 'sort_order' => 1],
+            ['name' => 'Kavya Menon', 'role' => 'Head Chai Brewer', 'bio' => 'Expert in masala, karivepaku, and ginger chai — every cup balanced for strength and aroma.', 'image' => 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?q=80&w=400&auto=format&fit=crop', 'sort_order' => 2],
+            ['name' => 'Rahul Varma', 'role' => 'Café & Snacks Lead', 'bio' => 'Keeps bun maska, puffs, and evening bites fresh for travelers and local families.', 'image' => 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?q=80&w=400&auto=format&fit=crop', 'sort_order' => 3],
         ];
 
         foreach ($members as $member) {
@@ -96,7 +96,7 @@ class CmsSeeder extends Seeder
     protected function seedOffers(): void
     {
         $offers = [
-            ['badge' => 'MORNING CHAI', 'title' => 'Sunrise Masala Combo', 'description' => 'Karivepaku chai with bun maska and filter coffee shot.', 'price' => 149, 'compare_price' => 199, 'icon_classes' => 'fa-mug-hot fa-bread-slice', 'button_link' => '/products?category=premium-coffees', 'sort_order' => 1],
+            ['badge' => 'MORNING CHAI', 'title' => 'Sunrise Masala Combo', 'description' => 'Karivepaku chai with bun maska and filter coffee shot.', 'price' => 149, 'compare_price' => 199, 'icon_classes' => 'fa-mug-hot fa-cookie', 'button_link' => '/products?category=premium-coffees', 'sort_order' => 1],
             ['badge' => 'EVENING SPECIAL', 'title' => 'Ginger Chai & Snacks', 'description' => 'Strong ginger tea with hot puffs and garlic toast.', 'price' => 179, 'compare_price' => 229, 'icon_classes' => 'fa-mug-hot fa-fire', 'button_link' => '/products?category=hot-items', 'sort_order' => 2],
             ['badge' => 'COOLER PAIR', 'title' => 'Iced Tea & Bites', 'description' => 'Mint cooler with light sweets from our tea-time menu.', 'price' => 199, 'compare_price' => 259, 'icon_classes' => 'fa-glass-water fa-leaf', 'button_link' => '/products?category=mocktails', 'sort_order' => 3],
         ];
@@ -117,7 +117,7 @@ class CmsSeeder extends Seeder
                     'established' => '2018',
                     'headline' => 'Where Every Cup Tells a Story',
                     'subtitle' => 'South Indian chai, filter coffee & café warmth',
-                    'hero_image' => 'https://images.unsplash.com/photo-1571934811356-798df2168c42?q=80&w=800&auto=format&fit=crop',
+                    'hero_image' => 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop',
                     'story_paragraphs' => [
                         'Mana Ooru Mana Tea serves fresh masala chai, karivepaku tea, ginger brews, and strong filter coffee beside NH 216 at Arumbaka, Guntur. Our lounge is a pause worth taking — warm snacks, cold drinks, and smiles with every pour.',
                         'We source quality tea leaves and coffee beans, brew in small batches, and pair every cup with bun maska, puffs, and light bites. Whether you are fueling up or winding down, our team pours with care.',
@@ -141,26 +141,23 @@ class CmsSeeder extends Seeder
     protected function seedCustomCakeOptions(): void
     {
         $options = [
-            ['group' => 'cake_type', 'label' => 'Celebration / Birthday Cake', 'value' => 'Birthday', 'price_addon' => 0, 'sort_order' => 1],
-            ['group' => 'cake_type', 'label' => 'Luxury Multi-Tier Wedding Cake (+₹500)', 'value' => 'Wedding', 'price_addon' => 500, 'sort_order' => 2],
-            ['group' => 'cake_type', 'label' => 'Elegant Anniversary Cake (+₹200)', 'value' => 'Anniversary', 'price_addon' => 200, 'sort_order' => 3],
-            ['group' => 'cake_type', 'label' => 'Playful Baby Shower Cake (+₹100)', 'value' => 'Baby Shower', 'price_addon' => 100, 'sort_order' => 4],
-            ['group' => 'size', 'label' => '1.0 kg (Serves 8-10) - Base ₹1,200', 'value' => '1 kg', 'price_addon' => 1200, 'sort_order' => 1],
-            ['group' => 'size', 'label' => '1.5 kg (Serves 12-15) - Base ₹1,800', 'value' => '1.5 kg', 'price_addon' => 1800, 'sort_order' => 2],
-            ['group' => 'size', 'label' => '2.0 kg (Serves 16-20) - Base ₹2,400', 'value' => '2.0 kg', 'price_addon' => 2400, 'sort_order' => 3],
-            ['group' => 'size', 'label' => '3.0 kg (Serves 25-30) - Base ₹3,600', 'value' => '3.0 kg', 'price_addon' => 3600, 'sort_order' => 4],
-            ['group' => 'size', 'label' => '5.0 kg (Serves 40-50) - Base ₹6,000', 'value' => '5.0 kg', 'price_addon' => 6000, 'sort_order' => 5],
-            ['group' => 'shape', 'label' => 'Traditional Round', 'value' => 'Round', 'price_addon' => 0, 'sort_order' => 1],
-            ['group' => 'shape', 'label' => 'Modern Square (+₹100)', 'value' => 'Square', 'price_addon' => 100, 'sort_order' => 2],
-            ['group' => 'shape', 'label' => 'Romantic Heart-Shaped (+₹200)', 'value' => 'Heart', 'price_addon' => 200, 'sort_order' => 3],
-            ['group' => 'flavor', 'label' => 'Premium Madagascar Vanilla Bean', 'value' => 'Vanilla Bean', 'price_addon' => 0, 'sort_order' => 1],
-            ['group' => 'flavor', 'label' => 'Belgian Dark Chocolate Truffle (+₹150)', 'value' => 'Dark Chocolate Truffle', 'price_addon' => 150, 'sort_order' => 2],
-            ['group' => 'flavor', 'label' => 'Gourmet Royal Red Velvet (+₹200)', 'value' => 'Royal Velvet', 'price_addon' => 200, 'sort_order' => 3],
-            ['group' => 'flavor', 'label' => 'Golden Salted Caramel Pecan (+₹250)', 'value' => 'Salted Caramel Pecan', 'price_addon' => 250, 'sort_order' => 4],
-            ['group' => 'filling', 'label' => 'Standard Cream Filling (No charge)', 'value' => 'None', 'price_addon' => 0, 'sort_order' => 1],
-            ['group' => 'filling', 'label' => 'Fresh Raspberry Coulis (+₹100)', 'value' => 'Fresh Raspberry Coulis', 'price_addon' => 100, 'sort_order' => 2],
-            ['group' => 'filling', 'label' => 'Silky Dark Chocolate Ganache (+₹120)', 'value' => 'Chocolate Ganache', 'price_addon' => 120, 'sort_order' => 3],
-            ['group' => 'filling', 'label' => 'House Salted Caramel Spread (+₹80)', 'value' => 'Salted Caramel', 'price_addon' => 80, 'sort_order' => 4],
+            ['group' => 'cake_type', 'label' => 'Morning Chai Combo', 'value' => 'Morning', 'price_addon' => 0, 'sort_order' => 1],
+            ['group' => 'cake_type', 'label' => 'Evening Tea Special (+₹50)', 'value' => 'Evening', 'price_addon' => 50, 'sort_order' => 2],
+            ['group' => 'cake_type', 'label' => 'Family Gathering Tray (+₹150)', 'value' => 'Family', 'price_addon' => 150, 'sort_order' => 3],
+            ['group' => 'size', 'label' => 'Single Cup — Base ₹99', 'value' => 'Single', 'price_addon' => 99, 'sort_order' => 1],
+            ['group' => 'size', 'label' => 'Duo Pair — Base ₹179', 'value' => 'Duo', 'price_addon' => 179, 'sort_order' => 2],
+            ['group' => 'size', 'label' => 'Family Tray — Base ₹349', 'value' => 'Family', 'price_addon' => 349, 'sort_order' => 3],
+            ['group' => 'shape', 'label' => 'Masala Chai', 'value' => 'Masala Chai', 'price_addon' => 0, 'sort_order' => 1],
+            ['group' => 'shape', 'label' => 'Karivepaku Tea (+₹20)', 'value' => 'Karivepaku Tea', 'price_addon' => 20, 'sort_order' => 2],
+            ['group' => 'shape', 'label' => 'Ginger Chai (+₹15)', 'value' => 'Ginger Chai', 'price_addon' => 15, 'sort_order' => 3],
+            ['group' => 'shape', 'label' => 'Filter Coffee (+₹25)', 'value' => 'Filter Coffee', 'price_addon' => 25, 'sort_order' => 4],
+            ['group' => 'flavor', 'label' => 'Bun Maska', 'value' => 'Bun Maska', 'price_addon' => 0, 'sort_order' => 1],
+            ['group' => 'flavor', 'label' => 'Hot Puff (+₹30)', 'value' => 'Hot Puff', 'price_addon' => 30, 'sort_order' => 2],
+            ['group' => 'flavor', 'label' => 'Biscuit Pack (+₹25)', 'value' => 'Biscuit Pack', 'price_addon' => 25, 'sort_order' => 3],
+            ['group' => 'flavor', 'label' => 'No snack', 'value' => 'None', 'price_addon' => 0, 'sort_order' => 4],
+            ['group' => 'filling', 'label' => 'No extra drink', 'value' => 'None', 'price_addon' => 0, 'sort_order' => 1],
+            ['group' => 'filling', 'label' => 'Mint Cooler (+₹40)', 'value' => 'Mint Cooler', 'price_addon' => 40, 'sort_order' => 2],
+            ['group' => 'filling', 'label' => 'Chilled Soda (+₹35)', 'value' => 'Chilled Soda', 'price_addon' => 35, 'sort_order' => 3],
         ];
 
         foreach ($options as $opt) {

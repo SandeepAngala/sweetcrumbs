@@ -17,21 +17,29 @@ class MediaUrl
         return asset('images/fallback-hero-tea.svg');
     }
 
+    public static function categoryFallback(): string
+    {
+        return asset('images/fallback-category-tea.svg');
+    }
+
+    public static function blogFallback(): string
+    {
+        return asset('images/fallback-blog-tea.svg');
+    }
+
     public static function resolve(?string $path, ?string $fallback = null): string
     {
+        $fallback ??= static::placeholder();
+
         if (empty($path)) {
-            return $fallback ?? static::placeholder();
+            return $fallback;
         }
 
         if (Str::startsWith($path, ['http://', 'https://'])) {
-            if (config('bakery.prefer_local_media', false) && Str::contains($path, 'unsplash.com')) {
-                return $fallback ?? static::placeholder();
-            }
-
             if (Str::contains($path, 'unsplash.com')) {
                 $base = explode('?', $path)[0];
 
-                return $base.'?auto=format,webp&fit=crop&w=800&q=75';
+                return $base.'?auto=format,webp&fit=crop&w=800&q=80';
             }
 
             return $path;
@@ -45,6 +53,6 @@ class MediaUrl
             return Storage::disk('public')->url($path);
         }
 
-        return $fallback ?? static::placeholder();
+        return $fallback;
     }
 }

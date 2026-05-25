@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MediaUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -41,6 +42,11 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return MediaUrl::resolve($this->image, MediaUrl::categoryFallback());
     }
 
     public function scopeActive($query)

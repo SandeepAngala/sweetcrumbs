@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\MediaUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -34,6 +35,11 @@ class Blog extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return MediaUrl::resolve($this->image, MediaUrl::blogFallback());
     }
 
     public function scopePublished($query)

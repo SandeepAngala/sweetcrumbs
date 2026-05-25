@@ -12,8 +12,8 @@
         </div>
 
         <x-section-heading
-            title="Loved by Sweet Lovers"
-            subtitle="Read glowing stories from our lovely customers"
+            title="Loved by Tea Lovers"
+            subtitle="Real stories from guests at our NH 216 tea lounge"
             align="center"
         />
 
@@ -50,7 +50,7 @@
                 </div>
             </div>
             @empty
-            <p class="col-span-3 text-center text-gray-500 py-12">No reviews yet. Be the first to share your sweet experience!</p>
+            <p class="col-span-3 text-center text-gray-500 py-12">No reviews yet. Be the first to share your tea lounge experience!</p>
             @endforelse
         </div>
 

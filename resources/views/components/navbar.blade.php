@@ -97,7 +97,7 @@
         <a href="{{ route('home') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('home') ? 'text-gold' : '' }}">Home</a>
         <a href="{{ route('about') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('about') ? 'text-gold' : '' }}">Our Story</a>
         <a href="{{ route('products.index') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('products.*') ? 'text-gold' : '' }}">Menu</a>
-        <a href="{{ route('custom-cake') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('custom-cake') ? 'text-gold' : '' }}">Custom Cakes</a>
+        <a href="{{ route('custom-cake') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('custom-cake') ? 'text-gold' : '' }}">Tea Bar</a>
         <a href="{{ route('blog.index') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('blog.*') ? 'text-gold' : '' }}">Blog</a>
         <a href="{{ route('contact') }}" class="hover:text-gold py-1 transition-colors {{ request()->routeIs('contact') ? 'text-gold' : '' }}">Contact</a>
     </div>

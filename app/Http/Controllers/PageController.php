@@ -123,6 +123,6 @@ class PageController extends Controller
 
         CustomCakeOrder::create($data);
 
-        return back()->with('success', 'Your custom cake request has been submitted! Our chef will review it and contact you shortly.');
+        return back()->with('success', 'Your tea combo request has been submitted! Our team will confirm details and contact you shortly.');
     }
 }

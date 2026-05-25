@@ -52,7 +52,7 @@
 
             <!-- Header Banner Image -->
             <div class="overflow-hidden rounded-3xl border border-amber-50 shadow-md aspect-[21/10] mb-8 bg-cream/10">
-                <img src="{{ $blog->image }}" alt="{{ $blog->title }}" class="w-full h-full object-cover" />
+                <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-blog-tea.svg') }}';" />
             </div>
 
             <!-- Article Body Content -->

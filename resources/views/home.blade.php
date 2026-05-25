@@ -130,7 +130,7 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-gold/0 to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
                 <div class="w-16 h-16 rounded-full overflow-hidden mb-4 shadow border-2 border-gold/20 group-hover:scale-110 group-hover:border-gold transition-all duration-300">
-                    <img src="{{ $cat->image ?: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop' }}" alt="{{ $cat->name }}" class="w-full h-full object-cover">
+                    <img src="{{ $cat->image_url }}" alt="{{ $cat->name }}" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-category-tea.svg') }}';">
                 </div>
                 
                 <h3 class="font-display font-bold text-sm text-coffee-900 dark:text-white group-hover:text-gold transition-colors">{{ $cat->name }}</h3>
@@ -170,7 +170,7 @@
 
 <!-- 4. HOT SELLING SAVORY ITEMS -->
 <section class="py-24 px-6 max-w-7xl mx-auto">
-    <x-section-heading title="Sizzling Savory Favorites" subtitle="Hot Oven Delights" />
+    <x-section-heading title="Sizzling Savory Favorites" subtitle="Fresh from the Kettle" />
 
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         @forelse($hotSelling as $product)
@@ -206,17 +206,17 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($homepageOffers as $offer)
-            <div class="glass rounded-3xl p-8 border border-white/15 flex flex-col group hover:border-gold/30 hover:scale-[1.02] transition-all duration-300">
+            <div class="rounded-3xl p-8 border border-gold/25 bg-white/95 text-coffee-900 shadow-xl flex flex-col group hover:border-gold/50 hover:scale-[1.02] transition-all duration-300">
                 @if($offer->badge)<span class="text-xs text-gold font-bold uppercase tracking-wider">{{ $offer->badge }}</span>@endif
-                <h3 class="font-display font-bold text-2xl text-white mt-2">{{ $offer->title }}</h3>
-                <p class="text-xs text-cream/70 mt-3 leading-relaxed">{{ $offer->description }}</p>
-                <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+                <h3 class="font-display font-bold text-2xl text-coffee-900 mt-2">{{ $offer->title }}</h3>
+                <p class="text-xs text-coffee-600 mt-3 leading-relaxed">{{ $offer->description }}</p>
+                <div class="my-6 p-4 rounded-2xl bg-coffee-50 border border-coffee-100/30 flex items-center justify-between">
                     <div>
                         @if($offer->compare_price)
-                        <span class="text-[10px] text-gray-400 line-through">Regular Price: {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->compare_price, 0) }}</span>
+                        <span class="text-[10px] text-coffee-400 line-through">Regular Price: {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->compare_price, 0) }}</span>
                         @endif
                         <div class="text-2xl font-black text-gold">{{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->price, 0) }}
-                            @if($offer->savings)<span class="text-xs font-bold text-white">SAVE {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->savings, 0) }}</span>@endif
+                            @if($offer->savings)<span class="text-xs font-bold text-coffee-800">SAVE {{ $bakery['currency_symbol'] ?? '₹' }}{{ number_format($offer->savings, 0) }}</span>@endif
                         </div>
                     </div>
                     @if($offer->icon_classes)<span class="text-3xl text-gold flex gap-2">@foreach(explode(' ', $offer->icon_classes) as $icon)<i class="fa-solid {{ $icon }}"></i>@endforeach</span>@endif
@@ -355,7 +355,7 @@
         @foreach($latestBlogs as $blog)
             <div class="luxury-hover bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-warm border border-coffee-100/5 flex flex-col group h-full" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                 <div class="relative overflow-hidden aspect-[16/10]">
-                    <img src="{{ $blog->image }}" alt="{{ $blog->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                    <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-blog-tea.svg') }}';">
                     <span class="absolute top-4 left-4 bg-coffee-950/80 backdrop-blur-md text-gold font-bold text-[10px] px-3 py-1 rounded-full uppercase border border-white/10">{{ $blog->category ?: 'Secrets' }}</span>
                 </div>
                 <div class="p-6 flex flex-col flex-grow">
@@ -378,7 +378,7 @@
 <!-- 10. PREMIUM TESTIMONIALS -->
 <section class="py-24 bg-coffee-50/20 dark:bg-gray-950/10 border-t border-coffee-100/5 px-6">
     <div class="max-w-7xl mx-auto">
-        <x-section-heading title="Loved By Real Foodies" subtitle="Gourmet Testimonials" />
+        <x-section-heading title="Loved by Tea Lovers" subtitle="Voices from Our Lounge" />
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($testimonials as $test)
@@ -398,7 +398,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-xs sm:text-sm text-coffee-900 dark:text-white">{{ $test->user->name }}</h4>
-                            <span class="text-[9px] text-gold font-bold uppercase tracking-wide">VERIFIED FOODIE</span>
+                            <span class="text-[9px] text-gold font-bold uppercase tracking-wide">VERIFIED GUEST</span>
                         </div>
                     </div>
                 </div>

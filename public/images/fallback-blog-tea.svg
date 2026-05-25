@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Tea blog">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C1810"/>
+      <stop offset="100%" style="stop-color:#120703"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <path d="M300 120 Q400 60 500 120 L480 320 Q400 360 320 320 Z" fill="#d4a574" opacity="0.85"/>
+  <ellipse cx="400" cy="120" rx="100" ry="22" fill="#3d2914"/>
+  <text x="400" y="400" text-anchor="middle" fill="#d4a574" font-family="Georgia, serif" font-size="32">Tea Chronicles</text>
+</svg>

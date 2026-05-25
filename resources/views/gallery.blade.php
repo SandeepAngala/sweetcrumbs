@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'MANA OORU MANA TEA Gallery - Gourmet Pastry Art')
+@section('title', 'Mana Ooru Mana Tea Gallery — Chai & Café Moments')
 
 @section('content')
 <div class="relative bg-cream py-16 sm:py-24 overflow-hidden">
@@ -11,7 +11,7 @@
             <x-breadcrumb :items="[['label' => 'Home', 'url' => route('home')], ['label' => 'Visual Gallery', 'url' => '#']]" />
         </div>
 
-        <x-section-heading title="A Feast for the Eyes" subtitle="Explore our visual archives of handcrafted pastries and celebration cakes" align="center" />
+        <x-section-heading title="A Feast for the Eyes" subtitle="Chai pours, filter coffee, and evening snacks from our NH 216 tea lounge" align="center" />
 
         <div class="mt-12 flex flex-wrap justify-center gap-3">
             <button type="button" onclick="filterGallery('all')" class="gallery-filter-btn active rounded-full px-5 py-2 text-xs font-semibold shadow-sm border border-amber-200 bg-coffee text-cream transition-all">All</button>
@@ -22,13 +22,10 @@
 
         <div class="mt-16 columns-1 gap-6 sm:columns-2 lg:columns-3 space-y-6">
             @forelse($items as $item)
-            @php
-                $imgUrl = str_starts_with($item->image, 'http') ? $item->image : asset('storage/'.$item->image);
-            @endphp
             <div class="gallery-item break-inside-avoid relative overflow-hidden rounded-3xl shadow-md group cursor-pointer hover:shadow-xl transition-all"
                  data-category="{{ $item->category }}"
-                 onclick="openLightbox('{{ $imgUrl }}', @json($item->title), @json($item->description))">
-                <img src="{{ $imgUrl }}" alt="{{ $item->title }}" class="w-full h-auto object-cover rounded-3xl transition duration-500 group-hover:scale-105" loading="lazy" />
+                 onclick="openLightbox('{{ $item->image_url }}', @json($item->title), @json($item->description))">
+                <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-auto object-cover rounded-3xl transition duration-500 group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-hero-tea.svg') }}';" />
                 <div class="absolute inset-0 bg-gradient-to-t from-coffee/85 via-coffee/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                     <span class="text-xs text-gold font-bold uppercase tracking-wider capitalize">{{ $item->category }}</span>
                     <h4 class="text-lg font-bold text-cream font-playfair mt-1">{{ $item->title }}</h4>

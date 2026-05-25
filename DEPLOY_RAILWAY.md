@@ -36,6 +36,15 @@ railway run php artisan db:seed-if-empty
 railway run php artisan db:seed --force
 ```
 
+After rebrand or content fixes (tea blogs, reviews, combo builder, images):
+
+```bash
+railway run php artisan db:seed --class=ContentRefreshSeeder --force
+railway run php artisan cache:clear
+railway run php artisan view:clear
+railway run php artisan storage:link
+```
+
 Verify counts:
 
 ```bash

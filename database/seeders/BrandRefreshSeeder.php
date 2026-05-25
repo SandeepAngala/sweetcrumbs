@@ -16,6 +16,7 @@ class BrandRefreshSeeder extends Seeder
             CmsSeeder::class,
             CategorySeeder::class,
             BannerSeeder::class,
+            ContentRefreshSeeder::class,
         ]);
     }
 }

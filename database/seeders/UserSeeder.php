@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@manaoorumanatea.com'],
             [
-                'name' => 'Chef Sandeep',
+                'name' => 'Sandeep Angala',
                 'password' => Hash::make('password'),
                 'phone' => '1234567890',
                 'avatar' => 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=400&auto=format&fit=crop',

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'MANA OORU MANA TEA Blog - Sourdough Secrets & Pastry Science')
+@section('title', 'Mana Ooru Mana Tea Blog — Chai, Coffee & Café Stories')
 
 @section('content')
 <div class="relative bg-cream min-h-screen py-12 overflow-hidden">
@@ -9,12 +9,12 @@
     <div class="relative mx-auto max-w-7xl px-6 lg:px-8">
         <!-- Breadcrumbs -->
         <div class="mb-6">
-            <x-breadcrumb :items="[['label' => 'Home', 'url' => route('home')], ['label' => 'Baking Blog & Science', 'url' => '#']]" />
+            <x-breadcrumb :items="[['label' => 'Home', 'url' => route('home')], ['label' => 'Tea Chronicles', 'url' => '#']]" />
         </div>
 
         <x-section-heading 
-            title="The Sweet Chronicles" 
-            subtitle="Deep dives into natural slow lamination, sourdough ecosystems, and gourmet baking science"
+            title="Tea Chronicles" 
+            subtitle="Masala chai, filter coffee, evening pairings, and lounge stories from NH 216"
             align="center"
         />
 
@@ -27,7 +27,7 @@
                 <div class="bg-white/70 backdrop-blur-md p-6 rounded-3xl border border-amber-100 shadow-sm">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-coffee font-playfair border-b border-amber-50 pb-2 mb-4">Search Articles</h3>
                     <form action="{{ route('blog.index') }}" method="GET" class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Sourdough, flour..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Chai, coffee, snacks..."
                                class="w-full rounded-xl border-0 bg-cream/30 py-2.5 pl-4 pr-10 text-xs text-gray-900 ring-1 ring-inset ring-amber-100 focus:ring-2 focus:ring-gold" />
                         <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>
@@ -120,7 +120,7 @@
                                 <div>
                                     <!-- Image -->
                                     <div class="relative overflow-hidden aspect-[16/10] bg-cream/10">
-                                        <img src="{{ $blog->image }}" alt="{{ $blog->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.01]" />
+                                        <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.01]" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-blog-tea.svg') }}';" />
                                         <span class="absolute top-4 left-4 rounded-xl bg-gold/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-cream shadow-sm">
                                             {{ $blog->category }}
                                         </span>

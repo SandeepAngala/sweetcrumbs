@@ -33,7 +33,7 @@
                 <div>
                     <label for="search" class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Search Products</label>
                     <div class="mt-2 relative">
-                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Macarons, Croissants..."
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Chai, coffee, snacks..."
                                class="w-full rounded-xl border-0 bg-cream/30 py-2.5 pl-4 pr-10 text-xs text-gray-900 shadow-sm ring-1 ring-inset ring-amber-100 focus:ring-2 focus:ring-gold" />
                         <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold">
                             <i class="fa-solid fa-magnifying-glass text-xs"></i>

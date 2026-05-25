@@ -8,7 +8,7 @@
                 <span class="font-display font-extrabold text-xl tracking-wider text-gold">{{ $bakery['store_name'] ?? 'MANA OORU MANA TEA' }}</span>
             </a>
             <p class="text-sm text-cream/85 leading-relaxed font-normal">
-                {{ $bakery['footer_about'] ?? 'Crafting luxury artisanal breads and pastries daily.' }}
+                {{ $bakery['footer_about'] ?? 'Premium chai, filter coffee, and café snacks at our NH 216 tea lounge in Arumbaka.' }}
             </p>
             <div class="flex items-center gap-4 text-cream/70">
                 @if(!empty($bakery['social_instagram']))<a href="{{ $bakery['social_instagram'] }}" target="_blank" rel="noopener" class="hover:text-gold transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>@endif
@@ -21,8 +21,8 @@
         <div class="space-y-6">
             <h4 class="font-display text-gold font-bold text-sm uppercase tracking-widest border-b border-coffee-800 pb-2">QUICK LINKS</h4>
             <ul class="space-y-3 text-sm text-cream/85 font-medium">
-                <li><a href="{{ route('products.index') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-bread-slice text-gold w-5 text-center"></i> Tea Menu</a></li>
-                <li><a href="{{ route('custom-cake') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-cake-candles text-gold w-5 text-center"></i> Custom Cake Builder</a></li>
+                <li><a href="{{ route('products.index') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-mug-hot text-gold w-5 text-center"></i> Tea Menu</a></li>
+                <li><a href="{{ route('custom-cake') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-mug-saucer text-gold w-5 text-center"></i> Tea Bar — Build Combo</a></li>
                 <li><a href="{{ route('gallery') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-image text-gold w-5 text-center"></i> Photo Gallery</a></li>
                 <li><a href="{{ route('testimonials') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-comments text-gold w-5 text-center"></i> Happy Reviews</a></li>
                 <li><a href="{{ route('faq') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-circle-question text-gold w-5 text-center"></i> Help & FAQs</a></li>

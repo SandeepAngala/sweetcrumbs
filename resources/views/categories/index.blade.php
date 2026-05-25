@@ -26,9 +26,11 @@
                     <div>
                         <!-- Image wrapper -->
                         <div class="relative overflow-hidden aspect-[16/10] bg-cream/10">
-                            <img src="{{ $cat->image ?: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600&auto=format&fit=crop' }}" 
+                            <img src="{{ $cat->image_url }}" 
                                  alt="{{ $cat->name }}" 
-                                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/fallback-category-tea.svg') }}';" />
                             
                             <!-- Product count badge floating -->
                             <div class="absolute top-4 right-4 rounded-xl bg-coffee/80 backdrop-blur-md px-3 py-1.5 text-xs font-bold text-cream shadow-sm">
