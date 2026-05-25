@@ -6,7 +6,7 @@
     <!-- Top Greeting Banner -->
     <div class="bg-gradient-to-r from-coffee-800 to-coffee-950 text-white rounded-3xl p-6 shadow-warm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h1 class="font-display text-3xl font-bold">Good Day, Chef {{ auth()->user()->name }}! <i class="fa-solid fa-cookie-bite text-bakery-gold-400 animate-pulse ml-1"></i></h1>
+            <h1 class="font-display text-3xl font-bold">Good Day, Chef {{ auth()->user()->name }}! <i class="fa-solid fa-mug-hot text-bakery-gold-400 animate-pulse ml-1"></i></h1>
             <p class="text-xs text-coffee-200 mt-1">Here is a snapshot of sweet operations and bakery revenue today.</p>
         </div>
         <div class="text-sm px-4 py-2 bg-coffee-700/50 rounded-2xl border border-coffee-600/50 text-bakery-gold-200 font-bold shrink-0">
@@ -56,7 +56,7 @@
                 <span class="text-2xl font-black text-coffee-900 dark:text-white mt-1 block">{{ $productsCount }}</span>
             </div>
             <div class="w-12 h-12 bg-amber-50 dark:bg-amber-950/20 text-amber-500 rounded-2xl flex items-center justify-center text-xl">
-                <i class="fa-solid fa-cookie-bite"></i>
+                <i class="fa-solid fa-mug-hot"></i>
             </div>
         </div>
     </div>

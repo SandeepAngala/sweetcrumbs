@@ -122,12 +122,12 @@
             <p class="text-[10px] uppercase font-bold text-coffee-400 dark:text-gray-500 tracking-wider mb-3 text-center">Quick Demo Access</p>
             <div class="grid grid-cols-2 gap-3">
                 <button type="button" 
-                        onclick="prefillAndSubmit('admin@sweetcrumbs.com', 'password')"
+                        onclick="prefillAndSubmit('admin@manaoorumanatea.com', 'password')"
                         class="py-2.5 px-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/20 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all">
                     <i class="fa-solid fa-user-shield"></i> Chef Admin
                 </button>
                 <button type="button" 
-                        onclick="prefillAndSubmit('user@sweetcrumbs.com', 'password')"
+                        onclick="prefillAndSubmit('user@manaoorumanatea.com', 'password')"
                         class="py-2.5 px-3 rounded-2xl bg-coffee-50 dark:bg-gray-800 hover:bg-coffee-100 text-coffee-800 dark:text-gray-300 border border-coffee-100 dark:border-gray-700 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all">
                     <i class="fa-solid fa-user"></i> Patron Customer
                 </button>

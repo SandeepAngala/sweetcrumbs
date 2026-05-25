@@ -3,9 +3,9 @@
         
         <!-- Logo -->
         <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-            <i class="fa-solid fa-cookie-bite text-3xl text-bakery-gold-400 group-hover:rotate-12 transition-transform duration-300"></i>
+            <i class="fa-solid fa-mug-hot text-3xl text-bakery-gold-400 group-hover:-rotate-6 transition-transform duration-300"></i>
             <span class="font-display font-extrabold text-xl tracking-wider bg-gradient-to-r from-coffee-700 via-coffee-500 to-bakery-gold-400 bg-clip-text text-transparent dark:from-white dark:to-bakery-gold-300">
-                SWEET CRUMBS
+                MANA OORU MANA TEA
             </span>
         </a>
 
@@ -21,7 +21,7 @@
             <a href="{{ route('home') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('home') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Home</a>
             <a href="{{ route('about') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('about') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Our Story</a>
             <a href="{{ route('products.index') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('products.*') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Menu</a>
-            <a href="{{ route('custom-cake') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('custom-cake') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Custom Cakes</a>
+            <a href="{{ route('custom-cake') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('custom-cake') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Tea Bar</a>
             <a href="{{ route('blog.index') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('blog.*') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Blog</a>
             <a href="{{ route('contact') }}" class="hover:text-gold dark:hover:text-gold transition-colors duration-350 {{ request()->routeIs('contact') ? 'text-gold dark:text-gold font-bold border-b-2 border-gold pb-1' : '' }}">Contact</a>
         </div>

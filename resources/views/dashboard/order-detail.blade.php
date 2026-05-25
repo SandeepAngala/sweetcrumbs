@@ -67,7 +67,7 @@
             <i class="fa-solid fa-triangle-exclamation text-4xl"></i>
             <div>
                 <h3 class="font-bold text-lg">Order Cancelled</h3>
-                <p class="text-xs text-rose-600 dark:text-rose-500 mt-0.5">This order was cancelled. If you believe this is an error, please contact Sweet Crumbs Customer Boutique support.</p>
+                <p class="text-xs text-rose-600 dark:text-rose-500 mt-0.5">This order was cancelled. If you believe this is an error, please contact MANA OORU MANA TEA Customer Boutique support.</p>
             </div>
         </div>
     @endif

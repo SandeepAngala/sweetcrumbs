@@ -4,8 +4,8 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
         <div class="space-y-6">
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <i class="fa-solid fa-cookie-bite text-2xl text-gold"></i>
-                <span class="font-display font-extrabold text-xl tracking-wider text-gold">{{ $bakery['store_name'] ?? 'SWEET CRUMBS' }}</span>
+                <i class="fa-solid fa-mug-hot text-2xl text-gold"></i>
+                <span class="font-display font-extrabold text-xl tracking-wider text-gold">{{ $bakery['store_name'] ?? 'MANA OORU MANA TEA' }}</span>
             </a>
             <p class="text-sm text-cream/85 leading-relaxed font-normal">
                 {{ $bakery['footer_about'] ?? 'Crafting luxury artisanal breads and pastries daily.' }}
@@ -21,7 +21,7 @@
         <div class="space-y-6">
             <h4 class="font-display text-gold font-bold text-sm uppercase tracking-widest border-b border-coffee-800 pb-2">QUICK LINKS</h4>
             <ul class="space-y-3 text-sm text-cream/85 font-medium">
-                <li><a href="{{ route('products.index') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-bread-slice text-gold w-5 text-center"></i> Bakery Menu</a></li>
+                <li><a href="{{ route('products.index') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-bread-slice text-gold w-5 text-center"></i> Tea Menu</a></li>
                 <li><a href="{{ route('custom-cake') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-cake-candles text-gold w-5 text-center"></i> Custom Cake Builder</a></li>
                 <li><a href="{{ route('gallery') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-image text-gold w-5 text-center"></i> Photo Gallery</a></li>
                 <li><a href="{{ route('testimonials') }}" class="hover:text-gold transition-colors flex items-center gap-2"><i class="fa-solid fa-comments text-gold w-5 text-center"></i> Happy Reviews</a></li>
@@ -65,6 +65,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-coffee-800/80 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-cream/70 font-normal">
-        <div>&copy; {{ date('Y') }} {{ $bakery['store_name'] ?? 'Sweet Crumbs Bakery' }}. All rights reserved.</div>
+        <div>&copy; {{ date('Y') }} {{ $bakery['store_name'] ?? 'Mana Ooru Mana Tea' }}. All rights reserved.</div>
     </div>
 </footer>

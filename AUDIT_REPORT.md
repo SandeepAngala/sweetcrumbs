@@ -1,4 +1,4 @@
-# Sweet Crumbs — Enterprise Codebase Audit & CMS Conversion Report
+# MANA OORU MANA TEA — Enterprise Codebase Audit & CMS Conversion Report
 
 **Date:** May 2026  
 **Scope:** Full Laravel MVC bakery platform (storefront, admin, API, database)  
@@ -181,7 +181,7 @@ php artisan storage:link
 php artisan serve
 ```
 
-**Admin:** `admin@sweetcrumbs.com` / `password`  
+**Admin:** `admin@manaoorumanatea.com` / `password`  
 **Manage CMS:** Admin → FAQs | Gallery | Homepage Offers | Team | Settings
 
 ---

@@ -19,7 +19,7 @@
                     <!-- User Profile Brief -->
                     <div class="flex items-center gap-4 pb-6 mb-6 border-b border-coffee-50 dark:border-gray-700">
                         <div class="w-14 h-14 rounded-full bg-bakery-gold-100 dark:bg-bakery-gold-950/30 flex items-center justify-center border border-bakery-gold-300">
-                            <i class="fa-solid fa-cookie-bite text-2xl text-bakery-gold-600"></i>
+                            <i class="fa-solid fa-mug-hot text-2xl text-bakery-gold-600"></i>
                         </div>
                         <div class="min-w-0">
                             <h2 class="font-bold text-coffee-900 dark:text-white truncate">{{ auth()->user()->name }}</h2>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Premium Bakery & Cafe Lounge')
+@section('title', 'Premium Tea Lounge & Café')
 
 @section('content')
 <!-- 1. LUXURIOUS HERO SLIDER / DYNAMIC BANNER -->
@@ -30,7 +30,7 @@
                         <!-- Slide Text Content -->
                         <div class="lg:col-span-7 space-y-6">
                             <span class="inline-block px-4 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs font-bold tracking-widest uppercase shadow-glow">
-                                <i class="fa-solid fa-wand-magic-sparkles mr-1.5 animate-pulse"></i> SPECIAL RECOMMENDATION
+                                <i class="fa-solid fa-leaf mr-1.5 animate-pulse"></i> TEA HOUSE SPECIAL
                             </span>
                             <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight">
                                 {{ $banner->title }}
@@ -45,7 +45,7 @@
                                     {{ $banner->button_text ?: 'EXPLORE MENU' }} <i class="fa-solid fa-arrow-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
                                 </a>
                                 <a href="{{ route('custom-cake') }}" class="px-8 py-4 border border-white/20 hover:bg-white/10 text-white font-bold rounded-2xl hover:border-gold/50 transition-all text-sm tracking-wide">
-                                    CUSTOM CAKES <i class="fa-solid fa-cake-candles ml-1.5 text-gold"></i>
+                                    TEA SPECIALS <i class="fa-solid fa-mug-hot ml-1.5 text-gold"></i>
                                 </a>
                             </div>
                         </div>
@@ -55,10 +55,10 @@
                             <div class="relative w-full max-w-md">
                                 <div class="absolute inset-0 bg-gradient-to-tr from-gold to-bakery-pink-200 rounded-3xl blur-2xl opacity-20"></div>
                                 <div class="relative glass rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden group">
-                                    <img src="{{ $banner->image }}" alt="{{ $banner->title }}" class="w-full aspect-[4/3] object-cover rounded-2xl shadow-inner transition-transform duration-700 group-hover:scale-105">
+                                    <img src="{{ $banner->image_url }}" alt="{{ $banner->title }}" class="w-full aspect-[4/3] object-cover rounded-2xl shadow-inner transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('images/fallback-hero-tea.svg') }}';">
                                     <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-coffee-950/80 backdrop-blur-md border border-white/10 text-center">
-                                        <p class="text-xs text-gold font-bold uppercase tracking-wider">CHEF SANDEEP PRESENTS</p>
-                                        <p class="text-sm font-semibold text-white mt-1">Fresh Luxury Culinary Art</p>
+                                        <p class="text-xs text-gold font-bold uppercase tracking-wider"><i class="fa-solid fa-mug-hot mr-1"></i> MANA OORU MANA TEA</p>
+                                        <p class="text-sm font-semibold text-white mt-1">Brewed Fresh, Served with Love</p>
                                     </div>
                                 </div>
                             </div>
@@ -78,14 +78,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
                 <div class="space-y-8" data-aos="fade-right">
                     <span class="inline-block px-4 py-1.5 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold tracking-widest uppercase">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-gold animate-pulse"></i> LUXURY BAKERY & MODERN CAFÉ
+                        <i class="fa-solid fa-mug-hot mr-1.5 text-gold animate-pulse"></i> PREMIUM TEA LOUNGE & CAFÉ
                     </span>
                     <h1 class="font-display font-extrabold text-5xl md:text-6xl text-white leading-tight">
-                        Baked Fresh <br>
-                        <span class="text-gold-gradient">with Pure Culinary Love</span>
+                        Brewed Fresh <br>
+                        <span class="text-gold-gradient">Mana Ooru Mana Tea</span>
                     </h1>
                     <p class="text-base text-cream/90 font-light leading-relaxed max-w-lg">
-                        Indulge in our exquisite collection of hot savory puffs, hand-crafted designer desserts, custom celebrations, and slow-roasted specialty coffees.
+                        Signature chai, filter coffee, café snacks, and coolers — served fresh at our Arumbaka tea lounge on NH 216.
                     </p>
                     <div class="flex flex-wrap items-center gap-4 pt-2">
                         <a href="{{ route('products.index') }}" class="px-8 py-4 bg-gold hover:bg-[#a67a35] text-coffee-950 font-bold rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all text-sm tracking-wide group">
@@ -100,9 +100,9 @@
                     <div class="relative w-full max-w-md animate-float">
                         <div class="absolute inset-0 bg-gradient-to-tr from-gold to-bakery-pink-200 rounded-3xl blur-2xl opacity-10"></div>
                         <div class="relative glass rounded-3xl p-6 border border-white/10 shadow-2xl">
-                            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600&auto=format&fit=crop" alt="Specialty Cake" class="w-full aspect-[4/3] object-cover rounded-2xl mb-6 shadow">
+                            <img src="{{ asset('images/fallback-hero-tea.svg') }}" alt="Premium chai" class="w-full aspect-[4/3] object-cover rounded-2xl mb-6 shadow" onerror="this.src='https://images.unsplash.com/photo-1571934811356-798df2168c42?q=80&w=600&auto=format&fit=crop'">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs text-gold font-bold uppercase tracking-wider">Chef's Signature</span>
+                                <span class="text-xs text-gold font-bold uppercase tracking-wider">House Special</span>
                                 <div class="flex text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
                             </div>
                             <h3 class="font-display font-bold text-xl text-white mb-2">Royal Velvet Raspberry Cake</h3>
@@ -148,15 +148,15 @@
 <!-- 3. CHEF'S RECOMMENDATIONS (Featured Products Grid) -->
 <section class="py-24 bg-coffee-50/40 dark:bg-gray-950/20 px-6 border-y border-coffee-100/5">
     <div class="max-w-7xl mx-auto">
-        <x-section-heading title="Chef Recommendations" subtitle="Handpicked Masterpieces" />
+        <x-section-heading title="Tea Master Picks" subtitle="Handpicked Favorites" />
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             @forelse($chefRecommendations as $product)
-                <!-- Custom decorated wrapper with Chef Special badges -->
+                <!-- Custom decorated wrapper with TEA SPECIAL badges -->
                 <div class="relative group">
                     <div class="absolute -top-3 right-4 z-20">
                         <span class="bg-gradient-to-r from-red-600 to-amber-500 text-white font-extrabold text-[10px] px-3 py-1 rounded-full shadow-lg uppercase tracking-wider border border-white/20 animate-pulse flex items-center gap-1">
-                            <i class="fa-solid fa-award"></i> CHEF SPECIAL
+                            <i class="fa-solid fa-award"></i> TEA SPECIAL
                         </span>
                     </div>
                     <x-product-card :product="$product" />
@@ -305,7 +305,7 @@
 
 <!-- 7. TRENDING SWEETS & DESSERTS BOUTIQUE -->
 <section class="py-24 px-6 max-w-7xl mx-auto">
-    <x-section-heading title="Trending Sweets & Desserts" subtitle="Our Boutique Specialties" />
+    <x-section-heading title="Trending Snacks & Sweets" subtitle="Tea-Time Favorites" />
 
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         @forelse($trendingDesserts as $product)
@@ -349,7 +349,7 @@
 
 <!-- 9. LATEST BLOG CHRONICLES -->
 <section class="py-24 px-6 max-w-7xl mx-auto">
-    <x-section-heading title="Baking Chronicles & Secrets" subtitle="Chef's Dairy & Insights" />
+    <x-section-heading title="Tea Chronicles" subtitle="Stories from Our Lounge" />
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         @foreach($latestBlogs as $blog)

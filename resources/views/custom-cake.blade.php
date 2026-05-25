@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Custom Celebration Cakes - Sweet Crumbs Architect')
+@section('title', 'Custom Celebration Cakes - MANA OORU MANA TEA Architect')
 
 @section('content')
 @php

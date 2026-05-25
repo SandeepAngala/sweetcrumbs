@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us - Sweet Crumbs Bakery')
+@section('title', 'Contact Us - Mana Ooru Mana Tea')
 
 @section('content')
 <div class="relative bg-cream py-16 sm:py-24 overflow-hidden">

@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         // Create Admin
         User::updateOrCreate(
-            ['email' => 'admin@sweetcrumbs.com'],
+            ['email' => 'admin@manaoorumanatea.com'],
             [
                 'name' => 'Chef Sandeep',
                 'password' => Hash::make('password'),
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
 
         // Create Regular Customer
         User::updateOrCreate(
-            ['email' => 'user@sweetcrumbs.com'],
+            ['email' => 'user@manaoorumanatea.com'],
             [
                 'name' => 'John Doe',
                 'password' => Hash::make('password'),

@@ -12,6 +12,11 @@ class MediaUrl
         return asset('images/placeholder-product.svg');
     }
 
+    public static function heroFallback(): string
+    {
+        return asset('images/fallback-hero-tea.svg');
+    }
+
     public static function resolve(?string $path, ?string $fallback = null): string
     {
         if (empty($path)) {

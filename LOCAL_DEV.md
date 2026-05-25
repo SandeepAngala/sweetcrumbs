@@ -1,16 +1,16 @@
-# Local development (Sweet Crumbs)
+# Local development (MANA OORU MANA TEA)
 
 ## Quick start (XAMPP + MySQL)
 
 1. Start **Apache** and **MySQL** in XAMPP.
-2. Create database `sweetcrumbs` in phpMyAdmin (utf8mb4).
+2. Create database `manaoorumanatea` in phpMyAdmin (utf8mb4).
 3. Configure `.env`:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=sweetcrumbs
+DB_DATABASE=manaoorumanatea
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -53,4 +53,4 @@ Laravel uses `public/hot` while Vite is running. If Vite stops but `public/hot` 
 ## Defaults
 
 - **APP_URL:** `http://127.0.0.1:8000`
-- **Admin:** `admin@sweetcrumbs.com` / `password`
+- **Admin:** `admin@manaoorumanatea.com` / `password`

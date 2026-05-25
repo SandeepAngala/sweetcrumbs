@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Panel - Sweet Crumbs Bakery</title>
+    <title>Admin Panel - Mana Ooru Mana Tea</title>
 
     <!-- Preload Critical Fonts for Fast Text Rendering & FOUT Prevention -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,8 +36,8 @@
     <!-- Sidebar Admin Menu -->
     <aside class="w-64 bg-coffee-800 text-white flex flex-col shadow-warm shrink-0 hidden md:flex border-r border-coffee-700">
         <div class="p-6 border-b border-coffee-700 flex items-center gap-3">
-            <i class="fa-solid fa-cookie-bite text-2xl text-bakery-gold-300"></i>
-            <span class="font-display font-bold text-lg tracking-wider text-bakery-gold-200">Sweet Crumbs</span>
+            <i class="fa-solid fa-mug-hot text-2xl text-bakery-gold-300"></i>
+            <span class="font-display font-bold text-lg tracking-wider text-bakery-gold-200">MANA OORU MANA TEA</span>
         </div>
         
         <nav class="flex-grow p-4 space-y-1">
@@ -45,7 +45,7 @@
                 <i class="fa-solid fa-chart-line w-5"></i> Dashboard
             </a>
             <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
-                <i class="fa-solid fa-cookie-bite w-5"></i> Products
+                <i class="fa-solid fa-mug-hot w-5"></i> Products
             </a>
             <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-coffee-700 transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-coffee-600 text-bakery-gold-100 font-semibold' : 'text-coffee-100' }}">
                 <i class="fa-solid fa-folder w-5"></i> Categories

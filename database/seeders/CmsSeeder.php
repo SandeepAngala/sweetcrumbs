@@ -27,15 +27,17 @@ class CmsSeeder extends Seeder
     protected function seedSettings(): void
     {
         $settings = [
-            ['key' => 'store_address', 'value' => '102 Pastry Lane, Sweet Corner, Colaba, Mumbai, MH - 400005', 'group' => 'contact'],
-            ['key' => 'opening_hours', 'value' => 'Daily: 7:00 AM - 10:00 PM', 'group' => 'contact'],
-            ['key' => 'map_embed_url', 'value' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3774.0!2d72.82!3d18.92!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMumbai!5e0!3m2!1sen!2sin!4v1', 'group' => 'contact'],
-            ['key' => 'footer_about', 'value' => 'Crafting luxury artisanal breads, delicate viennoiseries, custom wedding tiers, and modern designer pastries daily with passion, heritage, and pure butter.', 'group' => 'general'],
-            ['key' => 'promo_text', 'value' => 'Subscribe to get recipes, gourmet tips, and 10% off your first online order.', 'group' => 'marketing'],
-            ['key' => 'social_instagram', 'value' => 'https://instagram.com/sweetcrumbs', 'group' => 'social'],
-            ['key' => 'social_facebook', 'value' => 'https://facebook.com/sweetcrumbs', 'group' => 'social'],
-            ['key' => 'social_pinterest', 'value' => 'https://pinterest.com/sweetcrumbs', 'group' => 'social'],
-            ['key' => 'social_youtube', 'value' => 'https://youtube.com/sweetcrumbs', 'group' => 'social'],
+            ['key' => 'store_address', 'value' => 'M/s Sri Sai Hariharan Filling Station, Sy No 419/2, NH 216, Chandolu Cherukupalli Rd, Arumbaka, Bapatla, Guntur - 522309, Andhra Pradesh', 'group' => 'contact'],
+            ['key' => 'footer_address', 'value' => 'Arumbaka, Guntur — NH 216 (Mana Ooru Mana Tea)', 'group' => 'contact'],
+            ['key' => 'google_maps_link', 'value' => 'https://share.google/h8dNyeSgTNanDuS2x', 'group' => 'contact'],
+            ['key' => 'opening_hours', 'value' => 'Open 24 Hours', 'group' => 'contact'],
+            ['key' => 'map_embed_url', 'value' => 'https://www.google.com/maps?q=16.03690084,80.66422922&hl=en&z=16&output=embed', 'group' => 'contact'],
+            ['key' => 'footer_about', 'value' => 'Mana Ooru Mana Tea — premium chai, filter coffee, and café snacks at our NH 216 tea lounge in Arumbaka.', 'group' => 'general'],
+            ['key' => 'promo_text', 'value' => 'Subscribe for chai offers and 10% off your first order.', 'group' => 'marketing'],
+            ['key' => 'social_instagram', 'value' => 'https://instagram.com/manaoorumanatea', 'group' => 'social'],
+            ['key' => 'social_facebook', 'value' => 'https://facebook.com/manaoorumanatea', 'group' => 'social'],
+            ['key' => 'social_pinterest', 'value' => 'https://pinterest.com/manaoorumanatea', 'group' => 'social'],
+            ['key' => 'social_youtube', 'value' => 'https://youtube.com/manaoorumanatea', 'group' => 'social'],
             ['key' => 'default_product_image', 'value' => '/images/placeholder-product.svg', 'group' => 'media'],
             ['key' => 'shop_status', 'value' => 'open', 'group' => 'general'],
             ['key' => 'faq_delivery_radius_km', 'value' => '15', 'group' => 'delivery', 'type' => 'integer'],
@@ -47,7 +49,7 @@ class CmsSeeder extends Seeder
         ];
 
         foreach ($settings as $s) {
-            Setting::firstOrCreate(['key' => $s['key']], $s);
+            Setting::updateOrCreate(['key' => $s['key']], $s);
         }
     }
 
@@ -110,14 +112,14 @@ class CmsSeeder extends Seeder
             ['slug' => 'about'],
             [
                 'title' => 'Our Sweet Journey',
-                'body' => 'Founded by Chef Sandeep in 2018, Sweet Crumbs Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour.',
+                'body' => 'Founded by Chef Sandeep in 2018, MANA OORU MANA TEA Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour.',
                 'meta' => [
                     'established' => '2018',
                     'headline' => 'Where Every Crumb Tells a Story',
                     'subtitle' => 'The Story of Passion, Flour, and Edible Artistry',
                     'hero_image' => 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=800&auto=format&fit=crop',
                     'story_paragraphs' => [
-                        'Founded by Chef Sandeep in 2018, Sweet Crumbs Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour. Our goal has always been simple: to elevate daily moments with extraordinary, hand-rolled confections that look like fine art and taste like heaven.',
+                        'Founded by Chef Sandeep in 2018, MANA OORU MANA TEA Bakery began as a tiny kitchen table experiment fueled by a big dream and a single bag of organic French flour. Our goal has always been simple: to elevate daily moments with extraordinary, hand-rolled confections that look like fine art and taste like heaven.',
                         'We believe in slow baking—the quiet rhythm of natural fermentation, the precise lamination of cold butter, and the warm aroma of caramelized crusts wafting through the early morning air. Every ingredient we choose is ethically sourced, from local grass-fed butter to organic, single-origin dark chocolate.',
                     ],
                     'values' => [

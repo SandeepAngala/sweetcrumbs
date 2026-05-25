@@ -1,4 +1,4 @@
-# Sweet Crumbs — Production Hardening & QA Report
+# MANA OORU MANA TEA — Production Hardening & QA Report
 
 **Date:** May 2026  
 **Status:** Production-ready for academic evaluation, portfolio, and deployment  
@@ -247,9 +247,9 @@ php artisan optimize
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@sweetcrumbs.com | password |
-| Staff | staff@sweetcrumbs.com | password |
+| Admin | admin@manaoorumanatea.com | password |
+| Staff | staff@manaoorumanatea.com | password |
 
 ---
 
-*Sweet Crumbs is ready for academic evaluation, portfolio showcase, and production deployment. See `AUDIT_REPORT.md` for CMS conversion history and `BACKEND.md` for API documentation.*
+*MANA OORU MANA TEA is ready for academic evaluation, portfolio showcase, and production deployment. See `AUDIT_REPORT.md` for CMS conversion history and `BACKEND.md` for API documentation.*

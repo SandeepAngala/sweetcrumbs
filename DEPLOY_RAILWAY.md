@@ -1,4 +1,4 @@
-# Sweet Crumbs — Railway deployment
+# MANA OORU MANA TEA — Railway deployment
 
 ## Environment variables
 
@@ -65,4 +65,4 @@ Empty `[]` response = database not seeded.
 
 ## Admin login (after seed)
 
-- `admin@sweetcrumbs.com` / `password`
+- `admin@manaoorumanatea.com` / `password`

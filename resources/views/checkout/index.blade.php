@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Secure Checkout - Sweet Crumbs Boutique')
+@section('title', 'Secure Checkout - MANA OORU MANA TEA Boutique')
 
 @section('content')
 <div class="relative bg-cream min-h-screen py-12 overflow-hidden">

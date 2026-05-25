@@ -14,7 +14,7 @@ class NewsletterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Thank you! You have successfully subscribed to the Sweet Crumbs Newsletter.'
+            'message' => 'Thank you! You have successfully subscribed to the MANA OORU MANA TEA Newsletter.'
         ]);
     }
 }

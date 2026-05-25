@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sweet Crumbs Blog - Sourdough Secrets & Pastry Science')
+@section('title', 'MANA OORU MANA TEA Blog - Sourdough Secrets & Pastry Science')
 
 @section('content')
 <div class="relative bg-cream min-h-screen py-12 overflow-hidden">

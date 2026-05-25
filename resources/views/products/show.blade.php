@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' - Sweet Crumbs Boutique')
+@section('title', $product->name . ' - MANA OORU MANA TEA Boutique')
 
 @section('content')
 <div class="relative bg-cream min-h-screen py-12 overflow-hidden">

@@ -135,7 +135,7 @@ class PaymentService
             'provider' => 'upi',
             'reference' => 'UPI-'.$order->order_number,
             'amount' => $order->total,
-            'upi_id' => Setting::get('upi_id', 'sweetcrumbs@upi'),
+            'upi_id' => Setting::get('upi_id', 'manaoorumanatea@upi'),
         ];
     }
 

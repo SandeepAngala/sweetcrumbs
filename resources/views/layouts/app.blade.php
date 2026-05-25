@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Artisan Bakery & Cafe') - Sweet Crumbs Bakery</title>
+    <title>@yield('title', 'Premium Tea Lounge & Café') - Mana Ooru Mana Tea</title>
 
     <!-- Preload Critical Fonts for Fast Text Rendering & FOUT Prevention -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +52,7 @@
     <!-- Floating Quick Order Button -->
     <a href="{{ route('products.index') }}" class="floating-order-btn hover:scale-105 group" title="Order Now">
         <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-out font-bold whitespace-nowrap pr-0 group-hover:pr-2 text-sm">ORDER NOW</span>
-        <i class="fa-solid fa-cookie-bite text-xl"></i>
+        <i class="fa-solid fa-mug-hot text-xl"></i>
     </a>
 
     <!-- Back to Top Button -->

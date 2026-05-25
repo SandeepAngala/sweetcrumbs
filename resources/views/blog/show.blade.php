@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $blog->title . ' - Sweet Crumbs Chronicles')
+@section('title', $blog->title . ' - MANA OORU MANA TEA Chronicles')
 
 @section('content')
 <div class="relative bg-cream min-h-screen py-12 overflow-hidden">

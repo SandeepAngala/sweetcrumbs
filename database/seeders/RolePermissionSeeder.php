@@ -50,7 +50,7 @@ class RolePermissionSeeder extends Seeder
         }
 
         $superAdmin = User::firstOrCreate(
-            ['email' => 'admin@sweetcrumbs.com'],
+            ['email' => 'admin@manaoorumanatea.com'],
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
@@ -61,7 +61,7 @@ class RolePermissionSeeder extends Seeder
         $superAdmin->roles()->sync([Role::where('slug', 'super_admin')->first()->id]);
 
         $staff = User::firstOrCreate(
-            ['email' => 'staff@sweetcrumbs.com'],
+            ['email' => 'staff@manaoorumanatea.com'],
             [
                 'name' => 'Staff User',
                 'password' => Hash::make('password'),

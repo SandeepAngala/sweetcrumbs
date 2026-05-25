@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Sweet Crumbs') }} - Authentication</title>
+        <title>{{ config('app.name', 'MANA OORU MANA TEA') }} - Authentication</title>
 
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,12 +106,12 @@
                 <div class="my-auto z-20 flex flex-col items-start max-w-lg" data-aos="fade-right" data-aos-duration="1200">
                     <!-- Brand Icon with golden floating animation -->
                     <div class="w-16 h-16 bg-bakery-gold-100/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-glow mb-6 animate-float">
-                        <i class="fa-solid fa-cookie-bite text-3xl text-bakery-gold-300"></i>
+                        <i class="fa-solid fa-mug-hot text-3xl text-bakery-gold-300"></i>
                     </div>
 
                     <!-- Main Brand Header -->
                     <h1 class="font-display text-4xl lg:text-5xl font-black tracking-tight leading-none text-white">
-                        Sweet Crumbs
+                        MANA OORU MANA TEA
                     </h1>
                     <span class="mt-2 text-xs font-bold uppercase tracking-[0.25em] text-bakery-gold-300">Café & Artisanal Bakery</span>
                     
@@ -126,7 +126,7 @@
 
                 <!-- Bottom Row: Decorative info -->
                 <div class="z-20 flex justify-between items-center text-xxs text-coffee-200 border-t border-white/10 pt-4" data-aos="fade-up" data-aos-duration="1000">
-                    <span>Est. 2026 &bull; Sweet Crumbs Bakery</span>
+                    <span>Est. 2026 &bull; Mana Ooru Mana Tea</span>
                     <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-green-400 animate-pulse text-[6px]"></i> Oven Hot & Baking</span>
                 </div>
 
@@ -163,7 +163,7 @@
 
                 <!-- Footer Trademark watermark -->
                 <p class="mt-8 md:mt-0 text-center text-xxs text-coffee-400 dark:text-gray-500 z-10">
-                    &copy; {{ date('Y') }} Sweet Crumbs Bakery. All rights reserved.
+                    &copy; {{ date('Y') }} Mana Ooru Mana Tea. All rights reserved.
                 </p>
 
             </div>

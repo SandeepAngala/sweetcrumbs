@@ -24,7 +24,7 @@ class OrderPlaced extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Order Confirmed - '.$this->order->order_number)
             ->greeting('Hello '.$notifiable->name.'!')
-            ->line('Thank you for your order at Sweet Crumbs.')
+            ->line('Thank you for your order at MANA OORU MANA TEA.')
             ->line('Order #: '.$this->order->order_number)
             ->line('Total: ₹'.number_format($this->order->total, 2))
             ->action('Track Order', url('/dashboard/orders/'.$this->order->order_number));

@@ -29,7 +29,7 @@ class SeedIfEmptyCommand extends Command
             $this->warn('Categories exist but products are missing — running full seed.');
         }
 
-        $this->info('Seeding Sweet Crumbs catalog and CMS data...');
+        $this->info('Seeding MANA OORU MANA TEA catalog and CMS data...');
 
         Artisan::call('db:seed', ['--force' => true], $this->output);
 

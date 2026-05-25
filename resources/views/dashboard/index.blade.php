@@ -7,7 +7,7 @@
     
     <!-- Premium Welcome Header -->
     <div class="bg-gradient-to-r from-coffee-800 to-coffee-950 text-white rounded-3xl p-8 shadow-warm relative overflow-hidden">
-        <div class="absolute right-0 bottom-0 opacity-10 text-9xl"><i class="fa-solid fa-cookie-bite"></i></div>
+        <div class="absolute right-0 bottom-0 opacity-10 text-9xl"><i class="fa-solid fa-mug-hot"></i></div>
         <span class="text-xs font-semibold uppercase tracking-widest text-bakery-gold-300">Welcome Back</span>
         <h1 class="font-display text-3xl sm:text-4xl font-black mt-1">Hello, {{ $user->name }}!</h1>
         <p class="text-coffee-200 text-sm mt-2 max-w-md">

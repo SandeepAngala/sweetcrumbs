@@ -2,7 +2,7 @@
 
 return [
     'prefer_local_media' => env('BAKERY_PREFER_LOCAL_MEDIA', env('APP_ENV') === 'production'),
-    'name' => env('BAKERY_NAME', 'Sweet Crumbs'),
+    'name' => env('BAKERY_NAME', 'Mana Ooru Mana Tea'),
     'currency' => env('BAKERY_CURRENCY', 'INR'),
     'currency_symbol' => env('BAKERY_CURRENCY_SYMBOL', '₹'),
     'tax_rate' => (float) env('BAKERY_TAX_RATE', 0.05),

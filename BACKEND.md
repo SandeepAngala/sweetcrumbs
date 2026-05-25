@@ -1,6 +1,6 @@
-# Sweet Crumbs — Enterprise Laravel Backend
+# MANA OORU MANA TEA — Enterprise Laravel Backend
 
-Production-ready Laravel 12 MVC backend for the Sweet Crumbs premium bakery & café platform.
+Production-ready Laravel 12 MVC backend for the MANA OORU MANA TEA premium bakery & café platform.
 
 ## Architecture
 
@@ -34,8 +34,8 @@ php artisan storage:link
 php artisan serve
 ```
 
-**Default admin:** `admin@sweetcrumbs.com` / `password`  
-**Staff:** `staff@sweetcrumbs.com` / `password`
+**Default admin:** `admin@manaoorumanatea.com` / `password`  
+**Staff:** `staff@manaoorumanatea.com` / `password`
 
 ## API (`/api/v1`)
 
