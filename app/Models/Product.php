@@ -6,10 +6,11 @@ use App\Helpers\MediaUrl;
 use Illuminate\Support\Str;
 use MongoDB\Laravel\Eloquent\Model;
 use MongoDB\Laravel\Eloquent\SoftDeletes;
+use App\Models\Concerns\HandlesNullableDecimals;
 
 class Product extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HandlesNullableDecimals;
 
     protected $connection = 'mongodb';
     protected $collection = 'products';

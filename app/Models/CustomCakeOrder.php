@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Concerns\HandlesNullableDecimals;
 
 class CustomCakeOrder extends Model
 {
+    use HandlesNullableDecimals;
     protected $connection = 'mongodb';
     protected $collection = 'custom_cake_orders';
 

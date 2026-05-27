@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Concerns\HandlesNullableDecimals;
 
 class DeliveryTracking extends Model
 {
+    use HandlesNullableDecimals;
     protected $connection = 'mongodb';
     protected $collection = 'delivery_trackings';
 

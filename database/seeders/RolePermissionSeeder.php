@@ -29,16 +29,16 @@ class RolePermissionSeeder extends Seeder
         }
 
         $roles = [
-            'super_admin' => Permission::pluck('id'),
+            'super_admin' => Permission::pluck('id')->toArray(),
             'admin' => Permission::whereIn('slug', [
                 'manage-products', 'manage-categories', 'manage-orders',
                 'manage-customers', 'manage-coupons', 'view-analytics',
                 'manage-inventory', 'manage-reviews',
-            ])->pluck('id'),
+            ])->pluck('id')->toArray(),
             'staff' => Permission::whereIn('slug', [
                 'manage-orders', 'manage-inventory', 'view-analytics',
-            ])->pluck('id'),
-            'customer' => collect(),
+            ])->pluck('id')->toArray(),
+            'customer' => [],
         ];
 
         foreach ($roles as $slug => $permissionIds) {

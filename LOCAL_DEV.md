@@ -1,31 +1,28 @@
 # Local development (MANA OORU MANA TEA)
 
-## Quick start (XAMPP + MySQL)
+## Quick start (MongoDB Atlas)
 
-1. Start **Apache** and **MySQL** in XAMPP.
-2. Create database `manaoorumanatea` in phpMyAdmin (utf8mb4).
-3. Configure `.env`:
+1. Ensure the PHP MongoDB extension (`php_mongodb.dll` or `mongodb.so`) is installed and enabled in your `php.ini`.
+2. Configure `.env`:
 
 ```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=manaoorumanatea
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=mongodb
+MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority
+DB_DATABASE=agrofertmart
 ```
 
-4. Run:
+3. Run:
 
 ```bash
 composer install
 cp .env.example .env   # if needed
 php artisan key:generate
-php artisan migrate:fresh --seed
+php artisan migrate --force
+php artisan db:seed
 php artisan storage:link
 php artisan optimize:clear
 npm ci
-composer dev
+npm run dev
 ```
 
 Verify data: `php scripts/db-check.php` (expect 64 products, 6 categories).

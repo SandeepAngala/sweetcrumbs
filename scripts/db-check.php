@@ -10,12 +10,18 @@ use App\Models\HomepageOffer;
 use App\Models\Product;
 use App\Models\Review;
 
-echo 'DB: '.config('database.default').' / '.config('database.connections.mysql.database').PHP_EOL;
+echo 'DB: '.config('database.default').' / '.config('database.connections.'.config('database.default').'.database').PHP_EOL;
 try {
-    $tables = Illuminate\Support\Facades\DB::select('SHOW TABLES');
-    echo 'tables: '.count($tables).PHP_EOL;
+    if (config('database.default') === 'mongodb') {
+        $db = Illuminate\Support\Facades\DB::connection('mongodb')->getMongoDB();
+        $collections = iterator_to_array($db->listCollections());
+        echo 'collections: '.count($collections).PHP_EOL;
+    } else {
+        $tables = Illuminate\Support\Facades\DB::select('SHOW TABLES');
+        echo 'tables: '.count($tables).PHP_EOL;
+    }
 } catch (Throwable $e) {
-    echo 'tables error: '.$e->getMessage().PHP_EOL;
+    echo 'database access error: '.$e->getMessage().PHP_EOL;
 }
 echo 'products: '.Product::count().PHP_EOL;
 echo 'categories: '.Category::count().PHP_EOL;
