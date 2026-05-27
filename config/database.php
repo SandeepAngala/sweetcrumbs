@@ -36,8 +36,11 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb+srv://nithinpujari601_db_user:W9anlqXm28LLhDMo@cluster0.lorouvo.mongodb.net/ManaOoruManaTea?retryWrites=true&w=majority'),
+            'dsn' => env('MONGODB_URI', 'mongodb+srv://nithinpujari601_db_user:W9anlqXm28LLhDMo@cluster0.lorouvo.mongodb.net/ManaOoruManaTea?retryWrites=true&w=majority&tls=true'),
             'database' => env('DB_DATABASE', 'ManaOoruManaTea'),
+            'options' => [
+                'database' => env('DB_DATABASE', 'ManaOoruManaTea'),
+            ],
         ],
 
         'sqlite' => [
