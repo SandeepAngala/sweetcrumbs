@@ -1,4 +1,5 @@
 #!/bin/sh
+# Trigger automatic Railway redeployment
 set -e
 
 # Clear build-time caches so Railway runtime env vars (DATABASE_URL, APP_KEY) apply.
