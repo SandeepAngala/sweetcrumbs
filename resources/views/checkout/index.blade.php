@@ -22,8 +22,11 @@
             align="center"
         />
 
-        <form action="{{ route('checkout.store') }}" method="POST" class="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
+        <form id="checkout-form" action="{{ route('checkout.store') }}" method="POST" class="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
             @csrf
+            <input type="hidden" name="transaction_id" id="transaction_id" value="">
+            <input type="hidden" name="razorpay_order_id" id="razorpay_order_id" value="">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature" value="">
             
             <!-- Left Panel: Delivery Details & Payments -->
             <div class="lg:col-span-2 space-y-8">
@@ -245,4 +248,123 @@
         </form>
     </div>
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('checkout-form');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', async function(e) {
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            
+            // If COD or other methods that don't need Razorpay popup, just let it submit normally
+            if (paymentMethod !== 'upi' && paymentMethod !== 'razorpay') {
+                return;
+            }
+
+            // Prevent default form submission for Razorpay
+            e.preventDefault();
+            
+            // Disable button to prevent double clicks
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Processing Payment... <i class="fa-solid fa-spinner fa-spin"></i>';
+            submitBtn.disabled = true;
+
+            try {
+                // 1. Create Razorpay order on backend
+                const createRes = await fetch('{{ route("checkout.razorpay.create") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({}) // Amount is calculated on backend via CartService
+                });
+
+                const orderData = await createRes.json();
+
+                if (!orderData.success) {
+                    throw new Error(orderData.message || 'Failed to initialize payment.');
+                }
+
+                // 2. Open Razorpay popup
+                const options = {
+                    key: orderData.key_id,
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: orderData.bakery.name,
+                    description: "Order Payment",
+                    order_id: orderData.order_id,
+                    prefill: {
+                        name: orderData.customer.name,
+                        email: orderData.customer.email,
+                        contact: orderData.customer.phone
+                    },
+                    theme: {
+                        color: "#4A3B32" // Coffee color
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }
+                    },
+                    handler: async function (response) {
+                        try {
+                            // 3. Verify payment signature on backend
+                            submitBtn.innerHTML = 'Verifying Payment... <i class="fa-solid fa-spinner fa-spin"></i>';
+                            
+                            const verifyRes = await fetch('{{ route("checkout.razorpay.verify") }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+
+                            if (verifyData.success) {
+                                // 4. If verified, inject values and submit form
+                                document.getElementById('transaction_id').value = response.razorpay_payment_id;
+                                document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                                document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                                
+                                submitBtn.innerHTML = 'Placing Order... <i class="fa-solid fa-spinner fa-spin"></i>';
+                                form.submit(); // Submit the form to place the order
+                            } else {
+                                throw new Error(verifyData.message || 'Payment verification failed.');
+                            }
+                        } catch (err) {
+                            alert(err.message);
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    alert("Payment failed: " + response.error.description);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+
+                rzp.open();
+                
+            } catch (error) {
+                alert(error.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    });
+</script>
 @endsection

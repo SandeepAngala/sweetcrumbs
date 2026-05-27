@@ -26,16 +26,10 @@ class RazorpayController extends Controller
             ], 401);
         }
 
-        // 2. Validate request
-        $request->validate([
-            'order_number' => 'required|string|exists:orders,order_number',
-        ]);
-
-        $order = Order::where('order_number', $request->order_number)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
-
-        $amountPaise = (int) round($order->total * 100);
+        // 2. We don't have an order yet, we calculate amount from the Cart
+        $cartService = app(\App\Services\CartService::class);
+        $totals = $cartService->calculateTotals(auth()->id());
+        $amountPaise = (int) round($totals['total'] * 100);
 
         // 3. Validate minimum amount
         if ($amountPaise < 100) {
@@ -58,8 +52,9 @@ class RazorpayController extends Controller
         try {
             // 4. Call Razorpay API using SDK to create order
             $api = new Api($keyId, $keySecret);
+            $receiptId = 'cart_' . auth()->id() . '_' . time();
             $razorpayOrder = $api->order->create([
-                'receipt' => $order->order_number,
+                'receipt' => $receiptId,
                 'amount' => $amountPaise,
                 'currency' => config('bakery.currency', 'INR'),
             ]);
@@ -104,7 +99,7 @@ class RazorpayController extends Controller
         }
 
         // 2. Check missing fields and validate
-        if (!$request->has(['order_number', 'razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature'])) {
+        if (!$request->has(['razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature'])) {
             return response()->json([
                 'success' => false,
                 'message' => 'Missing required payment verification fields.'
@@ -112,15 +107,10 @@ class RazorpayController extends Controller
         }
 
         $request->validate([
-            'order_number' => 'required|string|exists:orders,order_number',
             'razorpay_order_id' => 'required|string',
             'razorpay_payment_id' => 'required|string',
             'razorpay_signature' => 'required|string',
         ]);
-
-        $order = Order::where('order_number', $request->order_number)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
 
         $keySecret = config('bakery.razorpay.secret');
 
@@ -144,23 +134,8 @@ class RazorpayController extends Controller
 
             $api->utility->verifyPaymentSignature($attributes);
 
-            // 4. Verification Successful -> Record Payment
-            Payment::updateOrCreate(
-                ['transaction_id' => $request->razorpay_payment_id],
-                [
-                    'order_id' => $order->id,
-                    'payment_method' => 'razorpay',
-                    'amount' => $order->total,
-                    'status' => 'success',
-                    'response_data' => $request->all(),
-                ]
-            );
-
-            // 5. Update Order Status
-            $order->update([
-                'payment_status' => 'paid',
-                'status' => 'confirmed'
-            ]);
+            // 4. Verification Successful -> Store in session for placeOrder to validate
+            session(['verified_payment_id' => $request->razorpay_payment_id]);
 
             return response()->json([
                 'success' => true,
@@ -169,9 +144,6 @@ class RazorpayController extends Controller
 
         } catch (SignatureVerificationError $e) {
             Log::warning('Razorpay Signature Verification Failed: ' . $e->getMessage());
-
-            // Update order status to failed on signature mismatch
-            $order->update(['payment_status' => 'failed']);
 
             return response()->json([
                 'success' => false,

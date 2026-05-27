@@ -72,10 +72,27 @@ class CheckoutController extends Controller
 
             $data['coupon_code'] = session('coupon_code');
 
+            if (in_array($data['payment_method'], ['razorpay', 'upi', 'stripe'], true)) {
+                if (empty($data['transaction_id']) || $data['transaction_id'] !== session('verified_payment_id')) {
+                    throw new \Exception('Payment verification failed or was not completed. Please try again.');
+                }
+            }
+
             $order = $this->orderService->createOrder($userId, $data);
 
-            if (in_array($data['payment_method'], ['razorpay', 'stripe'], true)) {
-                session(['pending_payment_order' => $order->order_number]);
+            if (in_array($data['payment_method'], ['razorpay', 'upi', 'stripe'], true)) {
+                // Payment was verified in session, mark as successful
+                if ($order->payment) {
+                    $order->payment->update([
+                        'status' => 'success',
+                        'response_data' => [
+                            'razorpay_order_id' => $data['razorpay_order_id'] ?? null,
+                            'razorpay_signature' => $data['razorpay_signature'] ?? null,
+                        ]
+                    ]);
+                }
+                $order->update(['payment_status' => 'paid', 'status' => 'confirmed']);
+                session()->forget('verified_payment_id');
             }
 
             session()->forget(['coupon_code', 'coupon_discount']);
