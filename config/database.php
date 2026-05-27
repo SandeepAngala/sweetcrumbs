@@ -3,15 +3,7 @@
 use Illuminate\Support\Str;
 use Pdo\Mysql;
 
-$databaseUrl = env('DATABASE_URL') ?? env('MYSQL_URL') ?? env('DB_URL');
-
-$defaultConnection = env('DB_CONNECTION') ?? (static function () use ($databaseUrl): string {
-    if (! $databaseUrl) {
-        return 'sqlite';
-    }
-
-    return str_contains($databaseUrl, 'postgres') ? 'pgsql' : 'mysql';
-})();
+$defaultConnection = env('DB_CONNECTION', 'mongodb');
 
 return [
 
@@ -62,7 +54,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => $databaseUrl ?: env('DB_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
@@ -82,7 +74,7 @@ return [
 
         'mariadb' => [
             'driver' => 'mariadb',
-            'url' => $databaseUrl ?: env('DB_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
@@ -102,7 +94,7 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => $databaseUrl ?: env('DB_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'laravel'),

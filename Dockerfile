@@ -1,5 +1,8 @@
 FROM php:8.2-fpm
 
+# Set Composer environment variable
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -10,13 +13,14 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libssl-dev \
-    pkg-config
+    pkg-config \
+    libzip-dev
 
 # Clear apt cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install mbstring exif pcntl bcmath gd
+# Install required PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Install and enable MongoDB extension
 RUN pecl install mongodb && docker-php-ext-enable mongodb
@@ -33,8 +37,14 @@ WORKDIR /var/www
 # Copy existing application directory contents
 COPY . .
 
-# Run composer install
-RUN composer install --no-dev --optimize-autoloader
+# Run composer install for non-interactive production build
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Clear old Laravel cache
+RUN php artisan config:clear || true \
+    && php artisan cache:clear || true \
+    && php artisan route:clear || true \
+    && php artisan view:clear || true
 
 EXPOSE 9000
 CMD ["php-fpm"]
