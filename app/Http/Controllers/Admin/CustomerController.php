@@ -12,7 +12,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = User::whereIn('role', ['user', 'customer'])
-            ->withCount('orders')
+            ->with('orders')
             ->latest()
             ->paginate(15);
 
@@ -52,7 +52,7 @@ class CustomerController extends Controller
             fputcsv($handle, ['ID', 'Name', 'Email', 'Phone', 'Orders', 'Loyalty Points', 'Joined']);
 
             User::whereIn('role', ['user', 'customer'])
-                ->withCount('orders')
+                ->with('orders')
                 ->chunk(100, function ($customers) use ($handle) {
                     foreach ($customers as $customer) {
                         fputcsv($handle, [

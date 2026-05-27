@@ -9,7 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::active()->withCount('products')->orderBy('sort_order', 'asc')->get();
+        $categories = Category::active()->with('products')->orderBy('sort_order', 'asc')->get();
         return view('categories.index', compact('categories'));
     }
 
@@ -43,10 +43,10 @@ class CategoryController extends Controller
         $sort = $request->input('sort', 'featured');
         switch ($sort) {
             case 'price_low':
-                $query->orderByRaw('COALESCE(discount_price, price) asc');
+                $query->orderBy('discount_price', 'asc')->orderBy('price', 'asc');
                 break;
             case 'price_high':
-                $query->orderByRaw('COALESCE(discount_price, price) desc');
+                $query->orderBy('discount_price', 'desc')->orderBy('price', 'desc');
                 break;
             case 'name_asc':
                 $query->orderBy('name', 'asc');

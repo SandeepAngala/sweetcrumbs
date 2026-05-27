@@ -51,7 +51,7 @@ class CartController extends Controller
         return response()->json(['message' => 'Cart updated.']);
     }
 
-    public function destroy(Request $request, int $productId): JsonResponse
+    public function destroy(Request $request, string $productId): JsonResponse
     {
         $this->cartService->removeFromCart($request->user()->id, $productId);
 

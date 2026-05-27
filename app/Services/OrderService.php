@@ -18,7 +18,7 @@ class OrderService
         protected DeliveryTrackingService $deliveryTrackingService
     ) {}
 
-    public function createOrder(int $userId, array $data): Order
+    public function createOrder(mixed $userId, array $data): Order
     {
         return DB::transaction(function () use ($userId, $data) {
             $cartItems = $this->cartService->getCart($userId);
@@ -116,7 +116,7 @@ class OrderService
         });
     }
 
-    public function updateStatus(int $orderId, string $status, ?int $staffId = null): Order
+    public function updateStatus(mixed $orderId, string $status, mixed $staffId = null): Order
     {
         $order = Order::findOrFail($orderId);
         $order->status = $status;
@@ -136,7 +136,7 @@ class OrderService
         return $order->fresh();
     }
 
-    public function cancelOrder(Order $order, ?int $userId = null): Order
+    public function cancelOrder(Order $order, mixed $userId = null): Order
     {
         if (in_array($order->status, ['delivered', 'cancelled'], true)) {
             throw new \Exception('This order cannot be cancelled.');

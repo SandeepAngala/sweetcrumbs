@@ -25,9 +25,7 @@ class HomeController extends Controller
 
         // Cache product collections for 10 minutes with eager loading
         $productQuery = fn () => Product::active()
-            ->with('category')
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating');
+            ->with(['category', 'reviews']);
 
         $hotSelling = Cache::remember('home_hot_selling', 600, fn () => $productQuery()
             ->whereHas('category', fn ($q) => $q->where('slug', 'hot-items'))

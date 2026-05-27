@@ -37,16 +37,16 @@ return new class extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_blocked')->default(false)->after('role');
-            $table->timestamp('blocked_at')->nullable()->after('is_blocked');
-            $table->json('notification_preferences')->nullable()->after('blocked_at');
-            $table->uuid('uuid')->nullable()->unique()->after('id');
+            $table->boolean('is_blocked')->default(false);
+            $table->timestamp('blocked_at')->nullable();
+            $table->json('notification_preferences')->nullable();
+            $table->uuid('uuid')->nullable()->unique();
         });
 
         Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('parent_id')->nullable()->after('id')->constrained('categories')->nullOnDelete();
-            $table->string('meta_title')->nullable()->after('description');
-            $table->string('meta_description')->nullable()->after('meta_title');
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
         });
 
         Schema::create('tags', function (Blueprint $table) {
@@ -91,12 +91,12 @@ return new class extends Migration
         });
 
         Schema::table('carts', function (Blueprint $table) {
-            $table->string('session_id', 100)->nullable()->index()->after('user_id');
+            $table->string('session_id', 100)->nullable()->index();
         });
 
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('tracking_number')->nullable()->unique()->after('order_number');
-            $table->uuid('uuid')->nullable()->unique()->after('id');
+            $table->string('tracking_number')->nullable()->unique();
+            $table->uuid('uuid')->nullable()->unique();
             $table->foreignId('assigned_staff_id')->nullable()->constrained('users')->nullOnDelete();
         });
 
@@ -136,7 +136,7 @@ return new class extends Migration
         });
 
         Schema::table('reviews', function (Blueprint $table) {
-            $table->boolean('is_verified_purchase')->default(false)->after('is_approved');
+            $table->boolean('is_verified_purchase')->default(false);
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
         });
 
@@ -163,7 +163,9 @@ return new class extends Migration
 
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
+            $table->string('tokenable_type');
+            $table->string('tokenable_id');
+            $table->index(['tokenable_type', 'tokenable_id']);
             $table->text('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();

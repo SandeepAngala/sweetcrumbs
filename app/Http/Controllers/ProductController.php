@@ -12,9 +12,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::active()
-            ->with('category')
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating');
+            ->with(['category', 'reviews']);
 
         // Live Search
         if ($request->filled('search')) {
@@ -57,10 +55,10 @@ class ProductController extends Controller
         $sort = $request->input('sort', 'featured');
         switch ($sort) {
             case 'price_low':
-                $query->orderByRaw('COALESCE(discount_price, price) asc');
+                $query->orderBy('discount_price', 'asc')->orderBy('price', 'asc');
                 break;
             case 'price_high':
-                $query->orderByRaw('COALESCE(discount_price, price) desc');
+                $query->orderBy('discount_price', 'desc')->orderBy('price', 'desc');
                 break;
             case 'name_asc':
                 $query->orderBy('name', 'asc');
@@ -80,16 +78,12 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::active()
-            ->with('category')
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
+            ->with(['category', 'reviews'])
             ->where('slug', $slug)
             ->firstOrFail();
 
         $relatedProducts = Product::active()
-            ->with('category')
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
+            ->with(['category', 'reviews'])
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4)

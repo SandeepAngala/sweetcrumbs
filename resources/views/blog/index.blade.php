@@ -46,7 +46,9 @@
                             </a>
                         </li>
                         @php
-                            $cats = \App\Models\Blog::published()->select('category', \DB::raw('count(*) as count'))->groupBy('category')->get();
+                            $cats = \App\Models\Blog::published()->get()->groupBy('category')->map(function ($items, $category) {
+                                return (object) ['category' => $category, 'count' => $items->count()];
+                            })->values();
                         @endphp
                         @foreach($cats as $c)
                             <li>

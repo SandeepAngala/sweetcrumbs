@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 class CartService
 {
-    public function getCart(?int $userId): Collection
+    public function getCart(mixed $userId): Collection
     {
         if ($userId) {
             return Cart::where('user_id', $userId)
@@ -22,7 +22,7 @@ class CartService
         return $this->getGuestCartLines();
     }
 
-    public function getSavedForLater(?int $userId): Collection
+    public function getSavedForLater(mixed $userId): Collection
     {
         if (! $userId) {
             return collect();
@@ -34,7 +34,7 @@ class CartService
             ->get();
     }
 
-    public function addToCart(?int $userId, int $productId, int $quantity = 1): mixed
+    public function addToCart(mixed $userId, mixed $productId, int $quantity = 1): mixed
     {
         $product = Product::findOrFail($productId);
 
@@ -49,7 +49,7 @@ class CartService
         return $this->addToGuestCart($productId, $quantity, $product);
     }
 
-    public function updateQuantity(?int $userId, int $productId, int $quantity): mixed
+    public function updateQuantity(mixed $userId, mixed $productId, int $quantity): mixed
     {
         if ($quantity <= 0) {
             return $this->removeFromCart($userId, $productId);
@@ -81,7 +81,7 @@ class CartService
         return true;
     }
 
-    public function removeFromCart(?int $userId, int $productId): bool
+    public function removeFromCart(mixed $userId, mixed $productId): bool
     {
         if ($userId) {
             return (bool) Cart::where('user_id', $userId)
@@ -96,7 +96,7 @@ class CartService
         return true;
     }
 
-    public function saveForLater(?int $userId, int $productId): mixed
+    public function saveForLater(mixed $userId, mixed $productId): mixed
     {
         if (! $userId) {
             throw new \Exception('Please log in to save items for later.');
@@ -114,7 +114,7 @@ class CartService
         return $cartItem;
     }
 
-    public function getCartTotal(?int $userId): float
+    public function getCartTotal(mixed $userId): float
     {
         $total = 0.0;
         foreach ($this->getCart($userId) as $item) {
@@ -124,7 +124,7 @@ class CartService
         return round($total, 2);
     }
 
-    public function getCartCount(?int $userId): int
+    public function getCartCount(mixed $userId): int
     {
         if ($userId) {
             return (int) Cart::where('user_id', $userId)
@@ -135,7 +135,7 @@ class CartService
         return (int) array_sum($this->guestCartArray());
     }
 
-    public function clearCart(?int $userId): void
+    public function clearCart(mixed $userId): void
     {
         if ($userId) {
             Cart::where('user_id', $userId)->where('saved_for_later', false)->delete();
@@ -146,11 +146,11 @@ class CartService
         session()->forget('guest_cart');
     }
 
-    public function mergeGuestCartIntoUser(int $userId): void
+    public function mergeGuestCartIntoUser(mixed $userId): void
     {
         foreach ($this->guestCartArray() as $productId => $quantity) {
             try {
-                $this->addToCart($userId, (int) $productId, (int) $quantity);
+                $this->addToCart($userId, $productId, (int) $quantity);
             } catch (\Exception) {
                 // Skip unavailable items
             }
@@ -159,7 +159,7 @@ class CartService
         session()->forget('guest_cart');
     }
 
-    public function calculateTotals(?int $userId, ?float $discount = null): array
+    public function calculateTotals(mixed $userId, ?float $discount = null): array
     {
         $subtotal = $this->getCartTotal($userId);
         $discount = $discount ?? (float) session('coupon_discount', 0);
@@ -198,7 +198,7 @@ class CartService
         ];
     }
 
-    protected function addToDatabaseCart(int $userId, Product $product, int $quantity): Cart
+    protected function addToDatabaseCart(mixed $userId, Product $product, int $quantity): Cart
     {
         $cartItem = Cart::where('user_id', $userId)
             ->where('product_id', $product->id)
@@ -224,7 +224,7 @@ class CartService
         return $cartItem;
     }
 
-    protected function addToGuestCart(int $productId, int $quantity, Product $product): bool
+    protected function addToGuestCart(mixed $productId, int $quantity, Product $product): bool
     {
         $cart = $this->guestCartArray();
         $existing = $cart[$productId] ?? 0;

@@ -57,7 +57,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->first();
     }
 
-    public function findById(int $id): ?Product
+    public function findById(mixed $id): ?Product
     {
         return Product::with(['category', 'tags', 'productImages'])->find($id);
     }

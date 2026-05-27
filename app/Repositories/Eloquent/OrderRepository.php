@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class OrderRepository implements OrderRepositoryInterface
 {
-    public function paginateForUser(int $userId, int $perPage = 15): LengthAwarePaginator
+    public function paginateForUser(mixed $userId, int $perPage = 15): LengthAwarePaginator
     {
         return Order::with(['items.product', 'address', 'deliveryTrackings'])
             ->where('user_id', $userId)
@@ -46,7 +46,7 @@ class OrderRepository implements OrderRepositoryInterface
             ->first();
     }
 
-    public function findById(int $id): ?Order
+    public function findById(mixed $id): ?Order
     {
         return Order::with(['items.product', 'user', 'payments', 'deliveryTrackings'])->find($id);
     }

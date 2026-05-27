@@ -14,9 +14,9 @@ class InventoryService
         Product $product,
         int $quantityChange,
         string $type,
-        ?int $userId = null,
+        mixed $userId = null,
         ?string $referenceType = null,
-        ?int $referenceId = null,
+        mixed $referenceId = null,
         ?string $notes = null
     ): Product {
         $stockBefore = $product->stock;
@@ -48,7 +48,7 @@ class InventoryService
         return $product->fresh();
     }
 
-    public function deductForOrder(Product $product, int $quantity, int $orderId, ?int $userId = null): Product
+    public function deductForOrder(Product $product, int $quantity, mixed $orderId, mixed $userId = null): Product
     {
         return $this->adjustStock(
             $product,
@@ -61,7 +61,7 @@ class InventoryService
         );
     }
 
-    public function restoreFromCancellation(Product $product, int $quantity, int $orderId, ?int $userId = null): Product
+    public function restoreFromCancellation(Product $product, int $quantity, mixed $orderId, mixed $userId = null): Product
     {
         return $this->adjustStock(
             $product,

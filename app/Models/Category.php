@@ -52,6 +52,18 @@ class Category extends Model
         return MediaUrl::resolve($this->image, MediaUrl::categoryFallback());
     }
 
+    public function getProductsCountAttribute()
+    {
+        if (isset($this->attributes['products_count'])) {
+            return (int) $this->attributes['products_count'];
+        }
+        if ($this->relationLoaded('products')) {
+            return $this->products->count();
+        }
+
+        return $this->products()->count();
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

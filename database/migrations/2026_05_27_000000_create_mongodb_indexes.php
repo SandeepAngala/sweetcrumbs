@@ -8,10 +8,25 @@ return new class extends Migration
 {
     protected $connection = 'mongodb';
 
+    /**
+     * Safely create an index, ignoring "already exists" errors from MongoDB.
+     */
+    private function safeIndex(string $collection, \Closure $callback): void
+    {
+        try {
+            Schema::connection('mongodb')->table($collection, $callback);
+        } catch (\Exception $e) {
+            if (!str_contains($e->getMessage(), 'already exists')
+                && !str_contains($e->getMessage(), 'same name as the requested index')) {
+                throw $e;
+            }
+        }
+    }
+
     public function up(): void
     {
         // Users indexes
-        Schema::connection('mongodb')->table('users', function (Blueprint $collection) {
+        $this->safeIndex('users', function (Blueprint $collection) {
             $collection->index('email');
             $collection->index('uuid');
             $collection->index('role');
@@ -19,7 +34,7 @@ return new class extends Migration
         });
 
         // Products indexes
-        Schema::connection('mongodb')->table('products', function (Blueprint $collection) {
+        $this->safeIndex('products', function (Blueprint $collection) {
             $collection->index('slug');
             $collection->index('category_id');
             $collection->index('status');
@@ -30,14 +45,14 @@ return new class extends Migration
         });
 
         // Categories indexes
-        Schema::connection('mongodb')->table('categories', function (Blueprint $collection) {
+        $this->safeIndex('categories', function (Blueprint $collection) {
             $collection->index('slug');
             $collection->index('parent_id');
             $collection->index('is_active');
         });
 
         // Orders indexes
-        Schema::connection('mongodb')->table('orders', function (Blueprint $collection) {
+        $this->safeIndex('orders', function (Blueprint $collection) {
             $collection->index('user_id');
             $collection->index('order_number');
             $collection->index('status');
@@ -46,83 +61,83 @@ return new class extends Migration
         });
 
         // Order items indexes
-        Schema::connection('mongodb')->table('order_items', function (Blueprint $collection) {
+        $this->safeIndex('order_items', function (Blueprint $collection) {
             $collection->index('order_id');
             $collection->index('product_id');
         });
 
         // Carts indexes
-        Schema::connection('mongodb')->table('carts', function (Blueprint $collection) {
+        $this->safeIndex('carts', function (Blueprint $collection) {
             $collection->index('user_id');
             $collection->index('product_id');
             $collection->compound(['user_id', 'product_id']);
         });
 
         // Payments indexes
-        Schema::connection('mongodb')->table('payments', function (Blueprint $collection) {
+        $this->safeIndex('payments', function (Blueprint $collection) {
             $collection->index('order_id');
             $collection->index('transaction_id');
         });
 
         // Reviews indexes
-        Schema::connection('mongodb')->table('reviews', function (Blueprint $collection) {
+        $this->safeIndex('reviews', function (Blueprint $collection) {
             $collection->index('user_id');
             $collection->index('product_id');
             $collection->index('is_approved');
         });
 
         // Wishlists indexes
-        Schema::connection('mongodb')->table('wishlists', function (Blueprint $collection) {
+        $this->safeIndex('wishlists', function (Blueprint $collection) {
             $collection->compound(['user_id', 'product_id']);
         });
 
         // Coupons indexes
-        Schema::connection('mongodb')->table('coupons', function (Blueprint $collection) {
+        $this->safeIndex('coupons', function (Blueprint $collection) {
             $collection->index('code');
             $collection->index('is_active');
         });
 
         // Blogs indexes
-        Schema::connection('mongodb')->table('blogs', function (Blueprint $collection) {
+        $this->safeIndex('blogs', function (Blueprint $collection) {
             $collection->index('slug');
             $collection->index('is_published');
         });
 
         // Settings indexes
-        Schema::connection('mongodb')->table('settings', function (Blueprint $collection) {
+        $this->safeIndex('settings', function (Blueprint $collection) {
             $collection->index('key');
         });
 
         // Addresses indexes
-        Schema::connection('mongodb')->table('addresses', function (Blueprint $collection) {
+        $this->safeIndex('addresses', function (Blueprint $collection) {
             $collection->index('user_id');
         });
 
         // Bakery notifications indexes
-        Schema::connection('mongodb')->table('bakery_notifications', function (Blueprint $collection) {
+        $this->safeIndex('bakery_notifications', function (Blueprint $collection) {
             $collection->index('user_id');
             $collection->index('read_at');
         });
 
         // Delivery trackings indexes
-        Schema::connection('mongodb')->table('delivery_trackings', function (Blueprint $collection) {
+        $this->safeIndex('delivery_trackings', function (Blueprint $collection) {
             $collection->index('order_id');
         });
 
         // Inventory logs indexes
-        Schema::connection('mongodb')->table('inventory_logs', function (Blueprint $collection) {
+        $this->safeIndex('inventory_logs', function (Blueprint $collection) {
             $collection->index('product_id');
         });
 
         // Coupon usages indexes
-        Schema::connection('mongodb')->table('coupon_usages', function (Blueprint $collection) {
+        $this->safeIndex('coupon_usages', function (Blueprint $collection) {
             $collection->index('coupon_id');
             $collection->index('user_id');
             $collection->index('order_id');
         });
 
         // Page contents indexes
-        Schema::connection('mongodb')->table('page_contents', function (Blueprint $collection) {
+        $this->safeIndex('page_contents', function (Blueprint $collection) {
             $collection->index('slug');
         });
     }

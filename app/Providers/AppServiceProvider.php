@@ -24,12 +24,14 @@ use App\Models\Review;
 use App\Models\Setting;
 use App\Models\TeamMember;
 use App\Models\Wishlist;
+use App\Models\PersonalAccessToken;
 use App\Observers\ClearsHomeCacheObserver;
 use App\Services\CartService;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -41,6 +43,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+
+        $this->app->afterResolving('db', function ($db) {
+            $db->extend('mongodb', function ($config, $name) {
+                $config['name'] = $name;
+                return new \App\Database\MongodbConnection($config);
+            });
+        });
     }
 
     public function boot(): void
@@ -48,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production') || filter_var(env('FORCE_HTTPS', false), FILTER_VALIDATE_BOOL)) {
             URL::forceScheme('https');
         }
+
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());

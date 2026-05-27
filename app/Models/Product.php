@@ -102,6 +102,23 @@ class Product extends Model
         return round((float) ($this->reviews()->avg('rating') ?? 0), 1);
     }
 
+    public function getReviewsAvgRatingAttribute()
+    {
+        return $this->average_rating;
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        if (isset($this->attributes['reviews_count'])) {
+            return (int) $this->attributes['reviews_count'];
+        }
+        if ($this->relationLoaded('reviews')) {
+            return $this->reviews->count();
+        }
+
+        return $this->reviews()->count();
+    }
+
     public function getPrimaryImageAttribute()
     {
         $img = null;

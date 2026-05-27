@@ -12,7 +12,7 @@ interface ProductRepositoryInterface
 
     public function findBySlug(string $slug): ?Product;
 
-    public function findById(int $id): ?Product;
+    public function findById(mixed $id): ?Product;
 
     public function featured(int $limit = 8): Collection;
 

@@ -132,4 +132,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(BakeryNotification::class);
     }
+
+    public function getOrdersCountAttribute()
+    {
+        if (isset($this->attributes['orders_count'])) {
+            return (int) $this->attributes['orders_count'];
+        }
+        if ($this->relationLoaded('orders')) {
+            return $this->orders->count();
+        }
+
+        return $this->orders()->count();
+    }
 }

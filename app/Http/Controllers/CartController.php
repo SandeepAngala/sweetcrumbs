@@ -9,7 +9,7 @@ class CartController extends Controller
 {
     public function __construct(protected CartService $cartService) {}
 
-    protected function userId(): ?int
+    protected function userId(): mixed
     {
         return auth()->id();
     }
@@ -139,7 +139,7 @@ class CartController extends Controller
     public function saveForLater($productId)
     {
         try {
-            $this->cartService->saveForLater($this->userId(), (int) $productId);
+            $this->cartService->saveForLater($this->userId(), $productId);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -149,7 +149,7 @@ class CartController extends Controller
 
     public function moveToCart($productId)
     {
-        $this->cartService->saveForLater($this->userId(), (int) $productId);
+        $this->cartService->saveForLater($this->userId(), $productId);
 
         return back()->with('success', 'Item successfully returned to active cart.');
     }
