@@ -45,7 +45,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('MONGODB_URI', 'mongodb://localhost:27017'),
-            'database' => env('DB_DATABASE', 'agrofertmart'),
+            'database' => env('DB_DATABASE', 'ManaOoruManaTea'),
         ],
 
         'sqlite' => [

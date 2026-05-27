@@ -8,7 +8,7 @@
 ```env
 DB_CONNECTION=mongodb
 MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority
-DB_DATABASE=agrofertmart
+DB_DATABASE=ManaOoruManaTea
 ```
 
 3. Run:
