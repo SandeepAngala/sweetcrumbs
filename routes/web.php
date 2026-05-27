@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/success/{orderNumber}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::post('/api/create-order', [App\Http\Controllers\RazorpayController::class, 'createOrder'])->name('checkout.razorpay.create');
+    Route::post('/api/verify-payment', [App\Http\Controllers\RazorpayController::class, 'verifyPayment'])->name('checkout.razorpay.verify');
 
     // User Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

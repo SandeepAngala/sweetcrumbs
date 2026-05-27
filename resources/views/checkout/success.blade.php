@@ -88,16 +88,27 @@
                         <div class="text-xs font-semibold uppercase tracking-wider text-coffee-400 dark:text-gray-500 mb-1">Payment Status</div>
                         <div>
                             @if($order->payment_status === 'paid')
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 text-xs font-bold rounded-full border border-green-200 dark:border-green-800">
+                                <span class="payment-status-badge inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 text-xs font-bold rounded-full border border-green-200 dark:border-green-800">
                                     <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span> PAID
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-50 dark:bg-yellow-950/30 text-yellow-600 dark:text-yellow-400 text-xs font-bold rounded-full border border-yellow-200 dark:border-yellow-800">
+                                <span class="payment-status-badge inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-50 dark:bg-yellow-950/30 text-yellow-600 dark:text-yellow-400 text-xs font-bold rounded-full border border-yellow-200 dark:border-yellow-800">
                                     <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span> PENDING PAYMENT
                                 </span>
                             @endif
                         </div>
                     </div>
+
+                    @if($order->payment_method === 'razorpay' && $order->payment_status !== 'paid')
+                        <div id="razorpay-payment-container" class="mt-6 p-5 rounded-2xl bg-sky-50/50 dark:bg-sky-950/10 border border-sky-100 dark:border-sky-900/40 text-center transition-all duration-300">
+                            <div class="mb-3 text-2xl">🧁</div>
+                            <h4 class="font-display font-bold text-coffee-950 dark:text-white text-sm mb-1">Complete Payment</h4>
+                            <p class="text-xxs text-coffee-500 dark:text-gray-400 mb-4 max-w-xs mx-auto">Please authorize your order payment via secure Razorpay checkout.</p>
+                            <button id="rzp-pay-btn" class="w-full py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold rounded-xl shadow-md transition-all duration-300 active:scale-98 text-xs inline-flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-credit-card"></i> Pay Securely Now (₹{{ number_format($order->total, 2) }})
+                            </button>
+                        </div>
+                    @endif
 
                     @if($order->notes)
                         <div>
@@ -182,3 +193,147 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const payBtn = document.getElementById('rzp-pay-btn');
+    if (!payBtn) return;
+
+    payBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        // Prevent double clicking
+        payBtn.disabled = true;
+        payBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Initializing Payment...';
+
+        try {
+            // 1. Create order on the backend
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await fetch('{{ route("checkout.razorpay.create") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_number: '{{ $order->order_number }}'
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.message || 'Failed to create payment order. Please try again.');
+            }
+
+            const data = await response.json();
+            
+            // 2. Configure Razorpay options
+            const options = {
+                key: data.key_id,
+                amount: data.amount,
+                currency: data.currency,
+                name: data.bakery.name,
+                description: 'Order Payment #' + '{{ $order->order_number }}',
+                order_id: data.order_id,
+                theme: {
+                    color: '#b45309' // Matches the premium amber/coffee gold theme of the boutique!
+                },
+                prefill: {
+                    name: data.customer.name,
+                    email: data.customer.email,
+                    contact: data.customer.phone
+                },
+                handler: async function (response) {
+                    // Show processing state
+                    payBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Verifying Payment...';
+                    
+                    try {
+                        // 3. Verify on the backend
+                        const verifyRes = await fetch('{{ route("checkout.razorpay.verify") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                order_number: '{{ $order->order_number }}',
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            })
+                        });
+
+                        if (!verifyRes.ok) {
+                            const errData = await verifyRes.json().catch(() => ({}));
+                            throw new Error(errData.message || 'Signature verification failed.');
+                        }
+
+                        const verifyData = await verifyRes.json();
+                        
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('🧁 Payment successful! Thank you for ordering.', 'success');
+                        }
+
+                        // Seamlessly update page UI state without page reload!
+                        const container = document.getElementById('razorpay-payment-container');
+                        if (container) {
+                            container.innerHTML = `
+                                <div class="text-emerald-500 font-bold text-xs flex items-center justify-center gap-1.5 mt-2">
+                                    <i class="fa-solid fa-circle-check"></i> PAYMENT COMPLETED
+                                </div>
+                            `;
+                        }
+
+                        // Update standard paid badges in view
+                        const badges = document.querySelectorAll('.payment-status-badge');
+                        badges.forEach(b => {
+                            b.className = 'payment-status-badge inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 text-xs font-bold rounded-full border border-green-200 dark:border-green-800';
+                            b.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span> PAID';
+                        });
+
+                    } catch (verifyErr) {
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Securely Now (₹{{ number_format($order->total, 2) }})';
+                        if (typeof window.showToast === 'function') {
+                            window.showToast(verifyErr.message, 'error');
+                        }
+                    }
+                },
+                modal: {
+                    ondismiss: function () {
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Securely Now (₹{{ number_format($order->total, 2) }})';
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Payment window was closed by the user.', 'warning');
+                        }
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (resp) {
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Payment Failed: ' + resp.error.description, 'error');
+                }
+                payBtn.disabled = false;
+                payBtn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Securely Now (₹{{ number_format($order->total, 2) }})';
+            });
+
+            rzp.open();
+
+        } catch (err) {
+            payBtn.disabled = false;
+            payBtn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Pay Securely Now (₹{{ number_format($order->total, 2) }})';
+            if (typeof window.showToast === 'function') {
+                window.showToast(err.message, 'error');
+            }
+        }
+    });
+});
+</script>
+@endpush
+
