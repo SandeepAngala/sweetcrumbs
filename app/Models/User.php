@@ -133,6 +133,14 @@ class User extends Authenticatable
         return $this->hasMany(BakeryNotification::class);
     }
 
+    /**
+     * Get the entity's notifications.
+     */
+    public function notifications()
+    {
+        return $this->morphMany(BakeryNotification::class, 'notifiable')->latest();
+    }
+
     public function getOrdersCountAttribute()
     {
         if (isset($this->attributes['orders_count'])) {
@@ -145,3 +153,4 @@ class User extends Authenticatable
         return $this->orders()->count();
     }
 }
+
