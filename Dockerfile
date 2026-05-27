@@ -23,7 +23,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Install and enable MongoDB extension
-RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN pecl install mongodb-1.21.5 && docker-php-ext-enable mongodb
 
 # Verify MongoDB extension is installed
 RUN php -m | grep mongodb
