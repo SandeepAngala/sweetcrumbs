@@ -105,8 +105,8 @@
         </div>
 
         <!-- Google OAuth Option -->
-        <a href="#" 
-           onclick="event.preventDefault(); showToast('Google Authentication coming soon!', 'info')"
+        <a href="{{ route('auth.google.redirect') }}" 
+           id="google-login-btn"
            class="social-btn w-full py-3 px-4 rounded-2xl bg-white dark:bg-gray-900 hover:bg-coffee-50/40 border border-coffee-100 dark:border-gray-800 text-coffee-800 dark:text-gray-300 font-bold text-xs flex items-center justify-center gap-2.5 transition-all">
             <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.54 14.98 1 12 1 7.35 1 3.37 3.68 1.42 7.61l3.86 3C6.2 7.72 8.87 5.04 12 5.04z"/>
@@ -114,7 +114,7 @@
                 <path fill="#FBBC05" d="M5.28 14.61c-.24-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29L1.42 7.03C.51 8.86 0 10.87 0 13s.51 4.14 1.42 5.97l3.86-3.36z"/>
                 <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.69-2.87c-1.02.68-2.33 1.09-3.96 1.09-3.13 0-5.8-2.68-6.72-5.57l-3.86 3C3.37 20.32 7.35 23 12 23z"/>
             </svg>
-            Google
+            Continue with Google
         </a>
 
         <!-- Quick Demo Access Widget -->

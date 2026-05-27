@@ -10,6 +10,7 @@
         "ext-mongodb": "*",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.3",
+        "laravel/socialite": "^5.27",
         "laravel/tinker": "^2.10.1",
         "mongodb/laravel-mongodb": "^5.7",
         "razorpay/razorpay": "*"
