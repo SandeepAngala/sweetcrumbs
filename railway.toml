@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "composer install --no-dev --optimize-autoloader && npm ci && npm run build && rm -f public/hot"
+buildCommand = "composer install --no-dev --optimize-autoloader --ignore-platform-reqs && npm ci && npm run build && rm -f public/hot"
 
 [deploy]
 startCommand = "sh scripts/railway-start.sh"
