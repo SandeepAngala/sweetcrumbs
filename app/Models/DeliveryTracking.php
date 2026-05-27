@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MongoDB\Laravel\Eloquent\Model;
 
 class DeliveryTracking extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'delivery_trackings';
+
     protected $fillable = [
         'order_id', 'status', 'note', 'latitude', 'longitude', 'recorded_at',
     ];

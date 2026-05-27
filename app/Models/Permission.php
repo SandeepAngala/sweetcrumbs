@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Permission extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'permissions';
+
     protected $fillable = ['name', 'slug', 'group'];
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'role_permission');
+        return $this->belongsToMany(Role::class);
     }
 }

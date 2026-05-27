@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MongoDB\Laravel\Eloquent\Model;
 
 class CouponUsage extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'coupon_usages';
+
     protected $fillable = ['coupon_id', 'user_id', 'order_id', 'discount_amount'];
 
     protected $casts = [

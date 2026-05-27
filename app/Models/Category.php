@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Helpers\MediaUrl;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Category extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'categories';
+
     protected $fillable = [
         'name', 'slug', 'image', 'description', 'is_active', 'sort_order',
         'parent_id', 'meta_title', 'meta_description',

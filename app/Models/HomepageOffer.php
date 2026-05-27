@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class HomepageOffer extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'homepage_offers';
+
     protected $fillable = [
         'badge', 'title', 'description', 'price', 'compare_price',
         'icon_classes', 'button_text', 'button_link', 'product_ids',

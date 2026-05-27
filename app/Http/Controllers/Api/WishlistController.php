@@ -14,7 +14,7 @@ class WishlistController extends Controller
     public function index(Request $request): JsonResponse
     {
         $products = Product::whereIn(
-            'id',
+            '_id',
             Wishlist::where('user_id', $request->user()->id)->pluck('product_id')
         )->with('category')->get();
 
@@ -26,7 +26,7 @@ class WishlistController extends Controller
 
     public function toggle(Request $request): JsonResponse
     {
-        $request->validate(['product_id' => 'required|exists:products,id']);
+        $request->validate(['product_id' => 'required|exists:products,_id']);
 
         $existing = Wishlist::where('user_id', $request->user()->id)
             ->where('product_id', $request->product_id)

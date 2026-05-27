@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MongoDB\Laravel\Eloquent\Model;
 
 class CartItem extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'cart_items';
+
     protected $fillable = [
         'cart_session_id', 'product_id', 'quantity', 'saved_for_later',
     ];

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class CustomCakeOption extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'custom_cake_options';
+
     protected $fillable = ['group', 'label', 'value', 'price_addon', 'sort_order', 'is_active'];
 
     protected $casts = [

@@ -2,21 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Role extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'roles';
+
     protected $fillable = ['name', 'slug', 'description'];
 
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_permission');
+        return $this->belongsToMany(Permission::class);
     }
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'role_user');
+        return $this->belongsToMany(User::class);
     }
 
     public function hasPermission(string $slug): bool

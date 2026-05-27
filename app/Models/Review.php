@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Review extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'reviews';
+
     protected $fillable = [
         'user_id', 'product_id', 'order_id', 'rating', 'comment',
         'is_approved', 'is_verified_purchase',

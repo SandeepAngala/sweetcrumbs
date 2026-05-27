@@ -73,7 +73,7 @@ class PageController extends Controller
     public function storeTestimonial(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,_id',
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|min:10|max:1000',
         ]);

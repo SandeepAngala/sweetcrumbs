@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Tag extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'tags';
+
     protected $fillable = ['name', 'slug'];
 
     protected static function boot(): void

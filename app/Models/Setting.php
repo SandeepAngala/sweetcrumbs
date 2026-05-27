@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Setting extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'settings';
+
     protected $fillable = ['group', 'key', 'value', 'type'];
 
     public static function get(string $key, mixed $default = null): mixed

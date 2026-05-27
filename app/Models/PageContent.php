@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class PageContent extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'page_contents';
+
     protected $fillable = ['slug', 'title', 'body', 'meta', 'is_active'];
 
     protected $casts = ['meta' => 'array', 'is_active' => 'boolean'];

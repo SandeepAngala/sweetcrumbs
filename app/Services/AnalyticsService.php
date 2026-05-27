@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class AnalyticsService
 {
@@ -52,18 +51,21 @@ class AnalyticsService
 
     public function topProducts(int $limit = 10): array
     {
-        return DB::table('order_items')
-            ->join('products', 'order_items.product_id', '=', 'products.id')
-            ->select(
-                'products.id',
-                'products.name',
-                DB::raw('SUM(order_items.quantity) as sold_quantity'),
-                DB::raw('SUM(order_items.total) as total_revenue')
-            )
-            ->groupBy('products.id', 'products.name')
-            ->orderByDesc('sold_quantity')
-            ->limit($limit)
+        return \App\Models\OrderItem::with('product:_id,name')
             ->get()
+            ->groupBy('product_id')
+            ->map(function ($items, $productId) {
+                $product = $items->first()->product;
+                return (object) [
+                    'id' => $productId,
+                    'name' => $product->name ?? 'Unknown',
+                    'sold_quantity' => $items->sum('quantity'),
+                    'total_revenue' => $items->sum('total'),
+                ];
+            })
+            ->sortByDesc('sold_quantity')
+            ->take($limit)
+            ->values()
             ->toArray();
     }
 

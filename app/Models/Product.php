@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Helpers\MediaUrl;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use SoftDeletes;
+
+    protected $connection = 'mongodb';
+    protected $collection = 'products';
 
     protected $fillable = [
         'name', 'slug', 'description', 'short_description', 'price', 'discount_price',

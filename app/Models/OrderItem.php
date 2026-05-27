@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class OrderItem extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'order_items';
+
     protected $fillable = ['order_id', 'product_id', 'quantity', 'price', 'total'];
 
     protected $casts = [

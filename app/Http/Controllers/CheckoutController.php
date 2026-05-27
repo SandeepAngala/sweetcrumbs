@@ -45,7 +45,7 @@ class CheckoutController extends Controller
         }
 
         $request->validate([
-            'address_id' => 'required_without:new_address|exists:addresses,id',
+            'address_id' => 'required_without:new_address|exists:addresses,_id',
             'payment_method' => 'required|in:'.implode(',', $allowedPayments),
             'delivery_date' => 'required|date|after_or_equal:today',
             'delivery_time_slot' => 'required|string|max:100',

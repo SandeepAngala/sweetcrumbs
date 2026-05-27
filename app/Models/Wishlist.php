@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Wishlist extends Model
 {
-    protected $table = 'wishlists';
+    protected $connection = 'mongodb';
+    protected $collection = 'wishlists';
 
     protected $fillable = ['user_id', 'product_id'];
 

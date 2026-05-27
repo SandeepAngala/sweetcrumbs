@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Helpers\MediaUrl;
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class GalleryItem extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'gallery_items';
+
     protected $fillable = ['title', 'description', 'image', 'category', 'sort_order', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean', 'sort_order' => 'integer'];

@@ -32,7 +32,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,_id',
             'quantity' => 'nullable|integer|min:1|max:99',
         ]);
 
@@ -57,7 +57,7 @@ class CartController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,_id',
             'quantity' => 'required|integer|min:0',
         ]);
 
@@ -87,7 +87,7 @@ class CartController extends Controller
     public function remove(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required|exists:products,_id',
         ]);
 
         if (! auth()->check()) {

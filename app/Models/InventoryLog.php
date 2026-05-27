@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MongoDB\Laravel\Eloquent\Model;
 
 class InventoryLog extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'inventory_logs';
+
     protected $fillable = [
         'product_id', 'user_id', 'type', 'quantity_change',
         'stock_before', 'stock_after', 'reference_type', 'reference_id', 'notes',

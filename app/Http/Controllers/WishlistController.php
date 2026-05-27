@@ -18,7 +18,7 @@ class WishlistController extends Controller
     public function toggle(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id'
+            'product_id' => 'required|exists:products,_id'
         ]);
 
         $userId = auth()->id();

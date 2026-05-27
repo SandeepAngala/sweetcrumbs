@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class BakeryNotification extends Model
 {
-    protected $table = 'bakery_notifications';
+    protected $connection = 'mongodb';
+    protected $collection = 'bakery_notifications';
 
     protected $fillable = ['user_id', 'type', 'title', 'message', 'data', 'read_at'];
 

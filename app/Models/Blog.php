@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Helpers\MediaUrl;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Blog extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'blogs';
+
     protected $fillable = [
         'title', 'slug', 'content', 'excerpt', 'image', 'author_id', 'category', 'tags', 'is_published', 'published_at'
     ];

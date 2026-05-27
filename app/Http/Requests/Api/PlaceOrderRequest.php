@@ -14,7 +14,7 @@ class PlaceOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address_id' => 'required|exists:addresses,id',
+            'address_id' => 'required|exists:addresses,_id',
             'payment_method' => 'required|in:razorpay,stripe,upi,cod',
             'coupon_code' => 'nullable|string|max:50',
             'delivery_date' => 'nullable|date|after_or_equal:today',
