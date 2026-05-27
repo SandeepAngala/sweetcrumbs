@@ -46,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->afterResolving('db', function ($db) {
             $db->extend('mongodb', function ($config, $name) {
+                if (!extension_loaded('mongodb')) {
+                    // Return a dummy connection when the MongoDB extension is not loaded (e.g., during build phase)
+                    return new class(null, '', '', $config) extends \Illuminate\Database\Connection {};
+                }
                 $config['name'] = $name;
                 return new \App\Database\MongodbConnection($config);
             });
