@@ -36,7 +36,7 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb://localhost:27017'),
+            'dsn' => env('MONGODB_URI', 'mongodb+srv://nithinpujari601_db_user:W9anlqXm28LLhDMo@cluster0.lorouvo.mongodb.net/ManaOoruManaTea?retryWrites=true&w=majority'),
             'database' => env('DB_DATABASE', 'ManaOoruManaTea'),
         ],
 
