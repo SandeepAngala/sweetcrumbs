@@ -32,8 +32,8 @@ class CheckoutIntegrationTest extends TestCase
     protected function cleanup(): void
     {
         User::where('email', 'customer@example.com')->delete();
-        Category::where('slug', 'cakes')->delete();
-        Product::where('slug', 'chocolate-cake')->delete();
+        Category::where('slug', 'cakes')->forceDelete();
+        Product::where('slug', 'chocolate-cake')->forceDelete();
         Cart::truncate();
         Address::truncate();
         Order::truncate();

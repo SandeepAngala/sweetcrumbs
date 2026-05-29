@@ -37,7 +37,12 @@ return new class extends Migration
 
     public function down(): void
     {
-        // The index is dropped automatically when the collection is dropped.
-        // For explicit removal, use Schema::connection('mongodb')->table(...)
+        try {
+            Schema::connection('mongodb')->table('sessions', function (Blueprint $collection) {
+                $collection->dropIndex('last_activity_1');
+            });
+        } catch (\Exception $e) {
+            // Gracefully ignore drop index errors
+        }
     }
 };
