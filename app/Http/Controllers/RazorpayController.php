@@ -170,7 +170,7 @@ class RazorpayController extends Controller
      */
     public function webhook(Request $request)
     {
-        $webhookSecret = config('bakery.razorpay.webhook_secret');
+        $webhookSecret = config('services.razorpay.webhook_secret');
 
         // If no webhook secret is configured, reject all webhook requests
         if (!$webhookSecret) {
@@ -202,25 +202,30 @@ class RazorpayController extends Controller
         if ($event === 'payment.captured') {
             $paymentEntity = $payload->get('payload.payment.entity', []);
             $razorpayPaymentId = $paymentEntity['id'] ?? null;
-            $razorpayOrderId = $paymentEntity['order_id'] ?? null;
 
             if ($razorpayPaymentId) {
-                // Find the payment record by Razorpay payment ID or order ID
+                // Find the payment record by Razorpay payment ID
                 $payment = Payment::where('transaction_id', $razorpayPaymentId)->first();
 
-                if ($payment && $payment->status !== 'success') {
-                    $payment->update(['status' => 'success']);
+                if ($payment) {
+                    if ($payment->status !== 'success') {
+                        $payment->update(['status' => 'success']);
 
-                    // Also update the parent order's payment status
-                    $order = Order::find($payment->order_id);
-                    if ($order && $order->payment_status !== 'paid') {
-                        $order->update([
-                            'payment_status' => 'paid',
-                            'status' => $order->status === 'pending' ? 'confirmed' : $order->status,
-                        ]);
+                        // Also update the parent order's payment status
+                        $order = Order::find($payment->order_id);
+                        if ($order && $order->payment_status !== 'paid') {
+                            $order->update([
+                                'payment_status' => 'paid',
+                                'status' => $order->status === 'pending' ? 'confirmed' : $order->status,
+                            ]);
 
-                        Log::info("Webhook confirmed payment for order #{$order->order_number}");
+                            Log::info("Webhook confirmed payment for order #{$order->order_number}");
+                        }
                     }
+                } else {
+                    // Fallback to direct Order update if configured with razorpay_payment_id field
+                    Order::where('razorpay_payment_id', $razorpayPaymentId)
+                         ->update(['payment_status' => 'paid', 'updated_at' => now()]);
                 }
             }
         }

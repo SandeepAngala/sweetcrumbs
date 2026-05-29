@@ -12,11 +12,10 @@ use Laravel\Socialite\Facades\Socialite;
 class GoogleController extends Controller
 {
     /**
-     * Redirect the user to Google's OAuth consent screen.
-     */
     public function redirect()
     {
         return Socialite::driver('google')
+            ->redirectUrl(route('auth.google.callback'))
             ->with(['prompt' => 'select_account'])
             ->redirect();
     }
@@ -27,7 +26,9 @@ class GoogleController extends Controller
     public function callback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')
+                ->redirectUrl(route('auth.google.callback'))
+                ->user();
         } catch (\Throwable $e) {
             Log::error('Google OAuth callback failed', [
                 'error' => $e->getMessage(),
