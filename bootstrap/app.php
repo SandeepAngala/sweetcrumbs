@@ -14,6 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
 
+        // FIX 3: Exclude Razorpay payment callbacks from CSRF verification
+        // These endpoints receive POST requests from client-side JS (after Razorpay
+        // gateway redirect) and from Razorpay webhooks — neither carries a CSRF token.
+        $middleware->validateCsrfTokens(except: [
+            'api/create-order',
+            'api/verify-payment',
+            'razorpay/webhook',
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,

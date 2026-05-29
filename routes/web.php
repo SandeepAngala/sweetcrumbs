@@ -87,5 +87,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// FIX 7: Razorpay server-to-server webhook (no auth, no CSRF — handled by HMAC signature verification)
+Route::post('razorpay/webhook', [App\Http\Controllers\RazorpayController::class, 'webhook'])->name('razorpay.webhook');
+
 require __DIR__.'/admin.php';
 require __DIR__.'/auth.php';

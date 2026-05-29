@@ -157,4 +157,74 @@ class RazorpayController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Handle Razorpay server-to-server webhook events.
+     *
+     * FIX 7: Fail-safe for payment confirmation — if a user's browser closes
+     * after successful payment but before the client-side verify-payment call,
+     * Razorpay will still deliver the payment.captured event here, ensuring
+     * the order transitions to 'paid' status.
+     *
+     * POST /razorpay/webhook
+     */
+    public function webhook(Request $request)
+    {
+        $webhookSecret = config('bakery.razorpay.webhook_secret');
+
+        // If no webhook secret is configured, reject all webhook requests
+        if (!$webhookSecret) {
+            Log::warning('Razorpay webhook received but RAZORPAY_WEBHOOK_SECRET is not configured.');
+            return response()->json(['error' => 'Webhook secret not configured'], 500);
+        }
+
+        $signature = $request->header('X-Razorpay-Signature');
+        $body = $request->getContent();
+
+        if (!$signature) {
+            return response()->json(['error' => 'Missing signature header'], 400);
+        }
+
+        // Verify HMAC-SHA256 signature
+        $expectedSignature = hash_hmac('sha256', $body, $webhookSecret);
+
+        if (!hash_equals($expectedSignature, $signature)) {
+            Log::warning('Razorpay webhook signature verification failed.');
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
+
+        // Parse the event payload
+        $payload = $request->json();
+        $event = $payload->get('event');
+
+        Log::info('Razorpay webhook received', ['event' => $event]);
+
+        if ($event === 'payment.captured') {
+            $paymentEntity = $payload->get('payload.payment.entity', []);
+            $razorpayPaymentId = $paymentEntity['id'] ?? null;
+            $razorpayOrderId = $paymentEntity['order_id'] ?? null;
+
+            if ($razorpayPaymentId) {
+                // Find the payment record by Razorpay payment ID or order ID
+                $payment = Payment::where('transaction_id', $razorpayPaymentId)->first();
+
+                if ($payment && $payment->status !== 'success') {
+                    $payment->update(['status' => 'success']);
+
+                    // Also update the parent order's payment status
+                    $order = Order::find($payment->order_id);
+                    if ($order && $order->payment_status !== 'paid') {
+                        $order->update([
+                            'payment_status' => 'paid',
+                            'status' => $order->status === 'pending' ? 'confirmed' : $order->status,
+                        ]);
+
+                        Log::info("Webhook confirmed payment for order #{$order->order_number}");
+                    }
+                }
+            }
+        }
+
+        return response()->json(['status' => 'ok']);
+    }
 }
