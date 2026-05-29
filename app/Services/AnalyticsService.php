@@ -13,15 +13,15 @@ class AnalyticsService
         $paidQuery = Order::where('payment_status', 'paid');
 
         return [
-            'revenue' => (float) $paidQuery->sum('total'),
+            'revenue' => (float) (string) $paidQuery->sum('total'),
             'orders_count' => Order::count(),
             'customers_count' => User::where('role', 'customer')->orWhere('role', 'user')->count(),
             'products_count' => Product::count(),
             'pending_orders' => Order::where('status', 'pending')->count(),
-            'today_revenue' => (float) Order::where('payment_status', 'paid')
+            'today_revenue' => (float) (string) Order::where('payment_status', 'paid')
                 ->whereDate('created_at', today())
                 ->sum('total'),
-            'month_revenue' => (float) Order::where('payment_status', 'paid')
+            'month_revenue' => (float) (string) Order::where('payment_status', 'paid')
                 ->whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
                 ->sum('total'),
@@ -38,7 +38,7 @@ class AnalyticsService
             ->sortKeys()
             ->map(fn ($group, $month) => [
                 'month' => $month,
-                'revenue' => (float) $group->sum('total'),
+                'revenue' => (float) (string) $group->sum('total'),
                 'orders' => $group->count(),
             ]);
 
@@ -60,7 +60,7 @@ class AnalyticsService
                     'id' => $productId,
                     'name' => $product->name ?? 'Unknown',
                     'sold_quantity' => $items->sum('quantity'),
-                    'total_revenue' => $items->sum('total'),
+                    'total_revenue' => (float) (string) $items->sum('total'),
                 ];
             })
             ->sortByDesc('sold_quantity')
