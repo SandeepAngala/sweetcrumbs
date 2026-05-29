@@ -21,6 +21,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
     Route::get('/analytics/data', [AnalyticsController::class, 'charts'])->name('analytics.charts');
 
+    Route::post('/products/analyze-image', [ProductController::class, 'analyzeImage'])->name('products.analyze-image');
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
 
